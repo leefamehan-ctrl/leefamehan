@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="zh-Hans">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>window.MR_TEACHER=(function(h){return h===""||h==="#"||/^#teacher/.test(h)})(location.hash);if(window.MR_TEACHER)document.documentElement.classList.add("tmode")</script>
+<style>html.tmode body{padding:0!important;margin:0;background:#f7f0de}html.tmode body>*:not(#teacherFrame){display:none!important}#teacherFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f7f0de}</style>
+<title>寻找大师的路线图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@500;700&family=ZCOOL+KuaiLe&display=swap">
+<style>
+/* Layout: 左侧一张不断“长大”的路线地图（带图层开关），右侧任务区；窄屏上下堆叠 */
+:root{
+  --paper:#f7f0de; --card:#fffaf0; --white:#ffffff;
+  --ink:#3a3024; --ink-soft:#6f6250; --line:#d9c9a3;
+  --gold:#b8862b; --gold-soft:#f6e7c4; --river:#3d7fc0; --orange:#e2772f; --green:#3c9657; --red:#d4513a; --plum:#8a4fa3;
+  --good-bg:#e7f4e6; --bad-bg:#fbe9e4; --sky:#e4eff8; --mark:#ffe08a;
+  --f-display:"ZCOOL KuaiLe","PingFang SC","Microsoft YaHei",sans-serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --f-text:"Noto Serif SC","Songti SC","SimSun",serif;
+  color-scheme: light;
+}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--f-body);font-size:16px;line-height:1.65;padding-inline:16px;padding-block:14px 32px;
+  background-image:radial-gradient(var(--line) 1px,transparent 1.2px);background-size:22px 22px}
+[hidden]{display:none!important}
+button,input,select,textarea{font-family:inherit}
+:focus-visible{outline:3px solid var(--river);outline-offset:2px}
+.wrap{max-width:1420px;margin:0 auto}
+
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(28px,4vw,46px);line-height:1.05;margin:0;color:var(--gold);
+  letter-spacing:3px;text-shadow:2px 2px 0 var(--white),4px 4px 0 rgba(58,48,36,.16);text-wrap:balance}
+.sub{font-family:var(--f-display);font-size:clamp(16px,1.7vw,21px);color:var(--ink-soft)}
+.hud{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--card);color:var(--ink);border:2px solid var(--ink);border-radius:999px;
+  padding:5px 14px;font-size:14px;cursor:pointer;box-shadow:0 2px 0 var(--ink)}
+.pill:active{transform:translateY(2px);box-shadow:none}
+.clock{cursor:default;font-variant-numeric:tabular-nums;font-weight:700}
+
+.layers{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.lay{display:flex;align-items:center;gap:7px;border:2px dashed var(--line);border-radius:999px;padding:3px 12px 3px 4px;font-size:14px;color:var(--ink-soft);background:var(--card);cursor:default}
+.lay b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--line);color:var(--white);font-family:var(--f-display);font-weight:400}
+.lay.now{border:2px solid var(--orange);color:var(--ink);font-weight:700}
+.lay.now b{background:var(--orange)}
+.lay.done{border:2px solid var(--green);color:var(--ink);cursor:pointer}
+.lay.done b{background:var(--green)}
+.lay.done.off{opacity:.5;border-style:dashed}
+.review .opt,.review .chip,.review .blank{cursor:default}
+.review .chips{display:none}
+button.lay{font:inherit;cursor:pointer}
+button.lay:hover{transform:translateY(-1px)}
+body.finished .slot{cursor:pointer}
+.lay input{width:16px;height:16px;accent-color:var(--green);margin:0}
+
+.stage{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:18px;margin-top:12px;align-items:start}
+@media (max-width:940px){.stage{grid-template-columns:minmax(0,1fr)}}
+.box{background:var(--card);border:2px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 rgba(58,48,36,.16)}
+.mapcol{display:grid;gap:12px;min-width:0}
+.mapbox{overflow:hidden;position:relative}
+#map{display:block;width:100%;height:auto;touch-action:manipulation}
+#map text{font-family:var(--f-body)}
+.disp{font-family:var(--f-display)!important}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;padding:8px 14px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px}
+
+/* map states */
+.site{transition:opacity .8s,filter .8s}
+.site.fog{opacity:0}
+.site.current .glow{opacity:1}
+.glow{opacity:0;transition:opacity .6s}
+.cloud{transition:opacity .8s}
+.cloud.gone{opacity:0}
+.slot .badge{transition:fill .4s}
+.slot.filled .badge{fill:var(--green)}
+.slot.current .badge{fill:var(--orange)}
+.slot.empty .frame{stroke-dasharray:6 5}
+.slot.hot .frame{fill:#ffe2bd}
+body.picking .slot .frame,body.dragging .slot .frame{fill:#fff1dc;stroke:#e2772f}
+.ring{transform-box:fill-box;transform-origin:center;opacity:0}
+.slot.current .ring{animation:pulse 1.6s infinite}
+@keyframes pulse{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(2.2)}}
+.shimmer{animation:flow 6s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-140}}
+.leg,.arm{transform-box:fill-box;transform-origin:50% 0}
+.walking .leg.l,.walking .arm.r{animation:swing .36s ease-in-out infinite alternate}
+.walking .leg.r{animation:swing .36s ease-in-out infinite alternate-reverse}
+.walking .body{animation:bob .18s ease-in-out infinite alternate}
+@keyframes swing{from{transform:rotate(-22deg)}to{transform:rotate(22deg)}}
+@keyframes bob{to{transform:translateY(-2px)}}
+.say{opacity:0;transition:opacity .3s}
+.say.on{opacity:1}
+.layer{transition:opacity .5s}
+.layer.hide{opacity:0;pointer-events:none}
+.rsign .q{animation:blink 1.2s ease-in-out infinite alternate}
+@keyframes blink{to{opacity:.35}}
+.growc{transform-box:fill-box;transform-origin:center;transition:transform 1.2s cubic-bezier(.3,1.4,.5,1)}
+.popin{animation:popin .6s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes popin{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
+.popin{transform-box:fill-box;transform-origin:center}
+
+/* panel */
+.panel{padding:18px 18px 22px;min-width:0}
+@media (min-width:941px){.panel{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);max-height:calc(100vh - 28px);overflow:auto}}
+.eyebrow{font-size:13px;letter-spacing:.12em;color:var(--ink-soft);font-weight:500}
+.ph{border-bottom:2px dashed var(--line);padding-bottom:10px;margin-bottom:14px}
+.ph h2{margin:2px 0 0;font-family:var(--f-display);font-weight:400;font-size:clamp(23px,2.4vw,30px);line-height:1.15}
+.pb{display:grid;gap:14px}
+.pb > *{min-width:0}
+.talk{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:start}
+.avatar{width:52px;height:52px;border-radius:50%;background:var(--sky);border:2px solid var(--ink);overflow:hidden}
+.avatar svg{width:100%;height:100%;display:block}
+.bubble{background:var(--white);border:1.5px solid var(--ink);border-radius:4px 16px 16px 16px;padding:8px 12px}
+.bubble .who{font-size:12px;color:var(--ink-soft);display:block}
+.tip{background:var(--sky);border-radius:14px;padding:10px 14px;font-size:15px}
+.tip b{color:var(--river)}
+.task{border:2px solid var(--ink);border-radius:16px;padding:14px;background:var(--white);display:grid;gap:12px}
+.task h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:20px;display:flex;gap:10px;align-items:center}
+.task h3 i{font-style:normal;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--white);font-size:15px;flex:none}
+.task.done h3 i{background:var(--green)}
+.task.locked{opacity:.45;pointer-events:none}
+.q{font-size:17px;font-weight:500;line-height:1.7}
+.hint{font-size:13px;color:var(--ink-soft)}
+.para{font-family:var(--f-text);font-size:16.5px;line-height:2;background:var(--paper);border-radius:12px;padding:10px 14px;border-left:5px solid var(--gold)}
+.para .pn{font-family:var(--f-display);color:var(--gold);margin-right:6px}
+.sen{cursor:pointer;border-radius:4px;padding:1px 0;transition:background .2s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.sen:hover{background:#fff3c9}
+.sen.sel{background:var(--mark);box-shadow:0 2px 0 var(--orange)}
+.sen.right{background:#cdeccc;box-shadow:0 2px 0 var(--green)}
+.sen.wrong{background:#f8cfc4;animation:shake .4s}
+.opts{display:grid;gap:10px}
+.opt{font-size:16px;background:var(--white);color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:9px 12px;cursor:pointer;box-shadow:0 3px 0 var(--ink);text-align:left;line-height:1.5;transition:transform .12s}
+.opt .k{font-family:var(--f-display);color:var(--orange);margin-right:6px}
+.opt:hover:not(:disabled){transform:translateY(-2px)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--red);color:#8f2d1d;box-shadow:0 3px 0 var(--red)}
+.opt.right{background:var(--good-bg);border-color:var(--green);color:#215c33;box-shadow:0 3px 0 var(--green)}
+.opt:disabled{cursor:default}
+.opt.shake,.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.opts.row4{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fb{border-radius:12px;padding:9px 13px;font-size:15px}
+.fb.bad{background:var(--bad-bg);border:1.5px dashed var(--red)}
+.fb.good{background:var(--good-bg);border:1.5px solid var(--green)}
+.fb.good b{color:var(--green)}
+.fb.info{background:var(--sky);border:1.5px solid var(--river)}
+.readlock{background:#fff6e0;border:2px solid var(--gold);border-radius:14px;padding:10px 14px;display:grid;gap:8px}
+.readlock .para{background:var(--white)}
+.fields{display:grid;gap:10px}
+.field{display:grid;gap:4px}
+.field label{font-weight:700;font-size:15px}
+.field .ins{display:flex;gap:8px;flex-wrap:wrap}
+input[type=text]{box-sizing:border-box;font-size:18px;border:2px solid var(--ink);border-radius:12px;padding:7px 10px;background:var(--white);color:var(--ink);width:100%;min-width:0}
+.ins input{flex:1 1 90px;max-width:160px}
+input.right{border-color:var(--green);background:var(--good-bg)}
+input.wrong{border-color:var(--red);background:var(--bad-bg)}
+textarea{width:100%;box-sizing:border-box;font-size:16px;border:1.5px solid var(--ink);border-radius:12px;padding:8px 10px;background:var(--white);color:var(--ink);resize:vertical;min-height:72px}
+select{width:100%;min-width:130px;font-size:15px;padding:7px 8px;border:2px solid var(--ink);border-radius:10px;background:var(--white);color:var(--ink)}
+select.right{border-color:var(--green);background:var(--good-bg)}
+select.wrong{border-color:var(--red);background:var(--bad-bg)}
+.matchwrap{overflow-x:auto}
+table.match{width:100%;border-collapse:separate;border-spacing:0 8px;min-width:420px}
+table.match th{font-size:13px;color:var(--ink-soft);font-weight:500;text-align:left;padding:0 6px}
+table.match td{padding:0 6px;vertical-align:middle}
+table.match td:first-child{font-weight:700;white-space:nowrap}
+table.guide td{vertical-align:top;padding:6px;border-bottom:1.5px dashed var(--line)}
+table.guide td:nth-child(2){white-space:nowrap;color:var(--orange);font-weight:700}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{font-family:var(--f-display);font-size:20px;background:var(--orange);color:var(--white);border:2px solid var(--ink);border-radius:999px;padding:7px 22px;box-shadow:0 4px 0 var(--ink);cursor:pointer;transition:transform .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn.green{background:var(--green)}
+.btn.blue{background:var(--river)}
+.btn.plum{background:var(--plum)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.chip{font-family:var(--f-display);font-size:19px;background:var(--plum);color:var(--white);border:2px solid var(--ink);border-radius:999px;padding:4px 16px;cursor:grab;box-shadow:0 3px 0 var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
+.chip.picked{outline:3px solid var(--river);outline-offset:2px;transform:translateY(-3px)}
+.chip.used{opacity:.3;cursor:default}
+.ghost{position:fixed;z-index:80;pointer-events:none;transform:translate(-50%,-60%) rotate(-3deg);opacity:.92;margin:0}
+.stnbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.secret{border:2px solid var(--gold);border-radius:16px;padding:12px 14px;background:linear-gradient(135deg,#fff8e4,#fff);display:grid;gap:4px;animation:pop .6s}
+.secret .eyebrow{color:var(--gold)}
+.secret b.big{font-family:var(--f-display);font-weight:400;font-size:24px;color:#7a4a2a}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.04)}100%{transform:none}}
+.checks{display:grid;gap:8px}
+.checks label{display:flex;gap:8px;align-items:center;background:var(--paper);border-radius:10px;padding:6px 10px;cursor:pointer}
+.checks input{width:18px;height:18px;accent-color:var(--green)}
+.sum{display:grid;gap:10px}
+.sumrow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;border-bottom:1.5px dashed var(--line);padding-bottom:10px}
+.sumrow i{font-style:normal;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--gold);color:var(--white);font-family:var(--f-display);font-size:18px}
+.sumrow .ev{font-family:var(--f-text);font-size:15px;color:var(--ink-soft)}
+.sumrow .mine{font-size:15px;background:var(--paper);border-radius:8px;padding:4px 8px;margin-top:4px}
+.teacher{display:inline-flex;gap:6px;align-items:center;background:var(--gold-soft);border:1.5px solid var(--gold);border-radius:999px;padding:2px 10px;font-size:13px;color:#7a4a2a}
+
+.modal{position:fixed;inset:0;background:rgba(40,32,22,.55);display:grid;place-items:center;padding:16px;z-index:90}
+.sheet{width:min(820px,100%);max-height:calc(100vh - 32px);overflow:auto;background:var(--card);border:2px solid var(--ink);border-radius:20px;padding:20px 22px 24px;position:relative}
+.sheet h2{font-family:var(--f-display);font-weight:400;font-size:30px;margin:0 0 8px;color:var(--gold)}
+.close{position:absolute;top:12px;right:12px}
+.text p{margin:0 0 10px;font-family:var(--f-text);font-size:16.5px;line-height:1.9}
+.text p b{display:inline-block;min-width:1.6em;font-family:var(--f-display);color:var(--gold)}
+
+/* ---------- 建筑卡 ---------- */
+.album-pill b{font-family:var(--f-display);font-weight:400;font-size:17px;color:var(--orange)}
+.album-pill.bump{animation:bump .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bump{40%{transform:scale(1.25)}}
+.bcard{--cc:var(--gold);width:100%;box-sizing:border-box;background:var(--white);border:3px solid var(--ink);border-radius:18px;padding:10px 12px 12px;display:grid;gap:6px;box-shadow:0 5px 0 var(--ink);text-align:left;position:relative;overflow:hidden}
+.bcard::before{content:"";position:absolute;inset:0 0 auto;height:40px;background:var(--cc);opacity:.9}
+.bc-top{position:relative;display:flex;justify-content:space-between;align-items:center;color:var(--white);font-weight:700;font-size:13px;min-height:22px}
+.bc-tag{background:var(--white);color:var(--cc);border-radius:999px;padding:0 10px;font-size:12px;border:2px solid var(--ink)}
+.bc-art{width:100%;height:auto;display:block;border:2px solid var(--ink);border-radius:12px;position:relative;background:var(--white)}
+.bc-name{font-family:var(--f-display);font-size:24px;line-height:1.15;color:var(--ink)}
+.bc-sub{font-size:13px;color:var(--ink-soft);margin-top:-4px}
+.bc-facts{margin:0;padding-left:1.1em;font-size:14px;line-height:1.55;display:grid;gap:2px}
+.bc-quote{font-family:var(--f-text);font-size:14px;background:var(--paper);border-left:4px solid var(--cc);border-radius:6px;padding:6px 8px}
+.bc-owner{font-size:12px;color:var(--ink-soft);text-align:right;border-top:1.5px dashed var(--line);padding-top:4px}
+.bcard.back{background:repeating-linear-gradient(45deg,var(--gold-soft) 0 10px,#f1dcaa 10px 20px);min-height:100%}
+.bcard.back::before{display:none}
+.bc-back{display:grid;place-items:center;gap:6px;align-content:center;min-height:260px;text-align:center}
+.bc-back b{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:var(--white);border:3px solid var(--ink);font-family:var(--f-display);font-weight:400;font-size:52px;color:var(--gold)}
+.bc-back span{font-family:var(--f-display);font-size:17px;color:var(--ink);background:var(--white);border:2px solid var(--ink);border-radius:999px;padding:1px 12px}
+.cardsheet{width:min(400px,100%);text-align:center;display:grid;gap:14px}
+.cardsheet h2{margin:0}
+.card3d{perspective:1200px;width:min(300px,100%);margin:0 auto}
+.flip{display:grid;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,1.3,.5,1)}
+.flip.on{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.f-front{transform:rotateY(180deg)}
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.acard{all:unset;cursor:pointer;display:block;border-radius:18px}
+.acard:focus-visible{outline:3px solid var(--river);outline-offset:3px}
+.acard:hover .bcard{transform:translateY(-3px)}
+.acard .bcard{transition:transform .15s;font-size:13px}
+.acard .bc-name{font-size:19px}
+.acard .bc-facts,.acard .bc-quote,.acard .bc-owner{display:none}
+.acard.locked{cursor:default;opacity:.75}
+.acard.locked .bc-back{min-height:200px}
+.bigcard{width:min(340px,100%);margin:0 auto 12px}
+@media (prefers-reduced-motion: reduce){.flip{transition:none}.album-pill.bump{animation:none}}
+.confetti{position:fixed;top:-20px;width:10px;height:14px;z-index:95;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+/* ---------- cover ---------- */
+.cover{min-height:calc(100vh - 46px);display:grid;place-items:center;padding-block:10px}
+.cover-card{width:min(620px,100%);background:var(--card);border:2px solid var(--ink);border-radius:28px;box-shadow:6px 6px 0 rgba(58,48,36,.18);padding:16px 16px 28px;display:grid;gap:10px;justify-items:center;text-align:center;animation:rise .7s cubic-bezier(.3,1.4,.5,1) both}
+.cover-card svg{width:100%;height:auto;display:block;border-radius:20px;border:2px solid var(--ink)}
+.ctitle{font-family:var(--f-display);font-weight:400;font-size:clamp(34px,7vw,56px);line-height:1.1;margin:6px 0 0;color:var(--gold);letter-spacing:4px;text-shadow:2px 2px 0 var(--white),4px 4px 0 rgba(58,48,36,.16)}
+.csub{margin:0;font-size:17px;color:var(--ink-soft);max-width:30em}
+.cname{display:grid;gap:6px;justify-items:center;width:100%;margin-top:6px}
+.cname label{font-family:var(--f-display);font-size:20px}
+.cname input{max-width:300px;text-align:center;font-size:22px;border-radius:999px;padding:9px 16px;border-width:2.5px}
+.btn.big{font-size:26px;padding:9px 44px;margin-top:4px}
+.ctag{font-family:var(--f-display);font-size:17px;background:var(--gold-soft);border:2px solid var(--ink);border-radius:999px;padding:2px 16px;margin-top:4px}
+.codebox textarea{width:100%;box-sizing:border-box;font:600 14px/1.5 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:2px solid var(--ink);border-radius:12px;background:var(--white);color:var(--ink);resize:none;word-break:break-all}
+.substat{font-size:16px;background:var(--white);border:2px dashed var(--line);border-radius:12px;padding:10px 12px}
+.substat .okc{color:var(--green)} .substat .badc{color:var(--red)}
+.codebox.backup{opacity:.85}
+.cerr{color:var(--red);font-size:15px;min-height:1.4em}
+.cover.leaving .cover-card{animation:leave .6s ease-in forwards}
+@keyframes rise{from{transform:translateY(30px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+@keyframes leave{to{transform:translateY(-50px) scale(.92);opacity:0}}
+.pre{visibility:hidden;height:0;overflow:hidden}
+.enter{animation:fadein .7s ease-out}
+@keyframes fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.floaty{animation:floaty 2.6s ease-in-out infinite alternate}
+@keyframes floaty{to{transform:translateY(-10px)}}
+.drift{animation:drift 9s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translateX(26px)}}
+.hop{animation:hop .9s ease-in-out infinite alternate}
+@keyframes hop{to{transform:translateY(-4px)}}
+
+/* ---------- word blanks ---------- */
+.sent{font-size:clamp(17px,2vw,20px);line-height:2.4;background:var(--paper);border-radius:12px;padding:6px 14px;border-left:5px solid var(--orange)}
+.blank{display:inline-flex;align-items:center;justify-content:center;min-width:3.4em;height:1.8em;vertical-align:middle;margin:0 4px;border:2.5px dashed var(--orange);border-radius:10px;background:#fff7ec;color:var(--ink);font:inherit;font-weight:700;padding:0 6px;cursor:pointer}
+body.dragging .blank.open,body.picking .blank.open{background:#ffe2bd}
+.blank.hot{background:#ffd29a!important}
+.blank.right{border-style:solid;border-color:var(--green);background:var(--good-bg);color:#215c33}
+.blank.wrong{border-color:var(--red);background:var(--bad-bg);animation:shake .4s}
+.chip.word{background:var(--orange)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- Raffles viewer ---------- */
+.viewer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:460px){.viewer{grid-template-columns:minmax(0,1fr)}}
+.vcell{background:var(--sky);border-radius:14px;padding:8px;display:grid;gap:6px;justify-items:center;text-align:center;font-size:13px;color:var(--ink-soft)}
+.vcell svg{width:100%;max-width:210px;height:auto}
+.vcell input[type=range]{width:100%;accent-color:var(--orange)}
+.seen{font-size:14px}
+.seen i{font-style:normal;color:var(--green);font-weight:700}
+.vcap{font-size:14px;color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<section class="cover" id="cover">
+  <div class="cover-card">
+    <svg viewBox="0 0 560 300" role="img" aria-label="爸爸和我准备出发去寻找建筑大师">
+      <defs>
+        <linearGradient id="csky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#cfe6f6"/><stop offset="1" stop-color="#fbf3df"/></linearGradient>
+        <linearGradient id="cglass" x1="0" x2="1"><stop offset="0" stop-color="#93adc4"/><stop offset=".45" stop-color="#eaf2f8"/><stop offset="1" stop-color="#7590a8"/></linearGradient>
+        <linearGradient id="cblade" x1="0" x2="1"><stop offset="0" stop-color="#7895af"/><stop offset=".5" stop-color="#e2ecf4"/><stop offset="1" stop-color="#67839d"/></linearGradient>
+      </defs>
+      <rect width="560" height="300" fill="url(#csky)"/>
+      <circle cx="486" cy="58" r="26" fill="#ffd27a"/>
+      <g class="drift"><g fill="#ffffff" opacity=".9"><ellipse cx="90" cy="58" rx="34" ry="14"/><ellipse cx="114" cy="50" rx="24" ry="14"/><ellipse cx="300" cy="40" rx="30" ry="12"/><ellipse cx="322" cy="34" rx="20" ry="11"/></g></g>
+      <path d="M0,214 Q280,186 560,214 V300 H0 Z" fill="#cfe2b4"/>
+      <path d="M0,240 Q280,214 560,240 V300 H0 Z" fill="#e1ebc9"/>
+      <path d="M40,276 C140,246 210,280 300,256 S460,236 540,250" fill="none" stroke="#e2772f" stroke-width="5" stroke-dasharray="12 9" stroke-linecap="round"/>
+      <!-- OCBC -->
+      <g transform="translate(176,118)" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"><rect x="0" y="0" width="34" height="78" rx="4" fill="url(#cglass)"/><g fill="none" stroke="#4f6c86" stroke-width="2"><rect x="5" y="6" width="24" height="64"/><path d="M5,27 H29 M5,48 H29"/></g><path d="M6,78 L-3,98 L5,98 L13,78Z M28,78 L37,98 L29,98 L21,78Z" fill="url(#cglass)"/></g>
+      <!-- Raffles -->
+      <g transform="translate(262,116)" stroke="#3a3024" stroke-width="2"><rect x="30" y="16" width="34" height="80" fill="#c9d9e6"/><path d="M0,6 V96 H32 V6" fill="url(#cglass)"/><ellipse cx="16" cy="6" rx="16" ry="5" fill="#eef5fa"/></g>
+      <!-- Gateway -->
+      <g transform="translate(360,104)" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"><path d="M0,14 L16,4 L18,112 L-2,112Z" fill="url(#cblade)"/><path d="M30,4 L46,14 L48,112 L28,112Z" fill="url(#cblade)"/></g>
+      <!-- home -->
+      <g transform="translate(452,170)" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"><rect x="0" y="18" width="50" height="36" fill="#f4e2c0"/><path d="M-8,20 L25,-6 L58,20Z" fill="#d4513a"/><rect x="19" y="32" width="12" height="22" fill="#8a5a35"/></g>
+      <!-- balloon -->
+      <g class="floaty"><path d="M470,138 q-6,20 4,40" fill="none" stroke="#3a3024" stroke-width="1.5"/><ellipse cx="470" cy="114" rx="24" ry="22" fill="#b07ccc" stroke="#3a3024" stroke-width="2"/><ellipse cx="462" cy="105" rx="6" ry="4" fill="#fff" opacity=".6"/><text x="470" y="123" text-anchor="middle" font-family="ZCOOL KuaiLe,sans-serif" font-size="24" fill="#fff">?</text>
+        <rect x="406" y="70" width="128" height="24" rx="12" fill="#8a4fa3" stroke="#3a3024" stroke-width="1.5"/><text x="470" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Noto Sans SC,sans-serif">大师在哪里？</text></g>
+      <g id="coverPeople" transform="translate(110,278) scale(1.75)"></g>
+    </svg>
+    <div class="ctag" id="ctag" hidden></div>
+    <h1 class="ctitle">寻找大师的路线图</h1>
+    <p class="csub">爸爸要带你去拜访一位有名的建筑大师。可是，大师在哪里呢？</p>
+    <div class="cname">
+      <label for="sname">你的名字</label>
+      <input type="text" id="sname" maxlength="16" autocomplete="off" placeholder="在这里输入">
+      <button type="button" class="btn big" id="go">出发！</button>
+      <div class="cerr" id="cerr" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap pre" id="game">
+  <header class="top">
+    <div class="brand">
+      <h1>寻找大师的路线图</h1>
+      <span class="sub">一站一站，看懂作者怎么带路</span>
+    </div>
+    <div class="hud">
+      <span class="teacher" id="teacherTag" hidden>老师模式</span>
+      <span class="pill clock" title="用时">用时 <span id="clock">00:00</span></span>
+      <button class="pill album-pill" id="btnAlbum" type="button">卡册 <b id="albumN">0</b>/5</button>
+      <button class="pill" id="btnText" type="button">翻开课文</button>
+      <button class="pill" id="btnRestart" type="button">重新开始</button>
+    </div>
+  </header>
+  <div class="layers" id="layers" aria-label="进度"></div>
+
+  <main class="stage">
+    <div class="mapcol">
+      <div class="box mapbox">
+<svg id="map" viewBox="0 0 1000 620" role="img" aria-label="寻找大师的路线图">
+          <defs>
+            <pattern id="win" width="7" height="9" patternUnits="userSpaceOnUse"><rect x="1.5" y="2" width="4" height="5" fill="#ffffff" opacity=".5"/></pattern>
+            <linearGradient id="glass" x1="0" x2="1"><stop offset="0" stop-color="#93adc4"/><stop offset=".45" stop-color="#eaf2f8"/><stop offset="1" stop-color="#7590a8"/></linearGradient>
+            <linearGradient id="glass2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d6e4ef"/><stop offset="1" stop-color="#97afc3"/></linearGradient>
+            <linearGradient id="blade" x1="0" x2="1"><stop offset="0" stop-color="#7895af"/><stop offset=".5" stop-color="#e2ecf4"/><stop offset="1" stop-color="#67839d"/></linearGradient>
+            <radialGradient id="glowg"><stop offset="0" stop-color="#ffd27a" stop-opacity=".75"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+            <mask id="m1" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="620"><path id="rv1" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/></mask>
+            <mask id="m2" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="620"><path id="rv2" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/></mask>
+            <mask id="m3" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="620"><path id="rv3" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/></mask>
+            <mask id="m4" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="620"><path id="rv4" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/></mask>
+          </defs>
+          <rect width="1000" height="620" fill="#fbf5e6"/>
+          <g fill="none" stroke="#efe5cc" stroke-width="12" stroke-linecap="round">
+            <path d="M0,300 C150,320 300,280 1000,300"/><path d="M560,0 L540,620"/><path d="M0,560 C300,540 600,600 1000,570"/><path d="M760,0 C780,200 740,400 760,620"/>
+          </g>
+          <g fill="#e1ebc9"><ellipse cx="560" cy="110" rx="70" ry="38"/><ellipse cx="720" cy="560" rx="80" ry="34"/><ellipse cx="330" cy="150" rx="60" ry="40"/></g>
+          <path id="river" d="M230,-20 C235,90 200,170 225,270 C250,370 270,430 360,515 C410,560 470,590 560,640" fill="none" stroke="#3d7fc0" stroke-width="58" stroke-linecap="round"/>
+          <path d="M230,-20 C235,90 200,170 225,270 C250,370 270,430 360,515 C410,560 470,590 560,640" fill="none" stroke="#a5d0ef" stroke-width="50" stroke-linecap="round"/>
+          <path class="shimmer" d="M230,-20 C235,90 200,170 225,270 C250,370 270,430 360,515 C410,560 470,590 560,640" fill="none" stroke="#d6ecfa" stroke-width="4" stroke-dasharray="30 40" stroke-linecap="round"/>
+          <text class="disp" font-size="19" fill="#245a91" letter-spacing="4"><textPath href="#river" startOffset="64%">新加坡河</textPath></text>
+          <g transform="translate(262,392) rotate(62)"><path d="M-16,0 L16,0 L11,7 L-11,7 Z" fill="#c9773d" stroke="#3a3024" stroke-width="1.5"/><rect x="-6" y="-7" width="11" height="7" fill="#fff8e6" stroke="#3a3024" stroke-width="1.2"/></g>
+          <g transform="translate(220,244) rotate(-6)"><rect x="-34" y="-11" width="68" height="22" rx="4" fill="#d8b47a" stroke="#3a3024" stroke-width="2"/><path d="M-30,-6 H30 M-30,6 H30" stroke="#8a6436" stroke-width="1.5"/></g>
+
+          <g fill="none" stroke="#cbbd9a" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round">
+            <path id="seg1" d="M150,240 C210,250 250,240 268,300 C285,360 300,410 350,450 C372,470 392,482 408,488"/>
+            <path id="seg2" d="M414,482 C470,440 500,380 520,330 C545,265 570,235 606,226"/>
+            <path id="seg3" d="M625,238 C680,300 700,350 720,400 C735,440 760,470 792,480"/>
+            <path id="seg4" d="M802,488 C880,470 900,420 905,350 C908,290 890,250 878,222"/>
+          </g>
+          <path d="M150,240 C210,250 250,240 268,300 C285,360 300,410 350,450 C372,470 392,482 408,488" fill="none" stroke="#2c6aa8" stroke-width="7" stroke-linecap="round" mask="url(#m1)"/>
+          <path d="M414,482 C470,440 500,380 520,330 C545,265 570,235 606,226" fill="none" stroke="#e2772f" stroke-width="6" stroke-dasharray="14 10" mask="url(#m2)"/>
+          <path d="M625,238 C680,300 700,350 720,400 C735,440 760,470 792,480" fill="none" stroke="#3c9657" stroke-width="8" stroke-dasharray="1 15" stroke-linecap="round" mask="url(#m3)"/>
+          <path d="M802,488 C880,470 900,420 905,350 C908,290 890,250 878,222" fill="none" stroke="#a0784a" stroke-width="6" stroke-dasharray="10 8" mask="url(#m4)"/>
+
+          <g transform="translate(562,420)"><rect x="-2" y="0" width="4" height="34" fill="#5c4a35"/><rect x="-36" y="-22" width="72" height="26" rx="5" fill="#3c9657" stroke="#3a3024" stroke-width="2"/><text x="0" y="-3" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">桥北路</text></g>
+          <g transform="translate(752,330)"><rect x="-2" y="0" width="4" height="34" fill="#5c4a35"/><rect x="-36" y="-22" width="72" height="26" rx="5" fill="#3c9657" stroke="#3a3024" stroke-width="2"/><text x="0" y="-3" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">美芝路</text></g>
+          <g id="trees"></g>
+
+          <g id="site0" class="site fog">
+            <circle class="glow" cx="110" cy="150" r="95" fill="url(#glowg)"/>
+            <g stroke="#3a3024" stroke-width="2" stroke-linejoin="round">
+              <rect x="42" y="108" width="32" height="107" fill="#a9c4d8"/><rect x="42" y="108" width="32" height="107" fill="url(#win)" stroke="none"/>
+              <rect x="78" y="62" width="30" height="153" fill="#dcc9a2"/><rect x="78" y="62" width="30" height="153" fill="url(#win)" stroke="none"/><path d="M93,62 V44"/>
+              <rect x="112" y="92" width="36" height="123" fill="#8fb3cf"/><rect x="112" y="92" width="36" height="123" fill="url(#win)" stroke="none"/>
+              <rect x="152" y="132" width="30" height="83" fill="#c7d8c2"/><rect x="152" y="132" width="30" height="83" fill="url(#win)" stroke="none"/>
+              <rect x="58" y="168" width="44" height="47" fill="#eab98d"/><path d="M58,168 L80,152 L102,168" fill="#d4513a"/>
+            </g>
+            <ellipse cx="112" cy="217" rx="80" ry="6" fill="#3a3024" opacity=".12"/>
+          </g>
+          <g id="site1" class="site fog">
+            <circle class="glow" cx="470" cy="400" r="90" fill="url(#glowg)"/>
+            <ellipse cx="470" cy="476" rx="44" ry="6" fill="#3a3024" opacity=".14"/>
+            <rect x="444" y="318" width="52" height="128" rx="6" fill="url(#glass)" stroke="#3a3024" stroke-width="2.2"/>
+            <g fill="none" stroke="#4f6c86" stroke-width="2.5"><rect x="452" y="328" width="36" height="108" rx="2"/><path d="M452,364 H488 M452,400 H488"/></g>
+            <path d="M454,446 L440,476 L453,476 L464,446 Z M486,446 L500,476 L487,476 L476,446 Z" fill="url(#glass)" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/>
+          </g>
+          <g id="site2" class="site fog">
+            <circle class="glow" cx="665" cy="140" r="95" fill="url(#glowg)"/>
+            <ellipse cx="668" cy="212" rx="74" ry="6" fill="#3a3024" opacity=".14"/>
+            <rect x="672" y="94" width="54" height="92" fill="url(#glass2)" stroke="#3a3024" stroke-width="2"/><rect x="672" y="94" width="54" height="92" fill="url(#win)"/>
+            <path d="M612,80 V186 H662 V80" fill="url(#glass)" stroke="#3a3024" stroke-width="2"/>
+            <g fill="none" stroke="#5f7d97" stroke-width="1.3"><path d="M612,104 Q637,112 662,104 M612,128 Q637,136 662,128 M612,152 Q637,160 662,152"/></g>
+            <ellipse cx="637" cy="80" rx="25" ry="7" fill="#eef5fa" stroke="#3a3024" stroke-width="2"/>
+            <rect x="598" y="182" width="140" height="28" rx="3" fill="#ead9b8" stroke="#3a3024" stroke-width="2"/>
+            <path d="M606,192 H730" stroke="#c9b48c" stroke-width="2"/>
+          </g>
+          <g id="site3" class="site fog">
+            <circle class="glow" cx="842" cy="390" r="95" fill="url(#glowg)"/>
+            <ellipse cx="842" cy="474" rx="54" ry="7" fill="#3a3024" opacity=".14"/>
+            <path d="M812,304 L832,288 L836,470 L810,470 Z" fill="url(#blade)" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M852,288 L872,304 L874,470 L848,470 Z" fill="url(#blade)" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M822,320 V460 M862,320 V460" stroke="#ffffff" stroke-width="1.5" opacity=".6"/>
+          </g>
+          <g id="site4" class="site fog">
+            <circle class="glow" cx="915" cy="170" r="70" fill="url(#glowg)"/>
+            <rect x="884" y="150" width="62" height="46" fill="#f4e2c0" stroke="#3a3024" stroke-width="2"/>
+            <path d="M874,154 L915,118 L956,154 Z" fill="#d4513a" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/>
+            <rect x="908" y="170" width="15" height="26" fill="#8a5a35" stroke="#3a3024" stroke-width="1.5"/>
+            <rect x="890" y="160" width="13" height="12" fill="#bfe0f5" stroke="#3a3024" stroke-width="1.5"/>
+            <rect x="929" y="160" width="13" height="12" fill="#bfe0f5" stroke="#3a3024" stroke-width="1.5"/>
+            <rect x="934" y="124" width="9" height="18" fill="#8a5a35" stroke="#3a3024" stroke-width="1.5"/>
+          </g>
+          <g id="L2"></g>
+          <g id="clouds"></g>
+          <g id="L1"></g>
+          <g id="L0"></g>
+          <g id="L3"></g>
+          <g id="L4"></g>
+          <g id="slots"></g>
+          <g id="walkers"></g>
+          <g id="balloonFly"></g>
+        </svg>
+      </div>
+    </div>
+    <section class="box panel" aria-live="polite">
+      <div id="phead"></div>
+      <div id="pbody" class="pb"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="cardModal" hidden>
+  <div class="sheet cardsheet" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+    <h2 id="cardTitle">你得到一张建筑卡！</h2>
+    <div class="card3d" id="cardStage"></div>
+    <div class="row" style="justify-content:center"><button type="button" class="btn green" id="cardGo">收进卡册</button></div>
+  </div>
+</div>
+<div class="modal" id="albumModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="albumTitle">
+    <button class="pill close" type="button" data-close>关闭</button>
+    <h2 id="albumTitle">我的卡册</h2>
+    <div id="albumBody"></div>
+  </div>
+</div>
+
+<div class="modal" id="textModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="tmTitle">
+    <button class="pill close" type="button" data-close>关闭</button>
+    <h2 id="tmTitle">难忘的建筑之旅</h2>
+    <div class="text" id="lessonText"></div>
+  </div>
+</div>
+
+<script>
+/* 寻找大师的路线图：课文、题目、完成码（学生端和教师端共用） */
+/* ---------- 课文 ---------- */
+const LESSON=[
+ '工艺设计课的老师布置了假期作业，让我们设计一个别具特色的建筑模型。正当我伤脑筋的时候，爸爸故作神秘地说，他可以带我去拜访一位有名的建筑大师，但要走很长一段路。我欣喜万分，满口答应。',
+ '爸爸带我来到中央商业区，我们沿着新加坡河漫步。走着走着，爸爸指着不远处一座外观独特的大楼问我：“那座大楼的外观像一个汉字，你能看出是什么字吗？”我绞尽脑汁，还是想不到。爸爸得意地说：“是繁体字‘貝’。古时候人们曾经把贝壳当作钱来使用，所以用‘贝’做偏旁的字，很多都跟钱财有关。你知道吗？这座楼就是华侨银行大楼。”“贝”代表钱，银行不就是与钱打交道吗？想到这里，我由衷佩服设计师的巧思。不过，建筑大师该不会住在银行大楼里吧？爸爸似乎看出我的疑惑，笑着说：“别急，我们先去来福士城吃午餐。”',
+ '我们沿着桥北路走，不久就看到远处的来福士城大楼。这座楼从一面看是个圆柱体，从另一面看又是个长方体，别具一格。吃完午餐，爸爸还要走一走。',
+ '我们离开来福士城，顺着美芝路来到新门广场。这里有两座摩天大楼，好像两扇打开的大门。大楼的形状独树一帜，看上去就像薄薄的刀片一样。爸爸说，有人认为大楼设计成这种形状，有消除灾祸的用意。虽然这只是传言，却让我对建筑设计产生了更多的好奇心。',
+ '我问爸爸那位建筑大师住在哪里，他却说：“你已经见过他了，他就是贝聿铭先生。这三座建筑都是他设计的。”我这才恍然大悟，原来爸爸是希望我从这位大师的建筑中获得设计的灵感。',
+ '回到家后，通过查找资料，我对贝聿铭先生有了更多的了解。他是一名建筑设计大师，他的很多建筑今天都已经成为知名的地标，但有些却曾受尽批评。例如，他为法国卢浮宫设计的玻璃金字塔，这一建筑造型大胆独特，遭到了很多人的质疑和抨击。面对挫折，他这样说：“我和我的建筑都像竹子，再大的风雨也只是弯弯腰而已。”',
+ '这次的建筑之旅，不但让我对新加坡的建筑有了新的认识，也让我从这位建筑大师身上学到很多。'];
+
+const PLACES=['中央商业区','华侨银行大楼','来福士城','新门广场','家'];
+const CARDS=['来福士城','滨海湾金沙','家','中央商业区','新门广场','华侨银行大楼'];
+const NAMES=['起点','第1站','第2站','第3站','终点'];
+const WORDS=['沿着','顺着','离开','来到','回到','经过','穿过'];
+
+/* ---------- 题目 ----------
+   step 类型：place 拖地点｜words 拖转换词｜mcq 选择题｜msq 多选｜viewer 转动观察 */
+const ST=[
+ {para:[1,2],say:'出发！',steps:[
+  {type:'place'},
+  {type:'words',title:'怎么到这里？',parts:['爸爸带我',null,'中央商业区。'],ans:['来到'],para:2},
+  {type:'mcq',title:'为什么出发？',q:'爸爸为什么要带“我”走这么长的一段路？',para:[1],opts:[
+    ['去中央商业区逛逛新大楼，顺便替“我”买些文具','回第1段看看：爸爸说要带“我”去拜访谁？'],
+    ['拜访一位有名的建筑大师，帮“我”找设计作业的灵感',1],
+    ['带“我”去银行办点事，让“我”认识新加坡的金融区','银行只是路上经过的第一站，不是出发的目的。']]},
+  {type:'mcq',title:'出发时的心情',q:'听到要去拜访建筑大师，“我”的心情怎样？',para:[1],opts:[
+    ['伤脑筋','这是“我”想不出作业时的样子。听到爸爸的提议后呢？'],
+    ['恍然大悟','这是第5段，大师揭晓时的心情。'],
+    ['欣喜万分',1]]}]},
+ {para:[2],say:'这座楼好特别！',steps:[
+  {type:'place'},
+  {type:'words',title:'怎么走到这里？',parts:['我们',null,'新加坡河漫步。'],ans:['沿着'],sign:'沿着',para:2},
+  {type:'mcq',title:'看到什么①',log:'see',show:'外观像繁体字“貝”',q:'爸爸说，这座大楼的外观像一个汉字。是哪个字？',para:[2],opts:[
+    ['汉字“目”','只看到了上半部分，大楼下面还有两条“腿”。'],
+    ['繁体字“貝”',1],
+    ['繁体字“門”','像两扇打开的大门的，是第3站新门广场。']]},
+  {type:'mcq',title:'看到什么②',q:'为什么银行大楼要设计成“貝”字的样子？',para:[2],opts:[
+    ['古时候用贝壳当钱，“贝”字旁的字多和钱财有关，正好配银行',1],
+    ['新加坡河里曾有很多贝壳，大楼建在河边，用来纪念这段历史','课文没有提到河里的贝壳。读读爸爸的解释。'],
+    ['“貝”字笔画多、左右对称，盖成大楼看起来特别稳重气派','笔画和对称都不是原因。读读爸爸的解释。']]},
+  {type:'mcq',title:'想到什么',log:'feel',pin:1,show:'由衷佩服设计师的巧思，又疑惑大师会不会住在这里',q:'想到这里，“我”有什么想法？',para:[2],opts:[
+    ['觉得大楼外形太奇怪，怀疑设计师是不是在跟大家开玩笑','课文说“我”由衷佩服设计师的巧思。'],
+    ['恍然大悟，原来要拜访的大师就是这座银行大楼的主人','这时还没揭晓大师是谁，那是第5段的事。'],
+    ['由衷佩服设计师的巧思，又疑惑大师会不会住在这里',1]]},
+  {type:'mcq',must:'过渡句',q:'离开前，爸爸笑着说：“别急，我们先去来福士城吃午餐。”这句话有什么作用？',para:[2,3],opts:[
+    ['交代地点：告诉读者他们中午要去哪里吃午餐','吃饭只是表面。想一想：这句话让文章从哪里转到哪里？'],
+    ['承上启下：结束这一站，把读者自然地带向下一站',1],
+    ['描写人物：说明爸爸做事不慌不忙，很有耐心','“别急”只是顺口一说。想想这句话之后，地点有没有变？']],
+    explain:'这是<b>过渡句</b>。人还没走，就先预告下一站，读者不会突然“被换到”另一个地方。'}]},
+ {para:[3],say:'看到了！',steps:[
+  {type:'place'},
+  {type:'words',title:'怎么走到这里？',parts:['我们',null,'桥北路走，不久就看到远处的来福士城大楼。'],ans:['沿着'],sign:'沿着',para:3},
+  {type:'viewer',title:'看到什么：绕着大楼走一圈'},
+  {type:'mcq',title:'看到什么①',q:'站在<b>弧形</b>的那一面看，来福士城像什么形状？',para:[3],opts:[
+    ['长方体','再转到弧形那一面看看。'],['圆柱体',1],['三棱柱','三棱柱的面都是平的，弧形那一面不是。']]},
+  {type:'mcq',title:'看到什么②',log:'see',show:'一面看是圆柱体，另一面看是长方体',q:'站在<b>平直</b>的那一面看，来福士城又像什么形状？',para:[3],opts:[
+    ['长方体',1],['圆柱体','再转到平直那一面看看。'],['圆锥体','圆锥体的顶是尖的。']],
+    explain:'课文第3段：“这座楼从一面看是个圆柱体，从另一面看又是个长方体。”换一个位置看，看到的就不一样。'},
+  {type:'mcq',title:'想到什么',log:'feel',pin:2,show:'很欣赏这座楼（别具一格）',q:'这一段没有直接写“我”的感受。从哪个词可以看出“我”很欣赏这座楼？',para:[3],opts:[
+    ['别具一格',1],['独树一帜','这个词在第4段，形容新门广场。'],['绞尽脑汁','这是第2段“我”在猜字的样子。']]},
+  {type:'mcq',must:'详略',q:'第2段写华侨银行大楼用了243个字，第3段写来福士城只用了67个字。两座都是贝聿铭设计的，为什么一详一略？',para:[2,3,5],opts:[
+    ['来福士城不是贝聿铭设计的，作者只是吃午餐时顺路经过，所以三言两语带过就够了','第5段爸爸说：“这三座建筑都是他设计的。”来福士城也是大师的作品。'],
+    ['第一站要靠猜字对话带出“大师在哪里”的疑问；来福士城抓住“两面形状不同”就写清楚了',1],
+    ['华侨银行大楼比来福士城更高、更有名，也更受游客欢迎，所以作者要花更多笔墨来详细介绍','课文没有比较两座楼的高矮和名气。详写还是略写，要看这一段在文章里要完成什么任务。']],
+    explain:'两座楼都是大师的作品，也都是爸爸要带“我”看的。不同的是写作上的<b>任务</b>：华侨银行大楼是第一站，作者要用猜字的对话、“貝”字的含义，带出“大师在哪里？”的疑问，所以<b>详写</b>；来福士城的特点（一面是圆柱体，一面是长方体）一两句就能写清楚，抓住这个特点、点出“别具一格”就够了，所以<b>略写</b>。详写还是略写，不是看哪座楼更重要，而是看这一段要完成什么任务。'}]},
+ {para:[4,5],say:'好高的楼！',steps:[
+  {type:'place'},
+  {type:'words',title:'怎么走到这里？',parts:['我们',null,'来福士城，',null,'美芝路',null,'新门广场。'],ans:['离开','顺着','来到'],sign:'离开·顺着·来到',para:4},
+  {type:'msq',title:'看到什么①',log:'see',show:'两座摩天大楼像两扇打开的大门，又像薄薄的刀片',q:'作者用了哪<b>两个</b>比喻来写这两座摩天大楼？（选两个）',para:[4],need:2,opts:[
+    ['像两扇打开的大门',1],['像两颗榴莲','这是导入时看到的滨海艺术中心。'],['像薄薄的刀片',1],['像繁体字“貝”','这是第1站华侨银行大楼。']]},
+  {type:'mcq',title:'看到什么②',q:'爸爸说，有人认为大楼设计成这种形状，有什么用意？',para:[4],opts:[
+    ['招财进宝','和钱财有关的是华侨银行大楼。'],['挡风遮雨','课文没有这样说。'],['消除灾祸',1]]},
+  {type:'mcq',title:'作者的态度',q:'“虽然这只是传言，却让我对建筑设计产生了更多的好奇心。”作者对这个传言的态度是什么？',para:[4],opts:[
+    ['完全相信，觉得大楼真的能替这一带消除灾祸','“虽然这只是传言”，说明作者并不当真。'],
+    ['不一定相信，但它引起了“我”对建筑设计的好奇',1],
+    ['觉得传言很可笑，认为建筑设计和传言毫无关系','课文没有嘲笑的意思，反而让“我”更好奇。']]},
+  {type:'mcq',title:'想到什么',log:'feel',pin:3,show:'对建筑设计更好奇；知道大师是谁后，恍然大悟',q:'在新门广场，“我”的心情有什么变化？',para:[4,5],opts:[
+    ['先是由衷佩服，后来觉得大楼像刀片太危险，感到害怕','课文没有写害怕；传言反而让“我”更好奇。'],
+    ['先是更加好奇，知道大师是谁后，恍然大悟',1],
+    ['一直很平静，因为这只是一个传言，“我”并不在意','第5段“恍然大悟”，心情有很大的变化。']]},
+  {type:'mcq',must:'悬念',q:'第1段就说要拜访建筑大师，为什么到了这一站（第5段）才说出大师是谁？',para:[2,5],opts:[
+    ['作者一开始忘了交代，写到最后才补上大师是谁，让文章完整','这是作者故意的安排。想想“我”一路上心里在问什么。'],
+    ['制造悬念：带着“大师在哪里”的疑问一站站走，揭晓时印象更深',1],
+    ['交代顺序：大师就住在新门广场，要一直走到这里才能见到他本人','课文说的是“你已经见过他了”，三座建筑都是他设计的。']],
+    explain:'这就是<b>悬念</b>。疑问在华侨银行大楼出现，到新门广场才解开。'}]},
+ {para:[6,7],say:'到家啦！',steps:[
+  {type:'place'},
+  {type:'words',title:'怎么回到这里？',parts:[null,'家后，通过查找资料，我对贝聿铭先生有了更多的了解。'],ans:['回到'],sign:'回到',para:6},
+  {type:'mcq',title:'看到什么①',log:'see',show:'玻璃金字塔造型大胆独特，曾受到批评',q:'“我”查资料知道，贝聿铭为法国卢浮宫设计的玻璃金字塔，为什么遭到很多人的质疑和抨击？',para:[6],opts:[
+    ['建造时间太长','课文没有提到建造时间。'],['造型大胆独特',1],['用了太多竹子','竹子是名言里的比喻，不是建筑材料。']]},
+  {type:'mcq',must:'人物精神',q:'“我和我的建筑都像竹子，再大的风雨也只是弯弯腰而已。”这句话让“我”学到了什么？',para:[6],opts:[
+    ['盖房子最好用竹子，因为竹子轻巧，又不怕风吹雨打','这是比喻，不是说真的用竹子盖房子。'],
+    ['面对批评和挫折，要像竹子一样坚韧，不被打倒',1],
+    ['遇到大风大雨时，要懂得弯下腰来保护好自己','“风雨”比喻的是批评和挫折，不是真的天气。']],
+    explain:'“风雨”比喻批评和挫折。“我”不但认识了建筑，也学到了大师坚韧不屈的精神。'},
+  {type:'mcq',title:'想到什么',log:'feel',pin:4,show:'对新加坡的建筑有新认识，也从大师身上学到很多',q:'这次旅程，“我”有什么收获？',para:[7],opts:[
+    ['走了一整天觉得很累，以后不想再去参观建筑了','课文没有这样写。看看第7段。'],
+    ['对新加坡的建筑有了新的认识，也从大师身上学到很多',1],
+    ['觉得设计作业太难了，决定回家请爸爸帮忙完成','刚好相反，“我”从大师的建筑中获得了灵感。']]}]}];
+
+const SECRETS=[
+ {name:'路线要清楚',full:'用转换词和过渡句带路',from:'华侨银行大楼的过渡句'},
+ {name:'详略有安排',full:'要展开故事、带出疑问的地方详写；抓住一个特点就能写清楚的地方略写',from:'华侨银行大楼和来福士城的详略'},
+ {name:'所见 + 所感',full:'每到一站，说出看到什么，也说出想到什么',from:'每一站的看到、想到'},
+ {name:'留一个悬念',full:'留一个疑问，吸引游客跟着走下去',from:'新门广场的悬念'}];
+
+
+/* ---------- 正确答案的位置：分散在 A、B、C（D），不要都是同一个字母 ---------- */
+const ANSWER_AT={'0.2':'A','0.3':'C','1.2':'A','1.3':'B','1.4':'C','1.5':'A','2.3':'B','2.4':'C','2.5':'B','2.6':'C',
+  '3.2':'BD','3.3':'A','3.4':'B','3.5':'C','3.6':'A','4.2':'B','4.3':'C','4.4':'A'};
+ST.forEach((st,k)=>st.steps.forEach((s,i)=>{
+  const want=ANSWER_AT[k+'.'+i];if(!want||!s.opts)return;
+  const right=s.opts.filter(o=>o[1]===1),wrong=s.opts.filter(o=>o[1]!==1);
+  const out=[];let r=0,w=0;
+  for(let j=0;j<s.opts.length;j++)out.push(want.includes('ABCD'[j])?right[r++]:wrong[w++]);
+  s.opts=out;
+}));
+
+/* ---------- 完成码（学生端生成，教师端读取） ----------
+   MR1|班级码|姓名|用时秒|每题记录|校验
+   每题记录：错误次数 + 误选字母（选择题=选项 A-D；地点=地点卡；转换词=词卡），用 . 隔开 */
+const QLIST=[];
+ST.forEach((st,k)=>st.steps.forEach((s,i)=>{if(s.type!=='viewer')QLIST.push({k,i,s})}));
+const CODE_RE=/MR1\|([^|\n]*)\|([^|\n]*)\|(\d{1,6})\|([0-9A-Z.]+)\|([0-9A-Z]{2})/g;
+function codeSum(t){let h=7;for(const ch of t)h=(h*31+ch.codePointAt(0))%1296;return h.toString(36).toUpperCase().padStart(2,'0')}
+function makeCode(cls,name,secs,rec){
+  const items=QLIST.map(q=>{const r=rec[q.k+'.'+q.i]||{n:0,p:''};return Math.min(9,r.n)+r.p}).join('.');
+  const body=`MR1|${(cls||'-').replace(/[|\n]/g,'')}|${String(name).replace(/[|\n]/g,'').trim()}|${secs}|${items}`;
+  return body+'|'+codeSum(body);
+}
+function readCodes(text){
+  const out=[];let m;CODE_RE.lastIndex=0;
+  while((m=CODE_RE.exec(text))){
+    const body=m[0].slice(0,m[0].length-3);
+    if(codeSum(body)!==m[5]){out.push({bad:true,raw:m[0]});continue}
+    const it=m[4].split('.');
+    if(it.length!==QLIST.length){out.push({bad:true,raw:m[0]});continue}
+    out.push({cls:m[1],name:m[2],secs:+m[3],items:it.map(x=>({n:+x[0],p:x.slice(1)}))});
+  }
+  return out;
+}
+const CLASS_RE=/^[A-Za-z0-9][A-Za-z0-9._~-]{1,39}$/;
+
+</script>
+<script>
+/* 建筑卡：每完成一站，收集一张 */
+const CARDSET=[
+ {title:'中央商业区',sub:'起点 · 新加坡河畔',tag:'出发卡',color:'#3d7fc0',
+  facts:['爸爸带“我”来到中央商业区，沿着新加坡河漫步。','任务：拜访一位有名的建筑大师。','心情：欣喜万分'],
+  art:`<rect width="200" height="130" fill="#e4eff8"/><circle cx="168" cy="26" r="12" fill="#f2b632"/>
+   <g stroke="#3a3024" stroke-width="2" stroke-linejoin="round">
+   <rect x="22" y="44" width="26" height="62" fill="#cfdfeb"/><rect x="52" y="22" width="22" height="84" fill="#e8d9b5"/><rect x="78" y="36" width="30" height="70" fill="#bccddb"/>
+   <rect x="112" y="16" width="20" height="90" fill="#d7e4ee"/><rect x="136" y="50" width="34" height="56" fill="#e8d9b5"/></g>
+   <g fill="#3a3024" opacity=".22"><rect x="57" y="30" width="12" height="3"/><rect x="57" y="40" width="12" height="3"/><rect x="57" y="50" width="12" height="3"/><rect x="116" y="26" width="12" height="3"/><rect x="116" y="38" width="12" height="3"/><rect x="116" y="50" width="12" height="3"/></g>
+   <path d="M0,112 C50,100 90,124 140,112 S190,104 200,110 V130 H0Z" fill="#7fb2e0" stroke="#3a3024" stroke-width="2"/>
+   <path d="M20,118 q10,-4 20,0 M90,121 q10,-4 20,0 M150,116 q10,-4 20,0" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>`},
+ {title:'华侨银行大楼',sub:'第1站 · 第2段',tag:'大师作品 ①',color:'#b8862b',
+  facts:['外观像繁体字“貝”。','古时候用贝壳当钱，银行正是和钱打交道的地方。','想到：由衷佩服设计师的巧思。'],
+  art:`<rect width="200" height="130" fill="#f6ecd6"/>
+   <g stroke="#3a3024" stroke-width="2.4" stroke-linejoin="round">
+   <rect x="68" y="12" width="64" height="88" rx="3" fill="#cfdfeb"/>
+   <line x1="68" y1="41" x2="132" y2="41"/><line x1="68" y1="70" x2="132" y2="70"/>
+   <path d="M80,100 L64,124 H76 L90,100Z" fill="#bccddb"/><path d="M120,100 L136,124 H124 L110,100Z" fill="#bccddb"/></g>
+   <g fill="#3a3024" opacity=".18"><rect x="76" y="18" width="48" height="3"/><rect x="76" y="27" width="48" height="3"/><rect x="76" y="47" width="48" height="3"/><rect x="76" y="56" width="48" height="3"/><rect x="76" y="76" width="48" height="3"/><rect x="76" y="85" width="48" height="3"/></g>
+   <text x="160" y="58" text-anchor="middle" font-size="34" font-family="Noto Serif SC,serif" font-weight="700" fill="#b8862b">貝</text>`},
+ {title:'来福士城',sub:'第2站 · 第3段',tag:'大师作品 ②',color:'#3c9657',
+  facts:['从一面看是个圆柱体，从另一面看又是个长方体。','别具一格。','这里吃午餐，再继续往前走。'],
+  art:`<rect width="200" height="130" fill="#e7f4e6"/>
+   <g stroke="#3a3024" stroke-width="2.2" stroke-linejoin="round">
+   <rect x="44" y="20" width="56" height="96" fill="#bccddb"/>
+   <path d="M100,20 A30,8 0 0 1 130,23 V116 A30,8 0 0 1 100,116 Z" fill="#9fb8cc"/>
+   <polygon points="44,20 100,20 130,23 74,23" fill="#e2ecf3"/></g>
+   <g fill="#3a3024" opacity=".2"><rect x="50" y="30" width="44" height="3"/><rect x="50" y="42" width="44" height="3"/><rect x="50" y="54" width="44" height="3"/><rect x="50" y="66" width="44" height="3"/><rect x="50" y="78" width="44" height="3"/><rect x="50" y="90" width="44" height="3"/><rect x="50" y="102" width="44" height="3"/></g>
+   <g font-size="12" font-family="Noto Sans SC,sans-serif" fill="#3a3024"><text x="72" y="128" text-anchor="middle">方</text><text x="116" y="128" text-anchor="middle">圆</text></g>
+   <g stroke="#3a3024" stroke-width="2" fill="#ffffff"><rect x="148" y="40" width="36" height="28" rx="3"/><ellipse cx="166" cy="96" rx="18" ry="16"/></g>
+   <text x="166" y="58" text-anchor="middle" font-size="11" fill="#6f6250" font-family="Noto Sans SC,sans-serif">长方体</text><text x="166" y="100" text-anchor="middle" font-size="11" fill="#6f6250" font-family="Noto Sans SC,sans-serif">圆柱体</text>`},
+ {title:'新门广场',sub:'第3站 · 第4、5段',tag:'大师作品 ③',color:'#e2772f',
+  facts:['两座摩天大楼像两扇打开的大门，又像薄薄的刀片。','传言：有消除灾祸的用意。','揭晓：大师就是贝聿铭先生！'],
+  art:`<rect width="200" height="130" fill="#fdf0dc"/>
+   <g stroke="#3a3024" stroke-width="2.2" stroke-linejoin="round">
+   <polygon points="52,14 92,24 92,118 52,118" fill="#bccddb"/><polygon points="92,24 98,22 98,118 92,118" fill="#8ea6ba"/>
+   <polygon points="148,14 108,24 108,118 148,118" fill="#bccddb"/><polygon points="108,24 102,22 102,118 108,118" fill="#8ea6ba"/></g>
+   <g stroke="#3a3024" stroke-width="1" opacity=".25"><line x1="56" y1="40" x2="88" y2="44"/><line x1="56" y1="62" x2="88" y2="64"/><line x1="56" y1="84" x2="88" y2="85"/><line x1="144" y1="40" x2="112" y2="44"/><line x1="144" y1="62" x2="112" y2="64"/><line x1="144" y1="84" x2="112" y2="85"/></g>
+   <rect y="118" width="200" height="12" fill="#e8d9b5" stroke="#3a3024" stroke-width="2"/>`},
+ {title:'贝聿铭 · 玻璃金字塔',sub:'终点 · 回到家后查资料',tag:'大师卡',color:'#8a4fa3',
+  facts:['为法国卢浮宫设计的玻璃金字塔，造型大胆独特。','曾遭到很多人的质疑和抨击。'],
+  quote:'“我和我的建筑都像竹子，再大的风雨也只是弯弯腰而已。”',
+  art:`<rect width="200" height="130" fill="#efe4f4"/>
+   <polygon points="100,18 168,112 32,112" fill="#d7e8f2" stroke="#3a3024" stroke-width="2.4" stroke-linejoin="round"/>
+   <g stroke="#5f7d97" stroke-width="1.2"><line x1="100" y1="18" x2="100" y2="112"/><line x1="100" y1="18" x2="66" y2="112"/><line x1="100" y1="18" x2="134" y2="112"/><line x1="66" y1="65" x2="134" y2="65"/><line x1="49" y1="89" x2="151" y2="89"/></g>
+   <rect y="112" width="200" height="18" fill="#e8d9b5" stroke="#3a3024" stroke-width="2"/>
+   <g stroke="#3c9657" stroke-width="4" stroke-linecap="round" fill="none"><path d="M182,112 C180,86 186,62 176,38"/></g>
+   <g fill="#3c9657"><ellipse cx="170" cy="52" rx="9" ry="3.5" transform="rotate(-30 170 52)"/><ellipse cx="188" cy="74" rx="9" ry="3.5" transform="rotate(25 188 74)"/><ellipse cx="172" cy="90" rx="8" ry="3" transform="rotate(-25 172 90)"/></g>`}
+];
+function cardHTML(i,owner){
+  const c=CARDSET[i];
+  return `<div class="bcard" style="--cc:${c.color}">
+    <div class="bc-top"><span>No.${i+1} / 5</span><span class="bc-tag">${c.tag}</span></div>
+    <svg class="bc-art" viewBox="0 0 200 130" aria-hidden="true">${c.art}</svg>
+    <div class="bc-name">${c.title}</div><div class="bc-sub">${c.sub}</div>
+    <ul class="bc-facts">${c.facts.map(f=>`<li>${f}</li>`).join('')}</ul>
+    ${c.quote?`<div class="bc-quote">${c.quote}</div>`:''}
+    ${owner?`<div class="bc-owner">收集者：${owner}</div>`:''}
+  </div>`;
+}
+function cardBackHTML(i,label){
+  return `<div class="bcard back"><div class="bc-back"><b>?</b><span>${label||'建筑卡'}</span></div></div>`;
+}
+
+</script>
+<script>
+/* 学生端 → 教师端：经免费转发服务 ntfy.sh 传送，内容先用链接里的密钥加密（AES-GCM），转发服务看不到名字和作答 */
+const RELAY_HOST='https://ntfy.sh/';
+const B64U={
+  enc:buf=>{let s='';new Uint8Array(buf).forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')},
+  dec:s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((s.length+3)%4)),c=>c.charCodeAt(0))
+};
+const ROOM_RE=/^[A-Za-z0-9_-]{16,64}$/, KEY_RE=/^[A-Za-z0-9_-]{22}$/;
+function randToken(n){const A='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';let r='';for(const x of crypto.getRandomValues(new Uint32Array(n)))r+=A[x%A.length];return r}
+function newKey(){return B64U.enc(crypto.getRandomValues(new Uint8Array(16)))}
+const _keys={};
+function aesKey(k){return _keys[k]||(_keys[k]=crypto.subtle.importKey('raw',B64U.dec(k),'AES-GCM',false,['encrypt','decrypt']))}
+async function seal(k,text){
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await aesKey(k),new TextEncoder().encode(text)));
+  const out=new Uint8Array(12+ct.length);out.set(iv);out.set(ct,12);
+  return 'MRX1.'+B64U.enc(out);
+}
+async function unseal(k,s){
+  if(typeof s!=='string'||!s.startsWith('MRX1.'))return null;
+  try{const b=B64U.dec(s.slice(5));const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b.slice(0,12)},await aesKey(k),b.slice(12));return JSON.parse(new TextDecoder().decode(pt))}catch(e){return null}
+}
+
+</script>
+<script>
+/* 爸爸和“我”的头像 */
+function dadSVG(){return `
+<g class="dad">
+ <g class="leg l"><rect x="-6.5" y="-30" width="6" height="30" rx="3" fill="#34405a"/><rect x="-9" y="-3" width="9" height="4" rx="2" fill="#2a2420"/></g>
+ <g class="leg r"><rect x="0.5" y="-30" width="6" height="30" rx="3" fill="#34405a"/><rect x="0" y="-3" width="9" height="4" rx="2" fill="#2a2420"/></g>
+ <g class="body">
+  <g class="arm r"><rect x="9" y="-56" width="5.5" height="23" rx="2.75" fill="#3f7fc4" stroke="#24324a" stroke-width="1"/><circle cx="11.7" cy="-32" r="3.2" fill="#f2c29b"/></g>
+  <rect x="-11" y="-58" width="22" height="32" rx="7" fill="#3f7fc4" stroke="#24324a" stroke-width="1.5"/>
+  <path d="M-4,-58 L0,-52 L4,-58 Z" fill="#ffffff"/>
+  <path d="M-9,-54 Q-17,-45 -19.5,-35" stroke="#3f7fc4" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+  <circle cx="-20" cy="-32.5" r="3.2" fill="#f2c29b"/>
+  <rect x="-3" y="-64" width="6" height="7" fill="#f2c29b"/>
+  <circle cx="-11" cy="-72" r="2.6" fill="#f2c29b" stroke="#3a3024" stroke-width="1"/>
+  <circle cx="0" cy="-73" r="11.5" fill="#f2c29b" stroke="#3a3024" stroke-width="1.5"/>
+  <path d="M-11.8,-75 C-12.5,-89 11,-91 11.8,-77 C6,-83 -4,-84 -11.8,-75Z" fill="#2b2622"/>
+  <circle cx="-4.5" cy="-73" r="1.1" fill="#2b2622"/><circle cx="4.5" cy="-73" r="1.1" fill="#2b2622"/>
+  <g fill="none" stroke="#3a3024" stroke-width="1.4"><circle cx="-4.5" cy="-73" r="3.4"/><circle cx="4.5" cy="-73" r="3.4"/><path d="M-1.1,-73 H1.1"/></g>
+  <path d="M-3.2,-66.6 Q0,-63.8 3.2,-66.6" stroke="#3a3024" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+ </g>
+</g>`}
+
+function kidSVG(dx){return `
+<g class="kid" transform="translate(${dx},0)">
+ <g class="leg l"><rect x="-5" y="-20" width="4.6" height="20" rx="2.3" fill="#2f5d8a"/><rect x="-7" y="-3" width="7" height="3.5" rx="1.7" fill="#f7f7f2" stroke="#3a3024" stroke-width=".8"/></g>
+ <g class="leg r"><rect x="0.4" y="-20" width="4.6" height="20" rx="2.3" fill="#2f5d8a"/><rect x="0" y="-3" width="7" height="3.5" rx="1.7" fill="#f7f7f2" stroke="#3a3024" stroke-width=".8"/></g>
+ <g class="body">
+  <rect x="-12.5" y="-39" width="7" height="15" rx="3" fill="#3c9657" stroke="#3a3024" stroke-width="1.2"/>
+  <rect x="-8" y="-41" width="16" height="23" rx="6" fill="#f08a3c" stroke="#7a3d12" stroke-width="1.3"/>
+  <path d="M-3,-34 H3" stroke="#ffd7b0" stroke-width="2.4" stroke-linecap="round"/>
+  <g class="arm r"><path d="M6,-38 Q8.5,-35 7.5,-32" stroke="#f08a3c" stroke-width="4.5" stroke-linecap="round" fill="none"/><circle cx="7.5" cy="-30.5" r="2.7" fill="#f2c29b"/></g>
+  <rect x="-2.5" y="-44" width="5" height="4" fill="#f2c29b"/>
+  <circle cx="0" cy="-50" r="9.6" fill="#f2c29b" stroke="#3a3024" stroke-width="1.4"/>
+  <path d="M-9.8,-50 C-11,-63 10,-64 9.8,-51 C7,-55 2,-57 -3,-55 C-5,-53 -7,-52 -9.8,-50Z" fill="#3a2a1e"/>
+  <circle cx="-3.4" cy="-49" r="1.1" fill="#2b2622"/><circle cx="3.6" cy="-49" r="1.1" fill="#2b2622"/>
+  <circle cx="-5.5" cy="-45.5" r="1.7" fill="#f4a3a0" opacity=".7"/><circle cx="5.8" cy="-45.5" r="1.7" fill="#f4a3a0" opacity=".7"/>
+  <path d="M-2.6,-45 Q0,-42.4 2.6,-45" stroke="#3a3024" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+ </g>
+</g>`}
+
+function avatar(who){
+  if(who==='dad') return `<svg viewBox="-16 -91 32 32" aria-hidden="true"><rect x="-16" y="-91" width="32" height="32" fill="#e4eff8"/><rect x="-12" y="-62" width="24" height="10" rx="5" fill="#3f7fc4"/>${dadSVG().replace('class="dad"','')}</svg>`;
+  return `<svg viewBox="-14 -64 28 28" aria-hidden="true"><rect x="-14" y="-64" width="28" height="28" fill="#fde9d6"/>${kidSVG(0).replace('class="kid"','')}</svg>`;
+}
+
+window.PEOPLE={avatar};
+
+</script>
+<script>
+/* 地图：底图、站牌、人物、行走，以及五个图层的绘制 */
+(function(){
+const $=s=>document.querySelector(s);
+const NS='http://www.w3.org/2000/svg';
+const REDUCE=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* trees */
+const trees=[[28,250],[196,92],[300,196],[392,300],[528,468],[566,186],[612,300],[700,252],[778,190],[930,302],[962,420],[700,486],[404,566],[290,560],[968,238],[984,540],[340,100],[470,90],[60,330],[140,420]];
+$('#trees').innerHTML=trees.map(([x,y])=>`<g transform="translate(${x},${y})"><rect x="-2" y="-2" width="4" height="10" fill="#7a5a3a"/><circle cx="0" cy="-8" r="10" fill="#8cbf6e" stroke="#3a3024" stroke-width="1.5"/><circle cx="-4" cy="-11" r="3" fill="#b4d98f"/></g>`).join('');
+
+/* fog clouds */
+const SITE=[[110,160],[470,400],[665,145],[842,390],[915,160]];
+$('#clouds').innerHTML=SITE.map(([x,y],i)=>`<g class="cloud" id="cloud${i}" transform="translate(${x},${y})"><g fill="#efe9da" stroke="#cfc3a6" stroke-width="2"><ellipse cx="-26" cy="8" rx="30" ry="22"/><ellipse cx="22" cy="6" rx="32" ry="24"/><ellipse cx="0" cy="-12" rx="30" ry="26"/></g><text class="disp" x="0" y="16" text-anchor="middle" font-size="38" fill="#b9aa88">?</text></g>`).join('');
+
+/* station signs */
+const SLOTS=[{x:110,y:264,n:'起'},{x:470,y:505,n:'1'},{x:668,y:244,n:'2'},{x:842,y:505,n:'3'},{x:915,y:96,n:'终'}];
+function slotHTML(i,name,pre){
+  const g=SLOTS[i];const label=name?(pre?pre+' · ':'')+name:'？？？';const w=name?Math.max(110,46+label.length*15.5):104;
+  let cx=0;if(g.x-w/2<6)cx=6-(g.x-w/2);if(g.x+w/2>994)cx=994-(g.x+w/2);
+  const bx=cx-w/2+16;
+  return `<g transform="translate(${g.x},${g.y})">
+   <rect class="frame" x="${cx-w/2}" y="-16" width="${w}" height="32" rx="16" fill="#fffaf0" stroke="#3a3024" stroke-width="2"/>
+   <circle class="ring" cx="${bx}" cy="0" r="11" fill="none" stroke="#e2772f" stroke-width="3"/>
+   <circle class="badge" cx="${bx}" cy="0" r="11" fill="#b9aa88"/>
+   <text class="disp" x="${bx}" y="5" text-anchor="middle" font-size="14" fill="#ffffff">${g.n}</text>
+   <text x="${bx+17}" y="5" font-size="15" font-weight="700" fill="${name?'#3a3024':'#a0927a'}">${label}</text></g>`;
+}
+$('#slots').innerHTML=SLOTS.map((g,i)=>`<g class="slot empty" id="slot${i}" data-drop="slot" data-i="${i}" role="button" tabindex="-1" aria-label="第${i+1}站">${slotHTML(i)}</g>`).join('');
+function setSlot(i,name,state,pre){
+  const el=$('#slot'+i);
+  if(name!==undefined){el.innerHTML=slotHTML(i,name,pre);el.setAttribute('aria-label',`第${i+1}站：${name||'未填'}`)}
+  if(state)['empty','filled','current'].forEach(c=>el.classList.toggle(c,c===state));
+}
+function slotsDroppable(on){document.querySelectorAll('.slot').forEach(s=>s.setAttribute('tabindex',on?'0':'-1'))}
+
+/* walkers */
+$('#walkers').innerHTML=`<g id="wk"><g id="wkf"><ellipse cx="-12" cy="1" rx="26" ry="4" fill="#3a3024" opacity=".18"/>${kidSVG(-27)}${dadSVG()}</g>
+<g id="say" class="say"><rect id="sayBg" x="-60" y="-140" width="120" height="34" rx="12" fill="#ffffff" stroke="#3a3024" stroke-width="2"/><path d="M-6,-107 L0,-96 L6,-107Z" fill="#ffffff" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/><rect x="-7" y="-109" width="14" height="4" fill="#ffffff"/><text id="sayTx" x="0" y="-117" text-anchor="middle" class="disp" font-size="18" fill="#3a3024"></text></g></g>`;
+const wk=$('#walkers'),wkG=$('#wk'),wkf=$('#wkf');
+const SC=1.2,START={x:150,y:240};let face=1;
+function setWalker(x,y,f){if(f)face=f;wkG.setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);wkf.setAttribute('transform',`scale(${SC*face},${SC})`)}
+const segs=[1,2,3,4].map(i=>{const p=$('#seg'+i);const rv=$('#rv'+i);rv.setAttribute('d',p.getAttribute('d'));const len=p.getTotalLength();rv.style.strokeDasharray=len;rv.style.strokeDashoffset=len;return{p,rv,len}});
+function reveal(i,f){const s=segs[i-1];s.rv.style.strokeDashoffset=(s.len*(1-f)).toFixed(1)}
+function ptAt(i,f){const s=segs[i-1];return s.p.getPointAtLength(s.len*f)}
+function anim(dur,step){return new Promise(res=>{if(REDUCE){step(1);res();return}let t0=null;function fr(ts){if(!t0)t0=ts;const t=Math.min(1,(ts-t0)/dur);step(t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2);if(t<1)requestAnimationFrame(fr);else res()}requestAnimationFrame(fr)})}
+function walk(i){
+  const s=segs[i-1];let prev=ptAt(i,0);
+  wk.classList.add('walking');
+  return anim(Math.max(2400,s.len*8.5),e=>{const pt=ptAt(i,e);const dx=pt.x-prev.x;let f=face;if(Math.abs(dx)>.3)f=dx>0?1:-1;setWalker(pt.x,pt.y,f);reveal(i,e);prev=pt}).then(()=>{wk.classList.remove('walking');const e=ptAt(i,1);setWalker(e.x,e.y,1)});
+}
+let sayTimer;
+function say(text,ms){const g=$('#say');$('#sayTx').textContent=text;const w=text.length*18+28;const bg=$('#sayBg');bg.setAttribute('width',w);bg.setAttribute('x',-w/2);g.classList.add('on');clearTimeout(sayTimer);sayTimer=setTimeout(()=>g.classList.remove('on'),ms||2600)}
+function showSite(i,on){$('#site'+i).classList.toggle('fog',!on);$('#cloud'+i).classList.toggle('gone',on)}
+function siteCurrent(i,on){$('#site'+i).classList.toggle('current',on)}
+
+/* ---------- layer 0: road word signs ---------- */
+const RS_OFF=[null,[55,-25],[62,-10],[-32,85],[50,40]];
+function roadSign(i,words){
+  const m=ptAt(i,.5);const [ox,oy]=RS_OFF[i];const x=m.x+ox,y=m.y+oy;
+  const t=words||'？';const w=Math.max(54,t.length*16+22);
+  return `<g class="rsign"><g transform="translate(${x.toFixed(0)},${y.toFixed(0)})"><g class="popin">
+    <path d="M${-ox*.55},${-oy*.55} L0,0" stroke="#5c4a35" stroke-width="2" stroke-dasharray="3 3"/>
+    <rect x="${-w/2}" y="-15" width="${w}" height="30" rx="7" fill="${words?'#e2772f':'#fffaf0'}" stroke="#3a3024" stroke-width="2"/>
+    <text class="${words?'':'q'}" x="0" y="6" text-anchor="middle" font-size="16" font-weight="700" fill="${words?'#ffffff':'#e2772f'}">${t}</text></g></g></g>`;
+}
+const L0={signs:['','','','','']};
+function drawL0(){$('#L0').innerHTML=[1,2,3,4].map(i=>L0.signs[i]===null?'':roadSign(i,L0.signs[i])).join('')}
+function setRoadWord(i,words){L0.signs[i]=words;drawL0()}
+function hideRoadSigns(){L0.signs=[null,null,null,null,null];drawL0()}
+
+/* ---------- layer 1: guide sentences ---------- */
+function drawL1(state){
+  const c=[
+    {x:330,y:150,seg:2,f:.12,text:'“别急，我们先去来福士城吃午餐。”'},
+    {x:560,y:40,seg:3,f:.1,text:'“吃完午餐，爸爸还要走一走。”'}];
+  $('#L1').innerHTML=c.map((o,k)=>{
+    const p=ptAt(o.seg,o.f);const found=state[k];const t=found?o.text:'谁在带路？';const w=(t.length+(found?3:0))*14.6+30;
+    return `<g class="popin"><path d="M${o.x},${o.y+18} L${p.x.toFixed(0)},${p.y.toFixed(0)}" stroke="${found?'#3c9657':'#a0927a'}" stroke-width="2.5" stroke-dasharray="5 4"/>
+      <circle cx="${p.x.toFixed(0)}" cy="${p.y.toFixed(0)}" r="6" fill="${found?'#3c9657':'#a0927a'}" stroke="#3a3024" stroke-width="1.5"/>
+      <rect x="${o.x-w/2}" y="${o.y-18}" width="${w}" height="36" rx="10" fill="${found?'#e7f4e6':'#fffaf0'}" stroke="${found?'#3c9657':'#3a3024'}" stroke-width="2"/>
+      <text x="${o.x}" y="${o.y+6}" text-anchor="middle" font-size="15" font-weight="700" fill="#3a3024">${found?'带路：':''}${t}</text></g>`;
+  }).join('');
+}
+
+/* ---------- layer 2: detail circles ---------- */
+const DET=[null,{n:243,p:'第2段'},{n:67,p:'第3段'},{n:200,p:'第4–5段'},{n:147,p:'第6段'}];
+const DCEN=[null,[470,400],[665,145],[842,390],[915,165]];
+const DLAB=[null,[470,312],[665,104],[842,310],[940,255]];
+function drawL2(){
+  $('#L2').innerHTML=[1,2,3,4].map(i=>{const [x,y]=DCEN[i];const r=6.1*Math.sqrt(DET[i].n);
+    const [lx,ly]=DLAB[i];
+    return `<g><circle class="growc" id="dc${i}" cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="#e2772f" fill-opacity=".16" stroke="#e2772f" stroke-width="3" stroke-dasharray="8 6" style="transform:scale(0)"/>
+      <g class="dlab" id="dl${i}" opacity="0"><rect x="${lx-44}" y="${ly-15}" width="88" height="26" rx="13" fill="#e2772f" stroke="#3a3024" stroke-width="1.5"/><text x="${lx}" y="${ly+4}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">${DET[i].n}字</text></g></g>`;
+  }).join('');
+}
+function growL2(){
+  return new Promise(res=>{[1,2,3,4].forEach((i,k)=>setTimeout(()=>{$('#dc'+i).style.transform='scale(1)';$('#dl'+i).setAttribute('opacity','1')},k*350));setTimeout(res,1800)});
+}
+
+/* ---------- layer 3: see / feel pins + mood line ---------- */
+const PIN=[null,[512,330],[740,64],[892,300],[826,150]];
+const MOOD=[{x:110,l:3,w:'欣喜万分',a:'start',dy:-6},{x:470,l:2.4,w:'佩服·疑惑',a:'start',dy:-6},{x:665,l:2.6,w:'欣赏',a:'start',dy:-6},{x:842,l:4,w:'恍然大悟',a:'end',dy:-4},{x:935,l:3.2,w:'学到很多',a:'middle',dy:17}];
+function eye(x,y){return `<g transform="translate(${x},${y})"><circle r="15" fill="#fff" stroke="#3d7fc0" stroke-width="2.5"/><path d="M-9,0 Q0,-8 9,0 Q0,8 -9,0Z" fill="#e4eff8" stroke="#3d7fc0" stroke-width="1.8"/><circle r="3.2" fill="#3d7fc0"/><title>看到什么</title></g>`}
+function heart(x,y){return `<g transform="translate(${x},${y})"><circle r="15" fill="#fff" stroke="#d4513a" stroke-width="2.5"/><path d="M0,7 C-12,-1 -8,-10 -3,-8 C-1,-7 0,-5 0,-4 C0,-5 1,-7 3,-8 C8,-10 12,-1 0,7Z" fill="#d4513a"/><title>想到什么</title></g>`}
+function drawL3(){
+  const pins=[1,2,3,4].map(i=>{const [x,y]=PIN[i];return `<g class="popin" style="animation-delay:${i*.15}s">${eye(x,y)}${heart(x+32,y)}</g>`}).join('');
+  const Y=l=>604-l*9;
+  const d=MOOD.map((m,k)=>(k?'L':'M')+m.x+','+Y(m.l)).join(' ');
+  const strip=`<g class="popin"><rect x="24" y="560" width="952" height="54" rx="12" fill="#ffffff" fill-opacity=".92" stroke="#d4513a" stroke-width="2"/>
+    <text x="40" y="592" font-size="15" font-weight="700" fill="#d4513a">心情线</text>
+    <path d="${d}" fill="none" stroke="#d4513a" stroke-width="3" stroke-linejoin="round"/>
+    ${MOOD.map(m=>`<circle cx="${m.x}" cy="${Y(m.l)}" r="5" fill="#d4513a"/><text x="${m.x+(m.a==='start'?8:m.a==='end'?-8:0)}" y="${Y(m.l)+m.dy}" text-anchor="${m.a}" font-size="12.5" font-weight="700" fill="#3a3024">${m.w}</text>`).join('')}</g>`;
+  $('#L3').innerHTML=pins+strip;
+}
+
+/* ---------- layer 4: suspense balloon ---------- */
+function balloonSVG(x,y,txt){return `<g transform="translate(${x},${y})"><path d="M0,22 q-4,14 3,26" fill="none" stroke="#3a3024" stroke-width="1.5"/><ellipse cx="0" cy="0" rx="26" ry="24" fill="#b07ccc" stroke="#3a3024" stroke-width="2"/><path d="M-4,22 L4,22 L0,27Z" fill="#8a4fa3" stroke="#3a3024" stroke-width="1.2"/><ellipse cx="-9" cy="-9" rx="6" ry="4" fill="#fff" opacity=".6"/><text x="0" y="9" text-anchor="middle" class="disp" font-size="26" fill="#fff">${txt||'?'}</text></g>`}
+function burstSVG(x,y){return `<g transform="translate(${x},${y})"><path d="M0,-34 L8,-12 L30,-18 L14,0 L32,16 L9,13 L0,34 L-9,13 L-32,16 L-14,0 L-30,-18 L-8,-12Z" fill="#ffd27a" stroke="#3a3024" stroke-width="2"/><text x="0" y="7" text-anchor="middle" class="disp" font-size="20" fill="#7a4a2a">!</text></g>`}
+function drawL4(stage){
+  // stage 0: nothing; 1: balloon at OCBC; 2: + burst at Gateway; 3: trail
+  let h='';
+  if(stage>=3){
+    const a=segs[1],b=segs[2];
+    h+=`<path d="${a.p.getAttribute('d')}" fill="none" stroke="#8a4fa3" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round" transform="translate(0,-70)"/>`;
+    h+=`<path d="${b.p.getAttribute('d')}" fill="none" stroke="#8a4fa3" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round" transform="translate(0,-70)"/>`;
+  }
+  if(stage>=1)h+=`<g class="popin">${balloonSVG(395,300)}<rect x="315" y="236" width="160" height="28" rx="14" fill="#8a4fa3" stroke="#3a3024" stroke-width="1.5"/><text x="395" y="256" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">大师在哪里？</text></g>`;
+  if(stage>=2)h+=`<g class="popin">${burstSVG(770,252)}<rect x="708" y="190" width="124" height="28" rx="14" fill="#ffd27a" stroke="#3a3024" stroke-width="1.5"/><text x="770" y="210" text-anchor="middle" font-size="14" font-weight="700" fill="#7a4a2a">贝聿铭！</text></g>`;
+  $('#L4').innerHTML=h;
+}
+function flyBalloon(){
+  const g=$('#balloonFly');
+  const go=(seg)=>anim(2600,e=>{const p=ptAt(seg,e);g.innerHTML=balloonSVG(p.x,p.y-70)});
+  return go(2).then(()=>go(3)).then(()=>{const p=ptAt(3,1);g.innerHTML=burstSVG(p.x,p.y-70)+`<text x="${p.x}" y="${p.y-112}" text-anchor="middle" class="disp" font-size="26" fill="#8a4fa3">贝聿铭！</text>`;return new Promise(r=>setTimeout(()=>{g.innerHTML='';r()},1500))});
+}
+
+function pinsFor(i){const [x,y]=PIN[i];const g=document.createElementNS(NS,'g');g.setAttribute('class','popin');g.innerHTML=eye(x,y)+heart(x+32,y);$('#L3').appendChild(g)}
+function layerVisible(n,on){$('#L'+n).classList.toggle('hide',!on);$('#L'+n).classList.add('layer')}
+function reset(){
+  for(let i=1;i<=4;i++)reveal(i,0);
+  for(let i=0;i<5;i++){showSite(i,false);siteCurrent(i,false);setSlot(i,'','empty')}
+  L0.signs=['','','','',''];drawL0();
+  ['L1','L2','L3','L4','balloonFly'].forEach(id=>$('#'+id).innerHTML='');
+  for(let n=0;n<=4;n++)layerVisible(n,true);
+  setWalker(START.x,START.y,1);
+}
+window.MAP={pinsFor,walk,say,setSlot,slotsDroppable,showSite,siteCurrent,setRoadWord,drawL1,drawL2,growL2,drawL3,drawL4,flyBalloon,layerVisible,reset,reveal,setWalker,ptAt};
+reset();
+})();
+
+</script>
+<script>
+/* 练：寻找大师的路线图（封面 + 一站一站版） */
+const $=s=>document.querySelector(s);
+const P=$('#pbody'),H=$('#phead');
+const NARROW=()=>window.innerWidth<=940;
+
+let S,timer;
+function fresh(){return{name:'',st:-1,t0:0,t1:0,picked:null,log:[],snap:[],rec:{},sid:newSid(),sub:'',cards:[]}}
+function newSid(){const A='abcdefghijkmnpqrstuvwxyz23456789';let r='';try{for(const x of crypto.getRandomValues(new Uint32Array(12)))r+=A[x%A.length]}catch(e){for(let i=0;i<12;i++)r+=A[Math.floor(Math.random()*A.length)]}return r}
+/* 班级码：老师给的链接末尾 #1E2-K7QX */
+const QS=(()=>{try{return new URLSearchParams(location.search)}catch(e){return new URLSearchParams('')}})();
+const HP=(()=>{try{const h=location.hash.slice(1);return h.includes('=')?new URLSearchParams(h):null}catch(e){return null}})();
+const CLS=(()=>{try{const h=QS.get('c')||(HP?HP.get('c')||'':decodeURIComponent(location.hash.slice(1)));return CLASS_RE.test(h)?h:''}catch(e){return ''}})();
+/* 单一文件版：学生链接 #c=班级码&r=房间&k=密钥 */
+const RELAY=(()=>{if(!HP||typeof seal!=='function'||!window.crypto||!crypto.subtle)return null;const r=HP.get('r')||'',k=HP.get('k')||'';return ROOM_RE.test(r)&&KEY_RE.test(k)?{r,k}:null})();
+/* 老师的收作答程序：链接里的 ?s=程序ID */
+const API=(()=>{const id=QS.get('s')||'';return /^[A-Za-z0-9_-]{20,120}$/.test(id)?`https://script.google.com/macros/s/${id}/exec`:''})();
+function itemsUpTo(stDone){return QLIST.map(q=>{if(q.k>=stDone)return '-';const r=S.rec[q.k+'.'+q.i]||{n:0,p:''};return Math.min(9,r.n)+r.p}).join('.')}
+let sendChain=Promise.resolve();
+/* 经转发服务送出：只在出发和完成时各送一次，避免同一校园网络送得太多 */
+function relaySend(stDone,done){
+  if(!S.name||(!done&&stDone>0))return Promise.resolve(true);
+  const payload={v:1,sid:S.sid,cls:CLS,name:S.name,st:stDone,secs:Math.floor(((S.t1||Date.now())-S.t0)/1000),it:itemsUpTo(stDone),done:!!done,ts:Date.now()};
+  const run=async()=>{
+    const body=await seal(RELAY.k,JSON.stringify(payload));
+    for(let t=0;t<6;t++){
+      try{const r=await fetch(RELAY_HOST+RELAY.r,{method:'POST',body});if(r.ok)return true;if(r.status!==429&&r.status<500)return false}catch(e){}
+      await new Promise(res=>setTimeout(res,2000*(t+1)+Math.random()*3000));
+    }
+    return false;
+  };
+  return sendChain=sendChain.then(run,run);
+}
+function send(stDone,done){
+  if(RELAY)return relaySend(stDone,done);
+  if(!API||!S.name)return Promise.resolve(false);
+  const body=JSON.stringify({action:'submit',sid:S.sid,cls:CLS,name:S.name,st:stDone,secs:Math.floor(((S.t1||Date.now())-S.t0)/1000),it:itemsUpTo(stDone),done:!!done});
+  const once=async()=>{
+    try{const r=await fetch(API,{method:'POST',body});const j=await r.json();if(j&&j.ok)return true;if(j&&j.err==='busy')throw 0;return false}
+    catch(e){try{await fetch(API,{method:'POST',mode:'no-cors',body});return 'maybe'}catch(_){return false}}};
+  const run=async()=>{for(let t=0;t<4;t++){const ok=await once();if(ok)return ok;await new Promise(r=>setTimeout(r,1500*(t+1)+Math.random()*1500))}return false};
+  return sendChain=sendChain.then(run,run);
+}
+function miss(k,i,letter){const key=k+'.'+i;const r=S.rec[key]||(S.rec[key]={n:0,p:''});r.n++;if(letter&&!r.p.includes(letter)&&r.p.length<4)r.p+=letter}
+
+/* ---------- helpers ---------- */
+function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild}
+function add(html,parent){const e=el(html);(parent||P).appendChild(e);return e}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function fb(host,kind,html){let f=host.querySelector(':scope > .fb.live');if(!f)f=add('<div class="fb live"></div>',host);f.className='fb live '+kind;f.innerHTML=html;return f}
+function shake(e){e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake')}
+function dad(html,parent){return add(`<div class="talk"><div class="avatar">${PEOPLE.avatar('dad')}</div><div class="bubble"><span class="who">爸爸</span>${html}</div></div>`,parent)}
+function head(eyebrow,title){H.innerHTML=`<div class="ph"><div class="eyebrow">${eyebrow}</div><h2>${title}</h2></div>`}
+function task(n,title,locked){return add(`<div class="task ${locked?'locked':''}"><h3><i>${n}</i>${title}</h3></div>`)}
+function done(t){t.classList.add('done');t.querySelector('h3 i').textContent='✓'}
+function unlock(t){t.classList.remove('locked');setTimeout(()=>t.scrollIntoView({behavior:'smooth',block:'nearest'}),200)}
+function paraHTML(pn){return `<div class="para"><span class="pn">第${pn}段</span>${LESSON[pn-1]}</div>`}
+function readHint(w,paras){if(paras&&!w.querySelector('.readlock'))add(`<div class="readlock"><b>读一读，再试一次</b>${paras.map(paraHTML).join('')}</div>`,w)}
+function toPanel(){if(NARROW())setTimeout(()=>$('.panel').scrollIntoView({behavior:'smooth',block:'start'}),300)}
+function toMap(){if(NARROW())$('.mapbox').scrollIntoView({behavior:'smooth',block:'start'})}
+
+/* 单选 */
+function mcq(host,o,onRight){
+  const w=add('<div class="pb"></div>',host);
+  add(`<div class="q">${o.q}</div>`,w);
+  const box=add('<div class="opts"></div>',w);let tries=0;
+  const bs=o.opts.map(([t,v],i)=>{
+    const b=add(`<button type="button" class="opt"><span class="k">${'ABCD'[i]}</span>${t}</button>`,box);
+    b.onclick=()=>{
+      if(v===1){b.classList.add('right');bs.forEach(x=>x.disabled=true);w.querySelector('.readlock')?.remove();fb(w,'good',`<b>答对了！</b>${o.explain||''}`);onRight(t);return}
+      b.classList.add('wrong');shake(b);b.disabled=true;tries++;o.onWrong&&o.onWrong(i);fb(w,'bad',v);if(tries>=2)readHint(w,o.para);
+    };return b;
+  });
+}
+/* 多选 */
+function msq(host,o,onRight){
+  const w=add('<div class="pb"></div>',host);
+  add(`<div class="q">${o.q}</div>`,w);
+  const box=add('<div class="opts"></div>',w);let tries=0;
+  const bs=o.opts.map(([t],i)=>{const b=add(`<button type="button" class="opt" aria-pressed="false"><span class="k">${'ABCD'[i]}</span>${t}</button>`,box);
+    b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);b.style.background=on?'#fff1dc':'';b.style.borderColor=on?'var(--orange)':''};return b});
+  const r=add('<div class="row"><button type="button" class="btn blue">检查</button></div>',w);
+  r.querySelector('.btn').onclick=()=>{
+    const sel=bs.map(b=>b.getAttribute('aria-pressed')==='true');
+    if(sel.filter(Boolean).length!==o.need){fb(w,'bad',`请选${o.need}个。`);return}
+    const wrong=o.opts.map((op,i)=>sel[i]&&op[1]!==1?i:-1).filter(i=>i>=0);
+    if(!wrong.length){bs.forEach((b,i)=>{b.disabled=true;b.style.background='';b.style.borderColor='';if(o.opts[i][1]===1)b.classList.add('right')});r.remove();w.querySelector('.readlock')?.remove();fb(w,'good','<b>答对了！</b>');onRight();return}
+    tries++;o.onWrong&&o.onWrong(wrong);wrong.forEach(i=>shake(bs[i]));fb(w,'bad',wrong.map(i=>`「${o.opts[i][0]}」：${o.opts[i][1]}`).join('<br>'));if(tries>=2)readHint(w,o.para);
+  };
+}
+
+/* ---------- 拖放 / 点选 ---------- */
+let drag=null;
+function bindChip(chip,payload,onDrop){
+  const pick=()=>{const was=S.picked&&S.picked.chip===chip;clearPick();if(!was){S.picked={chip,payload,onDrop};chip.classList.add('picked');document.body.classList.add('picking')}};
+  chip.addEventListener('pointerdown',e=>{if(chip.classList.contains('used'))return;e.preventDefault();try{chip.setPointerCapture(e.pointerId)}catch(_){};drag={chip,x0:e.clientX,y0:e.clientY,ghost:null,hot:null}});
+  chip.addEventListener('pointermove',e=>{
+    if(!drag||drag.chip!==chip)return;
+    if(!drag.ghost&&Math.hypot(e.clientX-drag.x0,e.clientY-drag.y0)>6){drag.ghost=chip.cloneNode(true);drag.ghost.classList.add('ghost');drag.ghost.classList.remove('picked');document.body.appendChild(drag.ghost);document.body.classList.add('dragging')}
+    if(drag.ghost){drag.ghost.style.left=e.clientX+'px';drag.ghost.style.top=e.clientY+'px';const t=document.elementFromPoint(e.clientX,e.clientY);const z=t&&t.closest('[data-drop]');if(drag.hot&&drag.hot!==z)drag.hot.classList.remove('hot');if(z){z.classList.add('hot');drag.hot=z}}
+  });
+  chip.addEventListener('pointerup',e=>{
+    if(!drag||drag.chip!==chip)return;const d=drag;drag=null;document.body.classList.remove('dragging');if(d.hot)d.hot.classList.remove('hot');
+    if(d.ghost){d.ghost.remove();clearPick();const t=document.elementFromPoint(e.clientX,e.clientY);const z=t&&t.closest('[data-drop]');if(z)onDrop(payload,z,chip)}else pick();
+  });
+  chip.addEventListener('pointercancel',()=>{if(drag&&drag.ghost)drag.ghost.remove();drag=null;document.body.classList.remove('dragging')});
+  chip.addEventListener('click',e=>{if(e.detail===0)pick()});
+}
+function clearPick(){if(S)S.picked=null;document.body.classList.remove('picking');document.querySelectorAll('.chip.picked').forEach(c=>c.classList.remove('picked'))}
+function dropOn(z){if(!S||!S.picked)return;const p=S.picked;clearPick();p.onDrop(p.payload,z,p.chip)}
+document.addEventListener('click',e=>{const z=e.target.closest('[data-drop]');if(z)dropOn(z)});
+document.addEventListener('keydown',e=>{const z=e.target.closest&&e.target.closest('[data-drop]');if(z&&(e.key==='Enter'||e.key===' ')){e.preventDefault();dropOn(z)}});
+
+/* ---------- 进度、时钟 ---------- */
+function renderProg(view){
+  const fin=S.st>4;
+  $('#layers').innerHTML=NAMES.map((n,i)=>{const d=i<S.st,now=i===S.st||view===i;
+    return fin?`<button type="button" class="lay done ${view===i?'now':''}" data-review="${i}"><b>✓</b>${PLACES[i]}</button>`
+      :`<span class="lay ${d?'done':''} ${now?'now':''}"><b>${d?'✓':i===0?'起':i===4?'终':i}</b>${d?PLACES[i]:n}</span>`}).join('')
+    +(fin?`<button type="button" class="lay done ${view===undefined?'now':''}" data-review="sum"><b>表</b>导览表</button>`:'');
+}
+document.addEventListener('click',e=>{
+  if(!S||S.st<=4)return;
+  const b=e.target.closest('[data-review]');if(b){const v=b.dataset.review;v==='sum'?summary():review(+v);return}
+  const sl=e.target.closest('.slot');if(sl)review(+sl.dataset.i);
+});
+document.addEventListener('keydown',e=>{if(!S||S.st<=4)return;const sl=e.target.closest&&e.target.closest('.slot');if(sl&&(e.key==='Enter'||e.key===' ')){e.preventDefault();review(+sl.dataset.i)}});
+function tick(){const end=S.t1||Date.now();const s=S.t0?Math.floor((end-S.t0)/1000):0;$('#clock').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+
+/* ================= 封面 ================= */
+$('#coverPeople').innerHTML=`<g class="hop"><ellipse cx="-12" cy="1" rx="26" ry="4" fill="#3a3024" opacity=".18"/>${kidSVG(-27)}${dadSVG()}</g>`;
+function showCover(){
+  if(CLS){$('#ctag').hidden=false;$('#ctag').textContent='班级 '+CLS.replace(/-[A-Z0-9]{4}$/,'')}
+  $('#cover').hidden=false;$('#cover').classList.remove('leaving');
+  const g=$('#game');g.classList.add('pre');g.classList.remove('enter');
+  $('#sname').value='';$('#cerr').textContent='';
+  setTimeout(()=>$('#sname').focus({preventScroll:true}),300);
+}
+$('#go').onclick=()=>{
+  const v=$('#sname').value.trim();
+  if(!v){$('#cerr').textContent='先写上你的名字，才能出发哦！';shake($('#sname'));$('#sname').focus();return}
+  S.name=v;$('#cover').classList.add('leaving');
+  setTimeout(()=>{$('#cover').hidden=true;const g=$('#game');g.classList.remove('pre');g.classList.add('enter');window.scrollTo(0,0);
+    S.t0=Date.now();clearInterval(timer);timer=setInterval(tick,1000);station(0);send(0,false)},600);
+};
+$('#sname').addEventListener('keydown',e=>{if(e.key==='Enter')$('#go').click()});
+
+/* ================= 每一站 ================= */
+function station(k){
+  S.st=k;renderProg();P.innerHTML='';$('.panel').scrollTop=0;
+  const st=ST[k];const L=S.log[k]={};
+  head(`${NAMES[k]} / 共5站`,k===0?`${esc(S.name)}，出发吧！`:`下一站：${NAMES[k]}`);
+  dad(k===0?'我们从哪里出发？先把起点的地点卡拖到地图上闪动的站牌。':`下一站是哪里？把正确的地点卡拖到地图上闪动的${NAMES[k]}。`);
+  for(let i=0;i<5;i++)MAP.siteCurrent(i,i===k);
+  MAP.setSlot(k,undefined,'current');MAP.slotsDroppable(true);
+  const tasks=st.steps.map((s,i)=>task(i+1,s.must?`必答题：${s.must}`:s.type==='place'?'这一站是哪里？':s.title,i>0));
+  const next=i=>{if(i+1<tasks.length)unlock(tasks[i+1]);else nextBtn()};
+  st.steps.forEach((s,i)=>{
+    const t=tasks[i];
+    if(s.type==='place')placeStep(t,k,L,()=>{done(t);next(i)});
+    else if(s.type==='words')wordsStep(t,k,s,()=>{done(t);arrive(k,()=>next(i))});
+    else if(s.type==='viewer')viewerStep(t,()=>{done(t);next(i)});
+    else if(s.type==='msq')msq(t,{...s,onWrong:ws=>{miss(k,i,'');const r=S.rec[k+'.'+i];ws.forEach(j=>{const L='ABCD'[j];if(!r.p.includes(L))r.p+=L})}},()=>{if(s.log)L[s.log]=s.show;done(t);next(i)});
+    else mcq(t,{q:s.q,opts:s.opts,para:s.para,explain:s.explain,onWrong:j=>miss(k,i,'ABCD'[j])},w=>{if(s.log)L[s.log]=s.show||w;if(s.pin)MAP.pinsFor(s.pin);done(t);next(i)});
+  });
+  function nextBtn(){
+    const last=k===4;
+    const r=add(`<div class="row"><button type="button" class="btn green">${last?'完成路线图':`前往${NAMES[k+1]}`}</button></div>`);
+    r.querySelector('button').onclick=()=>{r.remove();S.snap[k]=P.innerHTML;giveCard(k,()=>{if(last)finish();else{station(k+1);send(k+1,false)}})};
+    r.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  toPanel();
+}
+function arrive(k,then){
+  const fin=()=>{MAP.showSite(k,true);MAP.siteCurrent(k,false);MAP.setSlot(k,PLACES[k],'filled',k===0?'来到':undefined);MAP.say(ST[k].say);then();toPanel()};
+  if(k===0){fin();return}
+  MAP.setRoadWord(k,ST[k].steps[1].sign);toMap();MAP.walk(k).then(fin);
+}
+
+/* 拖地点 */
+function placeStep(t,k,L,ok){
+  add(`<div class="hint">把地点卡拖到地图上闪动的${NAMES[k]}（也可以先点卡片，再点站牌）。</div>`,t);
+  const tray=add('<div class="chips"></div>',t);
+  CARDS.forEach(c=>{const idx=PLACES.indexOf(c);if(idx>=0&&idx<k)return;const chip=add(`<button type="button" class="chip">${c}</button>`,tray);bindChip(chip,c,drop)});
+  function drop(name,z,chip){
+    if(L.place)return;
+    if(z.dataset.drop!=='slot'){fb(t,'bad','地点卡要放到<b>地图</b>上的站牌。');return}
+    const i=+z.dataset.i;
+    if(i!==k){fb(t,'bad',`请放到地图上闪动的${NAMES[k]}。`);toPanel();return}
+    if(name!==PLACES[k])miss(k,0,'ABCDEF'[CARDS.indexOf(name)]);
+    if(name==='滨海湾金沙'){shake(chip);chip.classList.add('used');fb(t,'bad','「滨海湾金沙」在课文里出现过吗？它不在这条路线上，这张卡已经帮你拿走了。');toPanel();return}
+    if(name!==PLACES[k]){shake(chip);const o=PLACES.indexOf(name);fb(t,'bad',`「${name}」是课文里的${NAMES[o]}，不是${NAMES[k]}。想想课文的顺序。`);toPanel();return}
+    L.place=name;MAP.slotsDroppable(false);MAP.setSlot(k,name,'current');tray.querySelectorAll('.chip').forEach(c=>c.classList.add('used'));
+    fb(t,'good',`<b>对！</b>${NAMES[k]}是${name}。`);ok();toPanel();
+  }
+}
+
+/* 拖转换词 */
+function whyWord(k,j,word,ans){
+  if(word===ans)return '';
+  if(k===4&&word==='来到')return '家是出发前的地方，回去要用哪个词？';
+  if(k===3&&j===0&&word==='来到')return '这里是从来福士城<b>出发</b>，不是到达。';
+  if(k===3&&j===2&&word==='离开')return '新门广场是要<b>到达</b>的地方。';
+  if((word==='顺着'&&ans==='沿着')||(word==='沿着'&&ans==='顺着'))return '意思很接近，但课文这里用的不是这个词，回去看看。';
+  if(word==='来到')return '“来到”后面要接目的地，这里接的是一条路。';
+  if(word==='离开')return '“离开”后面要接出发的地方。';
+  if(word==='回到')return k===0?'“回到”是回到原来的地方，可是旅程才刚开始。':'“回到”是回到原来的地方，这里是第一次来。';
+  if(word==='经过')return '“经过”是从旁边路过、不停留。';
+  if(word==='穿过')return '“穿过”是从中间通过，课文里没有这样写。';
+  if(word==='沿着'||word==='顺着')return '“'+word+'”后面要接一条路线。';
+  return '再读一读课文。';
+}
+function wordsStep(t,k,s,ok){
+  add(`<div class="hint">把转换词卡拖进句子的空格（也可以先点词，再点空格）。课文第${s.para}段。</div>`,t);
+  let bi=0;
+  const sent=add(`<div class="sent">${s.parts.map(p=>p===null?`<button type="button" class="blank open" data-drop="blank" data-i="${bi++}" aria-label="空格${bi}">　</button>`:p).join('')}</div>`,t);
+  const tray=add('<div class="chips"></div>',t);
+  const blanks=[...sent.querySelectorAll('.blank')];let filled=0,tries=0;
+  WORDS.forEach(w=>{const c=add(`<button type="button" class="chip word">${w}</button>`,tray);bindChip(c,w,drop)});
+  function drop(word,z){
+    if(z.dataset.drop!=='blank'||!z.classList.contains('open')||!sent.contains(z)){if(z.dataset.drop==='slot')fb(t,'bad','转换词要拖进上面句子里的空格。');return}
+    const j=+z.dataset.i;const ans=s.ans[j];
+    if(word===ans){z.textContent=word;z.classList.remove('open');z.classList.add('right');filled++;
+      if(filled===blanks.length){tray.querySelectorAll('.chip').forEach(c=>c.classList.add('used'));t.querySelector('.readlock')?.remove();fb(t,'good','<b>答对了！</b>出发……');ok()}
+      else fb(t,'good','对！继续填下一个空格。');return}
+    z.textContent=word;z.classList.add('wrong');tries++;miss(k,ST[k].steps.indexOf(s),'ABCDEFG'[WORDS.indexOf(word)]);fb(t,'bad',whyWord(k,j,word,ans));
+    setTimeout(()=>{if(z.classList.contains('open')){z.textContent='　';z.classList.remove('wrong')}},900);
+    if(tries>=2)readHint(t,[s.para]);
+  }
+}
+
+/* 来福士城：转动观察 */
+function viewerStep(t,ok){
+  add('<div class="q">课文说这座楼“从一面看是个圆柱体，从另一面看又是个长方体”。拖动滑杆，或按“自动绕一圈”，绕着大楼走一圈，两面都要看到。</div>',t);
+  const v=add(`<div class="viewer">
+    <div class="vcell"><svg viewBox="0 0 200 200" aria-label="俯视图"><circle cx="100" cy="100" r="80" fill="none" stroke="#9db7cc" stroke-width="2" stroke-dasharray="4 6"/>
+      <path d="M62,78 H138 V100 A38,38 0 0 1 62,100 Z" fill="#cfdfeb" stroke="#3a3024" stroke-width="2"/>
+      <text x="100" y="70" text-anchor="middle" font-size="12" fill="#6f6250">平直的一面</text><text x="100" y="156" text-anchor="middle" font-size="12" fill="#6f6250">弧形的一面</text>
+      <line class="sight" x1="100" y1="100" x2="100" y2="180" stroke="#e2772f" stroke-width="2" stroke-dasharray="5 4"/>
+      <g class="eye"><circle r="13" fill="#ffffff" stroke="#3a3024" stroke-width="2"/><ellipse rx="8" ry="5" fill="#ffffff" stroke="#3a3024" stroke-width="1.6"/><circle r="3" fill="#3a3024"/></g></svg>
+      <label>俯视图：眼睛就是你站的位置<input type="range" min="0" max="359" value="270" aria-label="绕着大楼走"></label>
+      <div class="row" style="justify-content:center"><button class="pill auto" type="button">自动绕一圈</button></div></div>
+    <div class="vcell"><svg class="front" viewBox="0 0 200 200" aria-label="你看到的样子"></svg><div class="vcap"></div><div class="seen"></div></div></div>`,t);
+  const VIEWS={
+    round:`<rect x="60" y="40" width="80" height="130" fill="url(#vcyl)"/><path d="M60,40 V170 A40,10 0 0 0 140,170 V40" fill="none" stroke="#3a3024" stroke-width="2"/>
+      <g fill="none" stroke="#5f7d97" stroke-width="1.2"><path d="M60,64 A40,10 0 0 0 140,64 M60,88 A40,10 0 0 0 140,88 M60,112 A40,10 0 0 0 140,112 M60,136 A40,10 0 0 0 140,136"/></g>
+      <ellipse cx="100" cy="40" rx="40" ry="10" fill="#f3f8fb" stroke="#3a3024" stroke-width="2"/>`,
+    flat:`<polygon points="52,44 64,32 158,32 146,44" fill="#e2ecf3" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="146,44 158,32 158,158 146,170" fill="#8ea6ba" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/>
+      <rect x="52" y="44" width="94" height="126" fill="#bccddb" stroke="#3a3024" stroke-width="2"/><rect x="52" y="44" width="94" height="126" fill="url(#win)"/>`,
+    side:`<rect x="50" y="44" width="62" height="126" fill="#bccddb" stroke="#3a3024" stroke-width="2"/><rect x="50" y="44" width="62" height="126" fill="url(#win)"/>
+      <path d="M112,44 A38,10 0 0 1 150,48 V170 A38,10 0 0 1 112,170 Z" fill="url(#vcyl2)" stroke="#3a3024" stroke-width="2"/>
+      <polygon points="50,44 112,44 150,48" fill="#e2ecf3" stroke="#3a3024" stroke-width="2" stroke-linejoin="round"/>`};
+  const CAP={round:'看起来圆圆的，四周是弧面',flat:'看起来方方正正，有棱有角',side:'斜着看：有弧面，也有直角……再转一转'};
+  const DEFS=`<defs><linearGradient id="vcyl" x1="0" x2="1"><stop offset="0" stop-color="#7d98b0"/><stop offset=".45" stop-color="#eef5fa"/><stop offset="1" stop-color="#6a869f"/></linearGradient><linearGradient id="vcyl2" x1="0" x2="1"><stop offset="0" stop-color="#d9e5ee"/><stop offset="1" stop-color="#6a869f"/></linearGradient></defs>`;
+  const seen={round:false,flat:false};const ang=v.querySelector('input');let finished=false;
+  function upd(){
+    const a=+ang.value*Math.PI/180,x=100+80*Math.cos(a),y=100+80*Math.sin(a);
+    v.querySelector('.eye').setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);
+    const s=v.querySelector('.sight');s.setAttribute('x2',x.toFixed(1));s.setAttribute('y2',y.toFixed(1));
+    const sn=Math.sin(a),k=sn>0.5?'round':sn<-0.5?'flat':'side';if(k!=='side')seen[k]=true;
+    v.querySelector('.front').innerHTML=DEFS+`<rect width="200" height="200" fill="#e4eff8"/><ellipse cx="100" cy="176" rx="64" ry="6" fill="#3a3024" opacity=".14"/>`+VIEWS[k];
+    v.querySelector('.vcap').innerHTML=`<b>你看到的样子：</b>${CAP[k]}`;
+    v.querySelector('.seen').innerHTML=`已看到：弧形的一面 ${seen.round?'<i>✓</i>':'—'}　平直的一面 ${seen.flat?'<i>✓</i>':'—'}`;
+    if(seen.round&&seen.flat&&!finished){finished=true;fb(t,'good','<b>两面都看到了！</b>接下来回答：从两面看，各像什么形状？');ok()}
+  }
+  ang.oninput=upd;
+  v.querySelector('.auto').onclick=e=>{const b=e.currentTarget;b.disabled=true;const a0=+ang.value;const t0=performance.now();
+    (function fr(now){const p=Math.min(1,(now-t0)/4000);ang.value=Math.round((a0+360*p)%360);upd();if(p<1)requestAnimationFrame(fr);else b.disabled=false})(t0)};
+  upd();
+}
+
+/* ================= 完成 ================= */
+function finish(){
+  S.st=5;S.t1=Date.now();tick();clearInterval(timer);MAP.slotsDroppable(true);document.body.classList.add('finished');
+  summary();confetti();submitFinal();
+}
+function submitFinal(){
+  if((!API&&!RELAY)||S.sub==='sending')return;
+  S.sub='sending';paintSub();
+  send(5,true).then(ok=>{S.sub=ok===true?'ok':ok?'maybe':'fail';paintSub()});
+}
+function paintSub(){
+  const e=document.getElementById('substat');if(!e)return;
+  const T={sending:'<b>正在交给老师……</b>请稍等，不要关掉这一页。',ok:'<b class="okc">✓ 已经交给老师了！</b>老师那边已经看得到你的作答。',
+    maybe:'<b class="okc">✓ 已经送出。</b>如果老师说没收到，再按一次下面的按钮。',fail:'<b class="badc">没有交成功。</b>请检查网络，再按一次。还是不行的话，把下面的备用完成码交给老师。'};
+  e.innerHTML=T[S.sub]||'';
+  const r=document.getElementById('subretry');if(r)r.hidden=!(S.sub==='fail'||S.sub==='maybe');
+}
+function review(i){
+  if(!S.snap[i])return;
+  renderProg(i);for(let j=0;j<5;j++)MAP.siteCurrent(j,j===i);
+  head(`回看 · ${NAMES[i]}`,PLACES[i]);
+  P.innerHTML='';
+  const nav=add(`<div class="row"><button type="button" class="pill" data-review="sum">← 回到导览表</button>${i>0?`<button type="button" class="pill" data-review="${i-1}">上一站</button>`:''}${i<4?`<button type="button" class="pill" data-review="${i+1}">下一站</button>`:''}</div>`);
+  const box=add('<div class="pb review"></div>');box.innerHTML=S.snap[i];
+  box.querySelectorAll('button,input').forEach(x=>{x.disabled=true;x.tabIndex=-1});
+  $('.panel').scrollTop=0;toPanel();
+}
+function summary(){
+  renderProg();
+  for(let i=0;i<5;i++)MAP.siteCurrent(i,false);
+  const s=Math.floor((S.t1-S.t0)/1000);
+  head(`${esc(S.name)} · 用时 ${Math.floor(s/60)}分${s%60}秒`,'找到大师了！');
+  P.innerHTML='';
+  dad('你一站一站走完了课文。下面是你的导览表，等一下当小导游时就用得上。想回看哪一站，就点地图上的站牌，或上面的站名。');
+  const rows=[1,2,3,4].map(i=>{const L=S.log[i];return `<tr><td><b>${PLACES[i]}</b></td><td>${esc(ST[i].steps[1].sign)}</td><td>${esc(L.see||'')}</td><td>${esc(L.feel||'')}</td></tr>`}).join('');
+  add(`<div class="task"><h3><i>表</i>我的导览表</h3><div class="matchwrap"><table class="match guide"><thead><tr><th>站点</th><th>怎么到</th><th>看到什么</th><th>想到什么</th></tr></thead><tbody>${rows}</tbody></table></div></div>`);
+  const al=add('<div class="task"><h3><i>卡</i>我的建筑卡（5 / 5）</h3><div class="hint">点一张卡，可以放大来看。当小导游时，卡上的内容就是你的讲解材料。</div></div>');al.insertAdjacentHTML('beforeend',albumHTML());
+  const sec=add('<div class="task sum"><h3><i>★</i>四个导游秘诀</h3></div>');
+  SECRETS.forEach((x,i)=>add(`<div class="sumrow"><i>${i+1}</i><div><b>${x.name}</b>：${x.full}<div class="ev">来自：${x.from}</div></div></div>`,sec));
+  const r=add('<div class="row"><button type="button" class="btn blue">复制导览表和秘诀</button><span class="hint" id="cpmsg">贴到小组的Slides里用</span></div>');
+  r.querySelector('.btn').onclick=()=>{
+    const txt=`寻找大师的路线图 · ${S.name}\n`+[1,2,3,4].map(i=>`${PLACES[i]}｜${ST[i].steps[1].sign}｜看到：${S.log[i].see}｜想到：${S.log[i].feel}`).join('\n')+'\n'+SECRETS.map((x,i)=>`秘诀${i+1} ${x.name}：${x.full}`).join('\n');
+    const m=$('#cpmsg');
+    try{navigator.clipboard.writeText(txt).then(()=>m.textContent='已复制！',()=>m.textContent='无法自动复制，请手动选取文字。')}catch(e){m.textContent='无法自动复制，请手动选取文字。'}
+  };
+  const code=S.code||(S.code=makeCode(CLS,S.name,Math.floor((S.t1-S.t0)/1000),S.rec));
+  if(API||RELAY){
+    const sb=add(`<div class="task codebox"><h3><i>交</i>交给老师</h3><div class="substat" id="substat" aria-live="polite"></div><div class="row" id="subretry" hidden><button type="button" class="btn green">再交一次</button></div></div>`);
+    sb.querySelector('#subretry .btn').onclick=submitFinal;
+    paintSub();
+  }
+  const cb=add(`<div class="task codebox ${API||RELAY?'backup':''}"><h3><i>码</i>${API||RELAY?'备用完成码':'我的完成码'}</h3><div class="hint">${API||RELAY?'如果老师说没收到，就复制这串完成码交给老师。':'复制完成码，按老师说的地方交上去（例如 Google Classroom）。老师会用它看全班哪些题最难。'}</div><textarea id="donecode" readonly rows="3" aria-label="完成码"></textarea><div class="row"><button type="button" class="btn ${API||RELAY?'':'green'}">复制完成码</button><span class="hint" id="codemsg"></span></div></div>`);
+  cb.querySelector('textarea').value=code;
+  cb.querySelector('.btn').onclick=()=>{const ta=$('#donecode'),m=$('#codemsg');
+    const fall=()=>{ta.focus();ta.select();m.textContent='已选取，请按 Ctrl+C（或长按）复制。'};
+    try{navigator.clipboard.writeText(code).then(()=>m.textContent='已复制！',fall)}catch(e){fall()}};
+  add('<div class="tip"><b>接下来</b>：等老师说开始，就和组员一起当小导游！</div>');
+  $('.panel').scrollTop=0;toPanel();
+}
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cs=['#e2772f','#3c9657','#3d7fc0','#f2b632','#8a4fa3'];
+  for(let i=0;i<70;i++){const d=document.createElement('div');d.className='confetti';d.style.left=Math.random()*100+'vw';d.style.background=cs[i%5];
+    d.style.animationDuration=(2.2+Math.random()*2)+'s';d.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}
+}
+
+/* ---------- 课文弹窗、重来 ---------- */
+$('#lessonText').innerHTML=LESSON.map((p,i)=>`<p><b>${i+1}</b>${p}</p>`).join('');
+$('#btnText').onclick=()=>{$('#textModal').hidden=false};
+document.querySelectorAll('.modal:not(#cardModal)').forEach(m=>m.addEventListener('click',e=>{if(e.target===m||e.target.closest('[data-close]'))m.hidden=true}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal:not(#cardModal)').forEach(m=>m.hidden=true)});
+
+/* ---------- 建筑卡 ---------- */
+function albumCount(){const n=S.cards.filter(Boolean).length;$('#albumN').textContent=n}
+function giveCard(k,then){
+  const m=$('#cardModal');
+  $('#cardTitle').textContent=k===4?'你得到一张隐藏的大师卡！':`你得到一张建筑卡！（${k+1} / 5）`;
+  $('#cardStage').innerHTML=`<div class="flip"><div class="face f-back">${cardBackHTML(k)}</div><div class="face f-front">${cardHTML(k,esc(S.name))}</div></div>`;
+  const btn=$('#cardGo');btn.textContent=k===4?'收进卡册，看我的导览表':`收进卡册，前往${NAMES[k+1]}`;
+  btn.disabled=true;m.hidden=false;
+  const f=$('#cardStage .flip');
+  setTimeout(()=>{f.classList.add('on');setTimeout(()=>{btn.disabled=false;btn.focus()},matchMedia('(prefers-reduced-motion: reduce)').matches?0:900)},matchMedia('(prefers-reduced-motion: reduce)').matches?0:450);
+  btn.onclick=()=>{S.cards[k]=true;albumCount();m.hidden=true;const pill=$('#btnAlbum');pill.classList.remove('bump');void pill.offsetWidth;pill.classList.add('bump');then()};
+}
+function albumHTML(){
+  return `<div class="album">${CARDSET.map((c,i)=>S.cards[i]?`<button type="button" class="acard" data-card="${i}" aria-label="看${c.title}卡">${cardHTML(i,esc(S.name))}</button>`
+    :`<div class="acard locked">${cardBackHTML(i,'完成'+NAMES[i]+'解锁')}</div>`).join('')}</div>`;
+}
+$('#btnAlbum').onclick=()=>{$('#albumBody').innerHTML=albumHTML();$('#albumModal').hidden=false};
+document.addEventListener('click',e=>{const a=e.target.closest('.acard[data-card]');if(!a)return;$('#albumBody').innerHTML=`<div class="bigcard">${cardHTML(+a.dataset.card,esc(S.name))}</div><div class="row" style="justify-content:center"><button type="button" class="pill" id="backAlbum">← 回到卡册</button></div>`;$('#albumModal').hidden=false;$('#backAlbum').onclick=()=>{$('#albumBody').innerHTML=albumHTML()}});
+function start(){clearInterval(timer);document.body.classList.remove('finished');S=fresh();$('#albumN').textContent=0;MAP.reset();tick();renderProg();P.innerHTML='';H.innerHTML='';showCover()}
+$('#btnRestart').onclick=start;
+if(!window.MR_TEACHER)start();
+
+</script>
+
+<script>
+if(window.MR_TEACHER){document.title="寻找大师的路线图 · 教师端";const f=document.createElement("iframe");f.id="teacherFrame";f.title="教师端";f.srcdoc="<!doctype html>\n<html lang=\"zh-Hans\">\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\">\n<title>寻找大师的路线图 · 教师端<\/title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+KuaiLe&display=swap\">\n<style>\n/* Layout: 顶部是班级标签；左栏放“本班链接”和“收完成码”，右栏是全班分析；窄屏单栏。与学生端同一套纸张配色（单一浅色风格） */\n:root{\n  --paper:#f7f0de; --card:#fffaf0; --white:#ffffff;\n  --ink:#3a3024; --ink-soft:#6f6250; --line:#d9c9a3; --line-soft:#ece0c2;\n  --gold:#b8862b; --gold-soft:#f6e7c4; --river:#3d7fc0; --orange:#e2772f; --green:#3c9657; --red:#d4513a;\n  --plum:#8a4fa3; --good-bg:#e7f4e6; --warn-bg:#fdf0dc; --bad-bg:#fbe9e4;\n  --f-display:\"ZCOOL KuaiLe\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;\n  --f-body:\"Noto Sans SC\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;\n  --f-mono:ui-monospace,\"SF Mono\",Menlo,Consolas,monospace;\n  color-scheme: light;\n}\nhtml,body{background:var(--paper);color:var(--ink)}\nbody{font-family:var(--f-body);font-size:15px;line-height:1.6;\n  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}\n[hidden]{display:none!important}\nbutton,input,textarea{font-family:inherit;font-size:inherit;color:inherit}\n:focus-visible{outline:3px solid var(--river);outline-offset:2px}\n.wrap{max-width:1280px;margin:0 auto;display:grid;gap:16px}\n\n.top{display:flex;align-items:flex-end;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}\nh1{font-family:var(--f-display);font-weight:400;font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin:0;color:var(--gold);letter-spacing:2px;text-wrap:balance}\nh1 small{font-size:.55em;color:var(--ink);letter-spacing:1px;margin-left:8px;background:var(--gold-soft);border:2px solid var(--ink);border-radius:999px;padding:1px 12px;vertical-align:middle}\n.store{font-size:13px;color:var(--ink-soft)}\n\n.btn{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--ink);border-radius:999px;padding:6px 16px;background:var(--card);cursor:pointer;box-shadow:0 2px 0 var(--ink);font-weight:500;white-space:nowrap}\n.btn:active{transform:translateY(2px);box-shadow:none}\n.btn.main{background:var(--green);color:var(--white)}\n.btn.blue{background:var(--river);color:var(--white)}\n.btn.quiet{box-shadow:none;border-color:var(--line);color:var(--ink-soft);padding:4px 12px;font-size:13px}\n.btn.danger{border-color:var(--red);color:var(--red);box-shadow:none;font-size:13px;padding:4px 12px}\n.btn.danger.armed{background:var(--red);color:var(--white)}\n.btn:disabled{opacity:.5;cursor:not-allowed}\n\n.classes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}\n.cls{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:14px;padding:6px 14px;background:var(--card);cursor:pointer;font-weight:500}\n.cls b{font-family:var(--f-display);font-weight:400;font-size:20px;line-height:1}\n.cls span{font-size:12px;color:var(--ink-soft)}\n.cls[aria-current=\"true\"]{border-color:var(--ink);background:var(--gold-soft);box-shadow:0 3px 0 var(--ink)}\n.cls.new{border-style:dashed;color:var(--ink-soft)}\n.newform{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:12px 14px}\n.newform label{font-weight:700}\n.newform input{border:2px solid var(--ink);border-radius:10px;padding:6px 10px;width:12em;max-width:100%;background:var(--white)}\n.newform .hint{flex-basis:100%}\n\n.grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;align-items:start}\n@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}\n.col{display:grid;gap:16px;min-width:0}\n.card{background:var(--card);border:2px solid var(--ink);border-radius:18px;padding:14px 16px;min-width:0}\n.card h2{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0 0 8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}\n.card h2 .tag{font-family:var(--f-body);font-size:12px;font-weight:700;background:var(--gold-soft);border:1.5px solid var(--gold);color:var(--ink);border-radius:999px;padding:0 10px}\n.hint{font-size:13px;color:var(--ink-soft)}\n.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}\n\n.link{display:grid;gap:4px;margin-bottom:12px}\n.link label{font-weight:700;font-size:14px}\n.link code{display:block;font-family:var(--f-mono);font-size:12.5px;background:var(--white);border:1.5px solid var(--line);border-radius:8px;padding:6px 8px;word-break:break-all;user-select:all}\n.code{font-family:var(--f-mono);font-weight:700;font-size:15px;letter-spacing:1px}\n\ntextarea#paste{width:100%;box-sizing:border-box;min-height:130px;border:2px solid var(--ink);border-radius:12px;padding:10px;background:var(--white);font:13px/1.5 var(--f-mono);resize:vertical}\n.msg{font-size:14px;border-radius:10px;padding:8px 10px;margin-top:8px}\n.msg.good{background:var(--good-bg)} .msg.warn{background:var(--warn-bg)} .msg.bad{background:var(--bad-bg)}\n\n.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}\n@media (max-width:700px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}\n.tile{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:10px 14px;min-width:0}\n.tile .k{font-size:13px;color:var(--ink-soft)}\n.tile .v{font-family:var(--f-display);font-size:30px;line-height:1.2;font-variant-numeric:tabular-nums}\n.tile .s{font-size:13px;color:var(--ink-soft);overflow-wrap:anywhere}\n\n.scroll{overflow-x:auto}\ntable{border-collapse:collapse;width:100%;font-size:14px}\nth{text-align:left;font-size:12px;color:var(--ink-soft);font-weight:700;padding:6px 8px;border-bottom:2px solid var(--line);white-space:nowrap}\ntd{padding:7px 8px;border-bottom:1px dashed var(--line);vertical-align:top}\ntd.num{font-variant-numeric:tabular-nums;white-space:nowrap}\n#qtable{min-width:640px}\n#qtable td:nth-child(2){min-width:9em}\ntr.st td{background:var(--gold-soft);font-weight:700;font-size:13px;border-bottom:none;padding:5px 8px}\ntr.q{cursor:pointer}\ntr.q:hover td{background:#fff3da}\ntr.q.open td{background:#fff3da}\n.qn{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft)}\n.must{font-size:11px;font-weight:700;color:var(--white);background:var(--plum,#8a4fa3);border-radius:6px;padding:0 6px;margin-right:4px}\n.bar{display:flex;align-items:center;gap:8px;min-width:150px}\n.bar i{flex:1;height:10px;border-radius:5px;background:var(--line-soft);position:relative;overflow:hidden}\n.bar i b{position:absolute;inset:0 auto 0 0;border-radius:5px}\n.bar span{font-variant-numeric:tabular-nums;width:3.2em;text-align:right;font-weight:700}\n.lvl-good{background:var(--green)} .lvl-mid{background:var(--orange)} .lvl-low{background:var(--red)}\n.pick{font-size:13px}\n.pick em{font-style:normal;color:var(--red);font-weight:700}\ntr.detail td{background:var(--white);border-bottom:2px solid var(--line)}\n.detail-box{display:grid;gap:6px;font-size:14px;padding:4px 2px}\n.detail-box .ans{background:var(--good-bg);border-radius:8px;padding:4px 8px}\n.chips{display:flex;gap:6px;flex-wrap:wrap}\n.chip{font-size:12.5px;border:1.5px solid var(--line);border-radius:999px;padding:0 9px;background:var(--card)}\n.chip.bad{border-color:var(--red);color:var(--red)}\n\n.heat{display:flex;gap:2px}\n.heat i{width:13px;height:18px;border-radius:3px;display:block}\n.h0{background:#cfe8cd} .h1{background:#f6c58f} .h2{background:#e98d7a}\n.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);align-items:center}\n.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}\n\n.empty{display:grid;gap:10px;justify-items:start}\n.demo-banner{background:var(--warn-bg);border:2px dashed var(--orange);border-radius:14px;padding:8px 14px;font-size:14px}\n\ndetails.key{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:8px 14px}\ndetails.key[open]{border-color:var(--ink)}\ndetails.key summary{cursor:pointer;font-weight:700}\n.keylist{display:grid;gap:6px;margin:10px 0 4px}\n.keylist div{font-size:14px}\n.keylist .a{color:var(--green);font-weight:700}\n@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}\n.store{font-size:13px;color:var(--ink-soft)}\n.setup .card{max-width:860px}\n.steps{display:grid;gap:12px;padding-left:1.4em;margin:12px 0 16px}\n.steps li{line-height:1.7}\ndetails.code{margin-top:6px}\ndetails.code summary{cursor:pointer;font-size:13px;color:var(--ink-soft)}\ndetails.code pre{max-height:260px;overflow:auto;background:var(--white);border:1.5px solid var(--line);border-radius:10px;padding:10px;font:12px/1.5 var(--f-mono);white-space:pre}\n.setform{display:grid;gap:6px;max-width:560px;background:var(--white);border:2px solid var(--ink);border-radius:14px;padding:14px}\n.setform label{font-weight:700;margin-top:4px}\n.setform input{border:2px solid var(--ink);border-radius:10px;padding:8px 10px;background:var(--white);min-width:0}\n.board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}\n@media (max-width:700px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}\n.lane{border:1.5px dashed var(--line);border-radius:12px;padding:6px 8px;min-height:72px;background:var(--white);min-width:0}\n.lane.fin{border:2px solid var(--green);background:var(--good-bg)}\n.lh{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:4px}\n.lh b{font-family:var(--f-display);font-weight:400;font-size:22px;color:var(--ink)}\n.names{display:flex;flex-wrap:wrap;gap:4px}\n.names span{font-size:12.5px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:0 8px}\n.hn{background:#ece6d6}\ndetails.paste{margin-top:10px}\ndetails.paste summary{cursor:pointer;font-size:14px;font-weight:700}\n\n<\/style>\n<div class=\"wrap\">\n  <header class=\"top\">\n    <h1>寻找大师的路线图<small>教师端<\/small><\/h1>\n    <span class=\"store\" id=\"store\"><\/span>\n  <\/header>\n\n  <!-- ========== 平常使用 ========== -->\n  <div id=\"app\">\n    <nav class=\"classes\" id=\"classes\" aria-label=\"班级\"><\/nav>\n    <form class=\"newform\" id=\"newform\" hidden>\n      <label for=\"cname\">新班级名称<\/label>\n      <input id=\"cname\" maxlength=\"16\" placeholder=\"例如 1E2\" autocomplete=\"off\">\n      <button class=\"btn main\" type=\"submit\">生成这一班的链接<\/button>\n      <button class=\"btn quiet\" type=\"button\" id=\"cancelNew\">取消<\/button>\n      <div class=\"hint\">每一班会拿到自己的学生链接，作答分开保存。<\/div>\n    <\/form>\n    <div id=\"noClass\" class=\"card empty\" hidden>\n      <h2>还没有班级<\/h2>\n      <p class=\"hint\">按上面的“＋ 开新一班”，输入班名，就会生成这一班的学生链接。学生做完，作答会自动出现在这里。下面是全部题目的答案。<\/p>\n    <\/div>\n\n    <div class=\"grid\" id=\"main\" hidden>\n      <div class=\"col\">\n        <section class=\"card\">\n          <h2>本班链接<\/h2>\n          <div class=\"link\"><label>学生端（发给学生）<\/label><code id=\"stuLink\"><\/code><div class=\"row\"><button class=\"btn quiet\" type=\"button\" data-copy=\"stuLink\">复制学生链接<\/button><\/div><\/div>\n          <div class=\"link\"><label>教师端（你在别的电脑打开用）<\/label><code id=\"teaLink\"><\/code><div class=\"row\"><button class=\"btn quiet\" type=\"button\" data-copy=\"teaLink\">复制教师链接<\/button><\/div><\/div>\n          <div class=\"hint\">学生打开学生链接，输入名字就出发。学生按“出发”时，名字会出现在“全班进度”；走到终点时，作答会自动交到这里，不用复制。请把教师链接存成书签，下次直接打开。<\/div>\n          <div class=\"hint\" id=\"copyMsg\" aria-live=\"polite\"><\/div>\n        <\/section>\n        <section class=\"card\">\n          <h2>管理<\/h2>\n          <div class=\"row\"><button class=\"btn blue\" type=\"button\" id=\"exportBtn\">复制全班成绩表<\/button><button class=\"btn danger\" type=\"button\" id=\"delClass\">删除这一班<\/button><\/div>\n          <div class=\"hint\" id=\"exportMsg\" aria-live=\"polite\">作答会存在这台电脑的浏览器里。换电脑、或想长期保存，请在下课后按“复制全班成绩表”，贴进 Google Sheets。<\/div>\n          <details class=\"paste\"><summary>补交：有学生没交成功时用<\/summary>\n            <textarea id=\"paste\" placeholder=\"把学生的备用完成码（MR1| 开头）贴在这里，一次贴很多个也可以。\"><\/textarea>\n            <div class=\"row\" style=\"margin-top:8px\"><button class=\"btn main\" type=\"button\" id=\"addBtn\">交进本班<\/button><\/div>\n            <div id=\"addMsg\" aria-live=\"polite\"><\/div>\n          <\/details>\n        <\/section>\n      <\/div>\n\n      <div class=\"col\">\n        <section class=\"card\">\n          <h2>全班进度 <span class=\"tag\" id=\"live\">连接中……<\/span><\/h2>\n          <div class=\"board\" id=\"board\"><\/div>\n        <\/section>\n        <div class=\"tiles\" id=\"tiles\"><\/div>\n        <section class=\"card\">\n          <h2>逐题分析 <span class=\"tag\">点一行看详情<\/span><\/h2>\n          <div class=\"hint\" style=\"margin-bottom:6px\">“一次答对”＝第一次就选对的人数比例，只计算已经做到这一题的学生。红色的题最值得在课堂上讲。<\/div>\n          <div class=\"scroll\"><table id=\"qtable\"><\/table><\/div>\n        <\/section>\n        <section class=\"card\">\n          <h2>学生名单<\/h2>\n          <div class=\"legend\"><span><i class=\"h0\"><\/i>一次答对<\/span><span><i class=\"h1\"><\/i>错 1 次<\/span><span><i class=\"h2\"><\/i>错 2 次以上<\/span><span><i class=\"hn\"><\/i>还没做到<\/span><\/div>\n          <div class=\"scroll\"><table id=\"stable\"><\/table><\/div>\n        <\/section>\n        <details class=\"key\" id=\"keyBox\" open><summary>答案（教师用）<\/summary><div id=\"keyList\"><\/div><\/details>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>\n<script>\n/* 寻找大师的路线图：课文、题目、完成码（学生端和教师端共用） */\n/* ---------- 课文 ---------- */\nconst LESSON=[\n '工艺设计课的老师布置了假期作业，让我们设计一个别具特色的建筑模型。正当我伤脑筋的时候，爸爸故作神秘地说，他可以带我去拜访一位有名的建筑大师，但要走很长一段路。我欣喜万分，满口答应。',\n '爸爸带我来到中央商业区，我们沿着新加坡河漫步。走着走着，爸爸指着不远处一座外观独特的大楼问我：“那座大楼的外观像一个汉字，你能看出是什么字吗？”我绞尽脑汁，还是想不到。爸爸得意地说：“是繁体字‘貝’。古时候人们曾经把贝壳当作钱来使用，所以用‘贝’做偏旁的字，很多都跟钱财有关。你知道吗？这座楼就是华侨银行大楼。”“贝”代表钱，银行不就是与钱打交道吗？想到这里，我由衷佩服设计师的巧思。不过，建筑大师该不会住在银行大楼里吧？爸爸似乎看出我的疑惑，笑着说：“别急，我们先去来福士城吃午餐。”',\n '我们沿着桥北路走，不久就看到远处的来福士城大楼。这座楼从一面看是个圆柱体，从另一面看又是个长方体，别具一格。吃完午餐，爸爸还要走一走。',\n '我们离开来福士城，顺着美芝路来到新门广场。这里有两座摩天大楼，好像两扇打开的大门。大楼的形状独树一帜，看上去就像薄薄的刀片一样。爸爸说，有人认为大楼设计成这种形状，有消除灾祸的用意。虽然这只是传言，却让我对建筑设计产生了更多的好奇心。',\n '我问爸爸那位建筑大师住在哪里，他却说：“你已经见过他了，他就是贝聿铭先生。这三座建筑都是他设计的。”我这才恍然大悟，原来爸爸是希望我从这位大师的建筑中获得设计的灵感。',\n '回到家后，通过查找资料，我对贝聿铭先生有了更多的了解。他是一名建筑设计大师，他的很多建筑今天都已经成为知名的地标，但有些却曾受尽批评。例如，他为法国卢浮宫设计的玻璃金字塔，这一建筑造型大胆独特，遭到了很多人的质疑和抨击。面对挫折，他这样说：“我和我的建筑都像竹子，再大的风雨也只是弯弯腰而已。”',\n '这次的建筑之旅，不但让我对新加坡的建筑有了新的认识，也让我从这位建筑大师身上学到很多。'];\n\nconst PLACES=['中央商业区','华侨银行大楼','来福士城','新门广场','家'];\nconst CARDS=['来福士城','滨海湾金沙','家','中央商业区','新门广场','华侨银行大楼'];\nconst NAMES=['起点','第1站','第2站','第3站','终点'];\nconst WORDS=['沿着','顺着','离开','来到','回到','经过','穿过'];\n\n/* ---------- 题目 ----------\n   step 类型：place 拖地点｜words 拖转换词｜mcq 选择题｜msq 多选｜viewer 转动观察 */\nconst ST=[\n {para:[1,2],say:'出发！',steps:[\n  {type:'place'},\n  {type:'words',title:'怎么到这里？',parts:['爸爸带我',null,'中央商业区。'],ans:['来到'],para:2},\n  {type:'mcq',title:'为什么出发？',q:'爸爸为什么要带“我”走这么长的一段路？',para:[1],opts:[\n    ['去中央商业区逛逛新大楼，顺便替“我”买些文具','回第1段看看：爸爸说要带“我”去拜访谁？'],\n    ['拜访一位有名的建筑大师，帮“我”找设计作业的灵感',1],\n    ['带“我”去银行办点事，让“我”认识新加坡的金融区','银行只是路上经过的第一站，不是出发的目的。']]},\n  {type:'mcq',title:'出发时的心情',q:'听到要去拜访建筑大师，“我”的心情怎样？',para:[1],opts:[\n    ['伤脑筋','这是“我”想不出作业时的样子。听到爸爸的提议后呢？'],\n    ['恍然大悟','这是第5段，大师揭晓时的心情。'],\n    ['欣喜万分',1]]}]},\n {para:[2],say:'这座楼好特别！',steps:[\n  {type:'place'},\n  {type:'words',title:'怎么走到这里？',parts:['我们',null,'新加坡河漫步。'],ans:['沿着'],sign:'沿着',para:2},\n  {type:'mcq',title:'看到什么①',log:'see',show:'外观像繁体字“貝”',q:'爸爸说，这座大楼的外观像一个汉字。是哪个字？',para:[2],opts:[\n    ['汉字“目”','只看到了上半部分，大楼下面还有两条“腿”。'],\n    ['繁体字“貝”',1],\n    ['繁体字“門”','像两扇打开的大门的，是第3站新门广场。']]},\n  {type:'mcq',title:'看到什么②',q:'为什么银行大楼要设计成“貝”字的样子？',para:[2],opts:[\n    ['古时候用贝壳当钱，“贝”字旁的字多和钱财有关，正好配银行',1],\n    ['新加坡河里曾有很多贝壳，大楼建在河边，用来纪念这段历史','课文没有提到河里的贝壳。读读爸爸的解释。'],\n    ['“貝”字笔画多、左右对称，盖成大楼看起来特别稳重气派','笔画和对称都不是原因。读读爸爸的解释。']]},\n  {type:'mcq',title:'想到什么',log:'feel',pin:1,show:'由衷佩服设计师的巧思，又疑惑大师会不会住在这里',q:'想到这里，“我”有什么想法？',para:[2],opts:[\n    ['觉得大楼外形太奇怪，怀疑设计师是不是在跟大家开玩笑','课文说“我”由衷佩服设计师的巧思。'],\n    ['恍然大悟，原来要拜访的大师就是这座银行大楼的主人','这时还没揭晓大师是谁，那是第5段的事。'],\n    ['由衷佩服设计师的巧思，又疑惑大师会不会住在这里',1]]},\n  {type:'mcq',must:'过渡句',q:'离开前，爸爸笑着说：“别急，我们先去来福士城吃午餐。”这句话有什么作用？',para:[2,3],opts:[\n    ['交代地点：告诉读者他们中午要去哪里吃午餐','吃饭只是表面。想一想：这句话让文章从哪里转到哪里？'],\n    ['承上启下：结束这一站，把读者自然地带向下一站',1],\n    ['描写人物：说明爸爸做事不慌不忙，很有耐心','“别急”只是顺口一说。想想这句话之后，地点有没有变？']],\n    explain:'这是<b>过渡句<\/b>。人还没走，就先预告下一站，读者不会突然“被换到”另一个地方。'}]},\n {para:[3],say:'看到了！',steps:[\n  {type:'place'},\n  {type:'words',title:'怎么走到这里？',parts:['我们',null,'桥北路走，不久就看到远处的来福士城大楼。'],ans:['沿着'],sign:'沿着',para:3},\n  {type:'viewer',title:'看到什么：绕着大楼走一圈'},\n  {type:'mcq',title:'看到什么①',q:'站在<b>弧形<\/b>的那一面看，来福士城像什么形状？',para:[3],opts:[\n    ['长方体','再转到弧形那一面看看。'],['圆柱体',1],['三棱柱','三棱柱的面都是平的，弧形那一面不是。']]},\n  {type:'mcq',title:'看到什么②',log:'see',show:'一面看是圆柱体，另一面看是长方体',q:'站在<b>平直<\/b>的那一面看，来福士城又像什么形状？',para:[3],opts:[\n    ['长方体',1],['圆柱体','再转到平直那一面看看。'],['圆锥体','圆锥体的顶是尖的。']],\n    explain:'课文第3段：“这座楼从一面看是个圆柱体，从另一面看又是个长方体。”换一个位置看，看到的就不一样。'},\n  {type:'mcq',title:'想到什么',log:'feel',pin:2,show:'很欣赏这座楼（别具一格）',q:'这一段没有直接写“我”的感受。从哪个词可以看出“我”很欣赏这座楼？',para:[3],opts:[\n    ['别具一格',1],['独树一帜','这个词在第4段，形容新门广场。'],['绞尽脑汁','这是第2段“我”在猜字的样子。']]},\n  {type:'mcq',must:'详略',q:'第2段写华侨银行大楼用了243个字，第3段写来福士城只用了67个字。两座都是贝聿铭设计的，为什么一详一略？',para:[2,3,5],opts:[\n    ['来福士城不是贝聿铭设计的，作者只是吃午餐时顺路经过，所以三言两语带过就够了','第5段爸爸说：“这三座建筑都是他设计的。”来福士城也是大师的作品。'],\n    ['第一站要靠猜字对话带出“大师在哪里”的疑问；来福士城抓住“两面形状不同”就写清楚了',1],\n    ['华侨银行大楼比来福士城更高、更有名，也更受游客欢迎，所以作者要花更多笔墨来详细介绍','课文没有比较两座楼的高矮和名气。详写还是略写，要看这一段在文章里要完成什么任务。']],\n    explain:'两座楼都是大师的作品，也都是爸爸要带“我”看的。不同的是写作上的<b>任务<\/b>：华侨银行大楼是第一站，作者要用猜字的对话、“貝”字的含义，带出“大师在哪里？”的疑问，所以<b>详写<\/b>；来福士城的特点（一面是圆柱体，一面是长方体）一两句就能写清楚，抓住这个特点、点出“别具一格”就够了，所以<b>略写<\/b>。详写还是略写，不是看哪座楼更重要，而是看这一段要完成什么任务。'}]},\n {para:[4,5],say:'好高的楼！',steps:[\n  {type:'place'},\n  {type:'words',title:'怎么走到这里？',parts:['我们',null,'来福士城，',null,'美芝路',null,'新门广场。'],ans:['离开','顺着','来到'],sign:'离开·顺着·来到',para:4},\n  {type:'msq',title:'看到什么①',log:'see',show:'两座摩天大楼像两扇打开的大门，又像薄薄的刀片',q:'作者用了哪<b>两个<\/b>比喻来写这两座摩天大楼？（选两个）',para:[4],need:2,opts:[\n    ['像两扇打开的大门',1],['像两颗榴莲','这是导入时看到的滨海艺术中心。'],['像薄薄的刀片',1],['像繁体字“貝”','这是第1站华侨银行大楼。']]},\n  {type:'mcq',title:'看到什么②',q:'爸爸说，有人认为大楼设计成这种形状，有什么用意？',para:[4],opts:[\n    ['招财进宝','和钱财有关的是华侨银行大楼。'],['挡风遮雨','课文没有这样说。'],['消除灾祸',1]]},\n  {type:'mcq',title:'作者的态度',q:'“虽然这只是传言，却让我对建筑设计产生了更多的好奇心。”作者对这个传言的态度是什么？',para:[4],opts:[\n    ['完全相信，觉得大楼真的能替这一带消除灾祸','“虽然这只是传言”，说明作者并不当真。'],\n    ['不一定相信，但它引起了“我”对建筑设计的好奇',1],\n    ['觉得传言很可笑，认为建筑设计和传言毫无关系','课文没有嘲笑的意思，反而让“我”更好奇。']]},\n  {type:'mcq',title:'想到什么',log:'feel',pin:3,show:'对建筑设计更好奇；知道大师是谁后，恍然大悟',q:'在新门广场，“我”的心情有什么变化？',para:[4,5],opts:[\n    ['先是由衷佩服，后来觉得大楼像刀片太危险，感到害怕','课文没有写害怕；传言反而让“我”更好奇。'],\n    ['先是更加好奇，知道大师是谁后，恍然大悟',1],\n    ['一直很平静，因为这只是一个传言，“我”并不在意','第5段“恍然大悟”，心情有很大的变化。']]},\n  {type:'mcq',must:'悬念',q:'第1段就说要拜访建筑大师，为什么到了这一站（第5段）才说出大师是谁？',para:[2,5],opts:[\n    ['作者一开始忘了交代，写到最后才补上大师是谁，让文章完整','这是作者故意的安排。想想“我”一路上心里在问什么。'],\n    ['制造悬念：带着“大师在哪里”的疑问一站站走，揭晓时印象更深',1],\n    ['交代顺序：大师就住在新门广场，要一直走到这里才能见到他本人','课文说的是“你已经见过他了”，三座建筑都是他设计的。']],\n    explain:'这就是<b>悬念<\/b>。疑问在华侨银行大楼出现，到新门广场才解开。'}]},\n {para:[6,7],say:'到家啦！',steps:[\n  {type:'place'},\n  {type:'words',title:'怎么回到这里？',parts:[null,'家后，通过查找资料，我对贝聿铭先生有了更多的了解。'],ans:['回到'],sign:'回到',para:6},\n  {type:'mcq',title:'看到什么①',log:'see',show:'玻璃金字塔造型大胆独特，曾受到批评',q:'“我”查资料知道，贝聿铭为法国卢浮宫设计的玻璃金字塔，为什么遭到很多人的质疑和抨击？',para:[6],opts:[\n    ['建造时间太长','课文没有提到建造时间。'],['造型大胆独特',1],['用了太多竹子','竹子是名言里的比喻，不是建筑材料。']]},\n  {type:'mcq',must:'人物精神',q:'“我和我的建筑都像竹子，再大的风雨也只是弯弯腰而已。”这句话让“我”学到了什么？',para:[6],opts:[\n    ['盖房子最好用竹子，因为竹子轻巧，又不怕风吹雨打','这是比喻，不是说真的用竹子盖房子。'],\n    ['面对批评和挫折，要像竹子一样坚韧，不被打倒',1],\n    ['遇到大风大雨时，要懂得弯下腰来保护好自己','“风雨”比喻的是批评和挫折，不是真的天气。']],\n    explain:'“风雨”比喻批评和挫折。“我”不但认识了建筑，也学到了大师坚韧不屈的精神。'},\n  {type:'mcq',title:'想到什么',log:'feel',pin:4,show:'对新加坡的建筑有新认识，也从大师身上学到很多',q:'这次旅程，“我”有什么收获？',para:[7],opts:[\n    ['走了一整天觉得很累，以后不想再去参观建筑了','课文没有这样写。看看第7段。'],\n    ['对新加坡的建筑有了新的认识，也从大师身上学到很多',1],\n    ['觉得设计作业太难了，决定回家请爸爸帮忙完成','刚好相反，“我”从大师的建筑中获得了灵感。']]}]}];\n\nconst SECRETS=[\n {name:'路线要清楚',full:'用转换词和过渡句带路',from:'华侨银行大楼的过渡句'},\n {name:'详略有安排',full:'要展开故事、带出疑问的地方详写；抓住一个特点就能写清楚的地方略写',from:'华侨银行大楼和来福士城的详略'},\n {name:'所见 + 所感',full:'每到一站，说出看到什么，也说出想到什么',from:'每一站的看到、想到'},\n {name:'留一个悬念',full:'留一个疑问，吸引游客跟着走下去',from:'新门广场的悬念'}];\n\n\n/* ---------- 正确答案的位置：分散在 A、B、C（D），不要都是同一个字母 ---------- */\nconst ANSWER_AT={'0.2':'A','0.3':'C','1.2':'A','1.3':'B','1.4':'C','1.5':'A','2.3':'B','2.4':'C','2.5':'B','2.6':'C',\n  '3.2':'BD','3.3':'A','3.4':'B','3.5':'C','3.6':'A','4.2':'B','4.3':'C','4.4':'A'};\nST.forEach((st,k)=>st.steps.forEach((s,i)=>{\n  const want=ANSWER_AT[k+'.'+i];if(!want||!s.opts)return;\n  const right=s.opts.filter(o=>o[1]===1),wrong=s.opts.filter(o=>o[1]!==1);\n  const out=[];let r=0,w=0;\n  for(let j=0;j<s.opts.length;j++)out.push(want.includes('ABCD'[j])?right[r++]:wrong[w++]);\n  s.opts=out;\n}));\n\n/* ---------- 完成码（学生端生成，教师端读取） ----------\n   MR1|班级码|姓名|用时秒|每题记录|校验\n   每题记录：错误次数 + 误选字母（选择题=选项 A-D；地点=地点卡；转换词=词卡），用 . 隔开 */\nconst QLIST=[];\nST.forEach((st,k)=>st.steps.forEach((s,i)=>{if(s.type!=='viewer')QLIST.push({k,i,s})}));\nconst CODE_RE=/MR1\\|([^|\\n]*)\\|([^|\\n]*)\\|(\\d{1,6})\\|([0-9A-Z.]+)\\|([0-9A-Z]{2})/g;\nfunction codeSum(t){let h=7;for(const ch of t)h=(h*31+ch.codePointAt(0))%1296;return h.toString(36).toUpperCase().padStart(2,'0')}\nfunction makeCode(cls,name,secs,rec){\n  const items=QLIST.map(q=>{const r=rec[q.k+'.'+q.i]||{n:0,p:''};return Math.min(9,r.n)+r.p}).join('.');\n  const body=`MR1|${(cls||'-').replace(/[|\\n]/g,'')}|${String(name).replace(/[|\\n]/g,'').trim()}|${secs}|${items}`;\n  return body+'|'+codeSum(body);\n}\nfunction readCodes(text){\n  const out=[];let m;CODE_RE.lastIndex=0;\n  while((m=CODE_RE.exec(text))){\n    const body=m[0].slice(0,m[0].length-3);\n    if(codeSum(body)!==m[5]){out.push({bad:true,raw:m[0]});continue}\n    const it=m[4].split('.');\n    if(it.length!==QLIST.length){out.push({bad:true,raw:m[0]});continue}\n    out.push({cls:m[1],name:m[2],secs:+m[3],items:it.map(x=>({n:+x[0],p:x.slice(1)}))});\n  }\n  return out;\n}\nconst CLASS_RE=/^[A-Za-z0-9][A-Za-z0-9._~-]{1,39}$/;\n\n<\/script>\n<script>\n/* 学生端 → 教师端：经免费转发服务 ntfy.sh 传送，内容先用链接里的密钥加密（AES-GCM），转发服务看不到名字和作答 */\nconst RELAY_HOST='https://ntfy.sh/';\nconst B64U={\n  enc:buf=>{let s='';new Uint8Array(buf).forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'')},\n  dec:s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((s.length+3)%4)),c=>c.charCodeAt(0))\n};\nconst ROOM_RE=/^[A-Za-z0-9_-]{16,64}$/, KEY_RE=/^[A-Za-z0-9_-]{22}$/;\nfunction randToken(n){const A='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';let r='';for(const x of crypto.getRandomValues(new Uint32Array(n)))r+=A[x%A.length];return r}\nfunction newKey(){return B64U.enc(crypto.getRandomValues(new Uint8Array(16)))}\nconst _keys={};\nfunction aesKey(k){return _keys[k]||(_keys[k]=crypto.subtle.importKey('raw',B64U.dec(k),'AES-GCM',false,['encrypt','decrypt']))}\nasync function seal(k,text){\n  const iv=crypto.getRandomValues(new Uint8Array(12));\n  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await aesKey(k),new TextEncoder().encode(text)));\n  const out=new Uint8Array(12+ct.length);out.set(iv);out.set(ct,12);\n  return 'MRX1.'+B64U.enc(out);\n}\nasync function unseal(k,s){\n  if(typeof s!=='string'||!s.startsWith('MRX1.'))return null;\n  try{const b=B64U.dec(s.slice(5));const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b.slice(0,12)},await aesKey(k),b.slice(12));return JSON.parse(new TextDecoder().decode(pt))}catch(e){return null}\n}\n\n<\/script>\n<script>\n/* 寻找大师的路线图 · 教师端（单一文件版：经 ntfy.sh 即时接收，存在这台电脑） */\nconst $=s=>document.querySelector(s);\nconst esc=s=>String(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));\nconst strip=s=>String(s).replace(/<[^>]+>/g,'');\nconst STN=['起点','第1站','第2站','第3站','终点'];\nconst TOP=(()=>{try{return window.parent.location}catch(e){return location}})();\nconst BASE=TOP.href.split('#')[0];\n\n/* ---------- 题目信息 ---------- */\nconst Q=QLIST.map((q,j)=>{\n  const {k,s}=q;let label,full,answer,pickText;\n  if(s.type==='place'){label='这一站是哪里？';full=`拖地点卡：${STN[k]}是哪里？`;answer=PLACES[k];pickText=L=>CARDS['ABCDEF'.indexOf(L)]}\n  else if(s.type==='words'){label='怎么到这里？（转换词）';let b=0;full=s.parts.map(p=>p===null?'____':p).join('');answer=s.parts.map(p=>p===null?`【${s.ans[b++]}】`:p).join('');pickText=L=>WORDS['ABCDEFG'.indexOf(L)]}\n  else{label=s.must?s.must:s.title;full=strip(s.q);answer=s.opts.map((o,i)=>o[1]===1?'ABCD'[i]+'. '+o[0]:'').filter(Boolean).join(' ＋ ');pickText=L=>{const o=s.opts['ABCD'.indexOf(L)];return o?L+'. '+o[0]:''}}\n  return {j,k,s,must:!!s.must,label,full,answer,pickText,explain:s.explain?strip(s.explain):''};\n});\n\n/* ---------- 本机保存 ---------- */\nconst LKEY='mr-one-classes';\nlet CLASSES=(()=>{try{return JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(e){return []}})();\nlet SAVED=true;\nfunction save(){try{localStorage.setItem(LKEY,JSON.stringify(CLASSES));SAVED=true}catch(e){SAVED=false}}\nlet CUR=null;\nfunction cls(){return CLASSES.find(c=>c.code===CUR)||null}\nfunction rowsOf(c){return c?Object.values(c.rows||{}).filter(r=>!(c.removed||[]).includes(r.sid)):[]}\nfunction storeNote(t,bad){const e=$('#store');e.textContent=t;e.style.color=bad?'var(--red)':''}\n\n/* 教师链接带着班级：#teacher&c=…&r=…&k=…&n=班名 —— 在别的电脑打开也能接上 */\n(()=>{\n  try{\n    const p=new URLSearchParams(TOP.hash.slice(1).replace(/^teacher&?/,''));\n    const code=p.get('c')||'',r=p.get('r')||'',k=p.get('k')||'';\n    if(CLASS_RE.test(code)&&ROOM_RE.test(r)&&KEY_RE.test(k)){\n      if(!CLASSES.some(c=>c.code===code)){CLASSES.push({code,name:p.get('n')||code.replace(/-[A-Z0-9]{4}$/,''),room:r,key:k,created:Date.now(),rows:{},removed:[]});save()}\n      CUR=code;\n    }\n  }catch(e){}\n})();\n\n/* ---------- 接收 ---------- */\nlet ES=null,pollT=null,lastMsg=0,connected=false;\nfunction listen(){\n  if(ES){ES.close();ES=null}clearInterval(pollT);connected=false;\n  const c=cls();if(!c){$('#live').textContent='';return}\n  setLive('连接中……');\n  const handle=async raw=>{\n    let m;try{m=typeof raw==='string'?JSON.parse(raw):raw}catch(e){return}\n    if(!m||m.event!=='message'||!m.message)return;\n    const d=await unseal(c.key,m.message);\n    if(!d||typeof d.sid!=='string'||!/^[A-Za-z0-9_-]{6,80}$/.test(d.sid))return;\n    const old=c.rows[d.sid];\n    if(old&&(old.ts||0)>=(d.ts||0))return;\n    c.rows[d.sid]={sid:d.sid,n:String(d.name||'').slice(0,16),st:Math.max(0,Math.min(5,+d.st||0)),t:Math.max(0,+d.secs||0),it:/^[0-9A-Z.\\-]{1,300}$/.test(d.it||'')?d.it:'',done:!!d.done,ts:+d.ts||Date.now(),cls:String(d.cls||'')};\n    lastMsg=Date.now();save();\n    if(c.code===CUR)scheduleRender();\n  };\n  try{\n    ES=new EventSource(`${RELAY_HOST}${c.room}/sse?since=all`);\n    ES.onopen=()=>{connected=true;setLive('已连上 · 学生交来会马上出现')};\n    ES.onmessage=e=>handle(e.data);\n    ES.onerror=()=>{connected=false;setLive('连接中断，正在重连……',true)};\n  }catch(e){ES=null}\n  /* 后备：每 20 秒补读一次 */\n  const poll=async()=>{\n    try{const r=await fetch(`${RELAY_HOST}${c.room}/json?poll=1&since=all`);if(!r.ok)throw 0;\n      const t=await r.text();for(const line of t.split('\\n'))if(line.trim())await handle(line);\n      if(!connected)setLive('已连上（每 20 秒更新）');}\n    catch(e){if(!connected)setLive('连不上转发服务。请检查网络；学校网络可能封锁了 ntfy.sh。',true)}\n  };\n  poll();pollT=setInterval(()=>{if(!document.hidden)poll()},20000);\n}\nfunction setLive(t,bad){const e=$('#live');if(!e)return;e.textContent=t;e.style.background=bad?'var(--bad-bg)':'';e.style.borderColor=bad?'var(--red)':''}\nlet rT=null;function scheduleRender(){clearTimeout(rT);rT=setTimeout(renderAll,250)}\n\n/* ---------- 班级 ---------- */\nfunction links(c){\n  const h=`c=${encodeURIComponent(c.code)}&r=${c.room}&k=${c.key}`;\n  return {stu:`${BASE}#${h}`,tea:`${BASE}#teacher&${h}&n=${encodeURIComponent(c.name)}`};\n}\nfunction renderClasses(){\n  $('#classes').innerHTML=CLASSES.map(c=>`<button type=\"button\" class=\"cls\" data-cls=\"${esc(c.code)}\" aria-current=\"${c.code===CUR}\"><b>${esc(c.name)}<\/b><span>${rowsOf(c).length} 人<\/span><\/button>`).join('')\n    +`<button type=\"button\" class=\"cls new\" id=\"newBtn\">＋ 开新一班<\/button>`;\n  const c=cls();\n  $('#noClass').hidden=!!c;$('#main').hidden=!c;\n  const key=$('#keyBox');\n  if(!c){$('#noClass').appendChild(key);key.open=true}else if(key.parentElement.id==='noClass'){$('#main .col:last-child').appendChild(key);key.open=false}\n  if(!c)return;\n  const L=links(c);$('#stuLink').textContent=L.stu;$('#teaLink').textContent=L.tea;\n}\ndocument.addEventListener('click',e=>{\n  const b=e.target.closest('[data-cls]');\n  if(b){CUR=b.dataset.cls;OPEN=null;renderClasses();renderAll();listen();return}\n  if(e.target.closest('#newBtn')){$('#newform').hidden=false;$('#cname').focus()}\n});\nfunction newCode(name){\n  const base=(name.toUpperCase().replace(/[^A-Z0-9]/g,'')||'CLASS').slice(0,8);\n  const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let r='';for(const x of crypto.getRandomValues(new Uint32Array(4)))r+=A[x%A.length];\n  return base+'-'+r;\n}\n$('#newform').addEventListener('submit',e=>{\n  e.preventDefault();const name=$('#cname').value.trim();if(!name){$('#cname').focus();return}\n  const c={code:newCode(name),name,room:'mr'+randToken(22),key:newKey(),created:Date.now(),rows:{},removed:[]};\n  CLASSES.push(c);save();CUR=c.code;\n  $('#newform').hidden=true;$('#cname').value='';\n  renderClasses();renderAll();listen();\n  $('#copyMsg').textContent='已生成！把学生链接发给 '+name+' 的学生。';\n});\n$('#cancelNew').onclick=()=>{$('#newform').hidden=true};\n\n/* ---------- 补交完成码 ---------- */\nfunction hashId(t){let h=5381;for(const ch of t)h=((h*33)^ch.codePointAt(0))>>>0;return 'code-'+h.toString(36)}\n$('#addBtn').onclick=()=>{\n  const box=$('#addMsg'),c=cls();if(!c)return;\n  const rs=readCodes($('#paste').value),good=rs.filter(r=>!r.bad),bad=rs.length-good.length;\n  if(!rs.length){box.innerHTML='<div class=\"msg bad\">没有找到完成码。完成码以 <b>MR1|<\/b> 开头，请整串复制。<\/div>';return}\n  good.forEach(r=>{const sid=hashId(c.code+'|'+r.name);c.rows[sid]={sid,n:r.name,st:5,t:r.secs,it:r.items.map(x=>x.n+x.p).join('.'),done:true,ts:Date.now(),cls:c.code}});\n  save();\n  box.innerHTML=`<div class=\"msg good\">交进 ${esc(c.name)}：${good.length} 位。<\/div>`+(bad?`<div class=\"msg bad\">有 ${bad} 个完成码不完整，请那几位学生重新复制。<\/div>`:'');\n  if(!bad)$('#paste').value='';\n  renderClasses();renderAll();\n};\n\n/* ---------- 复制、导出、删除 ---------- */\nfunction copy(text,msgEl,ok,fallbackEl){\n  const fall=()=>{msgEl.textContent='没办法自动复制，已帮你选取文字，请按 Ctrl+C。';if(fallbackEl){const r=document.createRange();r.selectNodeContents(fallbackEl);const sel=getSelection();sel.removeAllRanges();sel.addRange(r)}};\n  try{navigator.clipboard.writeText(text).then(()=>msgEl.textContent=ok,fall)}catch(e){fall()}\n}\ndocument.addEventListener('click',e=>{\n  const b=e.target.closest('[data-copy]');if(!b)return;\n  const el=document.getElementById(b.dataset.copy);copy(el.textContent,$('#copyMsg'),'已复制链接。',el);\n});\n$('#exportBtn').onclick=()=>{\n  const R=rowsOf(cls());\n  const head=['姓名','完成','用时(秒)','一次答对题数','总错次',...Q.map(q=>`Q${q.j+1} ${STN[q.k]} ${q.label}`)];\n  const rows=R.map(s=>{const it=items(s);return [s.n,s.done?'是':'否',s.t,it.filter(x=>x&&x.n===0).length,it.reduce((a,x)=>a+(x?x.n:0),0),...it.map(x=>x?x.n:'')]});\n  copy([head,...rows].map(r=>r.join('\\t')).join('\\n'),$('#exportMsg'),`已复制 ${R.length} 位学生的成绩表，可以贴进 Google Sheets。`);\n};\nlet armTimer;\n$('#delClass').onclick=e=>{\n  const b=e.currentTarget,c=cls();if(!c)return;\n  if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='再按一次，确定删除 '+c.name;clearTimeout(armTimer);armTimer=setTimeout(()=>{b.classList.remove('armed');b.textContent='删除这一班'},4000);return}\n  b.classList.remove('armed');b.textContent='删除这一班';\n  CLASSES=CLASSES.filter(x=>x.code!==c.code);save();\n  CUR=CLASSES.length?CLASSES[CLASSES.length-1].code:null;renderClasses();renderAll();listen();\n};\n\n/* ---------- 计算 ---------- */\nfunction items(s){return String(s.it||'').split('.').map(t=>t==='-'||t===''?null:{n:+t[0],p:t.slice(1)})}\nfunction stats(R){\n  const S=R.map(items);\n  return Q.map(q=>{\n    let n=0,first=0,erred=[],picks={};\n    S.forEach((it,si)=>{const x=it[q.j];if(!x)return;n++;if(x.n===0)first++;else erred.push(R[si].n);for(const L of x.p)picks[L]=(picks[L]||0)+1});\n    return {q,n,rate:n?first/n:0,erred,picks:Object.entries(picks).sort((a,b)=>b[1]-a[1])};\n  });\n}\nconst lvl=r=>r>=.8?'lvl-good':r>=.6?'lvl-mid':'lvl-low';\nconst pct=r=>Math.round(r*100)+'%';\nconst fmtT=s=>`${Math.floor(s/60)}分${String(s%60).padStart(2,'0')}秒`;\n\n/* ---------- 画面 ---------- */\nfunction renderAll(){\n  const c=cls();if(!c)return;const R=rowsOf(c);\n  renderBoard(R);renderTiles(R);renderQ(R);renderStudents(R);\n  $('#classes [aria-current=\"true\"] span')&&($('#classes [aria-current=\"true\"] span').textContent=R.length+' 人');\n  if(!SAVED)storeNote('这台电脑的浏览器存不了资料，请下课前复制成绩表。',true);\n}\nfunction renderBoard(R){\n  const go=R.filter(r=>!r.done),fin=R.filter(r=>r.done);\n  const lane=(t,arr,cl)=>`<div class=\"lane ${cl}\"><div class=\"lh\">${t}<b>${arr.length}<\/b><\/div><div class=\"names\">${arr.sort((a,b)=>a.n.localeCompare(b.n,'zh')).map(r=>`<span>${esc(r.n)}<\/span>`).join('')}<\/div><\/div>`;\n  $('#board').innerHTML=R.length?lane('已出发，还在路上',go,'')+lane('已完成',fin,'fin')\n    :'<div class=\"hint\">还没有学生出发。学生在学生链接输入名字、按“出发”后，名字会出现在这里。<\/div>';\n}\nfunction renderTiles(R){\n  const n=R.length,done=R.filter(r=>r.done);\n  if(!done.length){$('#tiles').innerHTML='';return}\n  const st=stats(R).filter(x=>x.n>0);\n  const all=st.reduce((a,x)=>a+x.rate,0)/st.length;\n  const minN=Math.max(1,Math.ceil(done.length*.3));\n  const hard=st.filter(x=>x.n>=minN).sort((a,b)=>a.rate-b.rate)[0];\n  const avgT=Math.round(done.reduce((a,s)=>a+s.t,0)/done.length);\n  const tot=R.map(s=>items(s).reduce((a,x)=>a+(x?x.n:0),0));\n  const help=R.filter((s,i)=>tot[i]>=6);\n  $('#tiles').innerHTML=[\n    ['已完成',`${done.length} / ${n} 人`,`${n-done.length} 人还在路上`],\n    ['平均用时',fmtT(avgT),'只算已完成的学生'],\n    ['全班一次答对',pct(all),'已交的作答平均'],\n    ['最需要讲',hard?pct(hard.rate):'—',hard?`Q${hard.q.j+1} ${hard.q.label}`:'']\n  ].map(([k,v,s])=>`<div class=\"tile\"><div class=\"k\">${k}<\/div><div class=\"v\">${esc(v)}<\/div><div class=\"s\">${esc(s)}<\/div><\/div>`).join('')\n  +(help.length?`<div class=\"tile\" style=\"grid-column:1/-1;background:var(--warn-bg)\"><div class=\"k\">可能需要个别辅导<\/div><div class=\"s\" style=\"color:var(--ink)\">${help.map(s=>esc(s.n)).join('、')}（全部题目合计错 6 次以上）<\/div><\/div>`:'');\n}\nlet OPEN=null;\nfunction renderQ(R){\n  const st=stats(R);let html='<thead><tr><th>题<\/th><th>题目<\/th><th>一次答对<\/th><th>错的人数<\/th><th>最多人误选<\/th><\/tr><\/thead><tbody>';\n  let lastK=-1;\n  st.forEach(x=>{const q=x.q;\n    if(q.k!==lastK){lastK=q.k;html+=`<tr class=\"st\"><td colspan=\"5\">${STN[q.k]} · ${PLACES[q.k]}<\/td><\/tr>`}\n    const tp=x.picks[0];\n    html+=`<tr class=\"q ${OPEN===q.j?'open':''}\" data-q=\"${q.j}\" tabindex=\"0\"><td class=\"qn\">Q${q.j+1}<\/td><td>${q.must?'<span class=\"must\">必答<\/span>':''}${esc(q.label)}<\/td>\n      <td>${x.n?`<div class=\"bar\"><i><b class=\"${lvl(x.rate)}\" style=\"width:${pct(x.rate)}\"><\/b><\/i><span>${pct(x.rate)}<\/span><\/div>`:'<span class=\"hint\">还没有人交<\/span>'}<\/td>\n      <td class=\"num\">${x.n?x.erred.length+' / '+x.n+' 人':''}<\/td>\n      <td class=\"pick\">${tp?`<em>${tp[1]} 人<\/em> ${esc(q.pickText(tp[0])||'')}`:''}<\/td><\/tr>`;\n    if(OPEN===q.j){\n      html+=`<tr class=\"detail\"><td colspan=\"5\"><div class=\"detail-box\">\n        <div><b>题目：<\/b>${esc(q.full)}<\/div>\n        <div class=\"ans\"><b>答案：<\/b>${esc(q.answer)}<\/div>\n        ${q.explain?`<div class=\"hint\">${esc(q.explain)}<\/div>`:''}\n        ${x.picks.length?`<div><b>误选情况：<\/b><div class=\"chips\">${x.picks.map(([L,m])=>`<span class=\"chip bad\">${esc(q.pickText(L)||L)} · ${m} 人<\/span>`).join('')}<\/div><\/div>`:''}\n        ${x.erred.length?`<div><b>错过的学生：<\/b><div class=\"chips\">${x.erred.map(n=>`<span class=\"chip\">${esc(n)}<\/span>`).join('')}<\/div><\/div>`:(x.n?'<div>交来的学生都一次答对。<\/div>':'')}\n      <\/div><\/td><\/tr>`;\n    }\n  });\n  $('#qtable').innerHTML=html+'<\/tbody>';\n}\nfunction toggleQ(j){OPEN=OPEN===j?null:j;renderQ(rowsOf(cls()));const r=$(`#qtable tr.q[data-q=\"${j}\"]`);r&&r.focus()}\n$('#qtable').addEventListener('click',e=>{const r=e.target.closest('tr.q');if(r)toggleQ(+r.dataset.q)});\n$('#qtable').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const r=e.target.closest('tr.q');if(!r)return;e.preventDefault();toggleQ(+r.dataset.q)});\n\nlet SORT='name';\nfunction renderStudents(R){\n  if(!R.length){$('#stable').innerHTML='<tbody><tr><td class=\"hint\">学生交来后，这里会列出每位学生每一题的情况。<\/td><\/tr><\/tbody>';return}\n  const rows=R.map(s=>{const it=items(s);return {s,it,first:it.filter(x=>x&&x.n===0).length,done:it.filter(Boolean).length,err:it.reduce((a,x)=>a+(x?x.n:0),0)}});\n  rows.sort(SORT==='err'?(a,b)=>b.err-a.err:SORT==='prog'?(a,b)=>(b.s.done-a.s.done)||(a.s.t-b.s.t):(a,b)=>a.s.n.localeCompare(b.s.n,'zh'));\n  const th=(k,t)=>`<th><button type=\"button\" class=\"btn quiet\" data-sort=\"${k}\" aria-pressed=\"${SORT===k}\">${t}${SORT===k?' ▾':''}<\/button><\/th>`;\n  $('#stable').innerHTML=`<thead><tr>${th('name','姓名')}${th('prog','状态')}${th('err','错次')}<th>一次答对<\/th><th>每一题（Q1 → Q${Q.length}）<\/th><th><\/th><\/tr><\/thead><tbody>`+\n    rows.map(r=>`<tr><td><b>${esc(r.s.n)}<\/b><\/td><td class=\"num\">${r.s.done?'✓ 完成 · '+fmtT(r.s.t):'还在路上'}<\/td><td class=\"num\">${r.s.done?r.err:''}<\/td><td class=\"num\">${r.s.done?r.first+'/'+r.done:''}<\/td>\n      <td><div class=\"heat\">${r.it.map((x,j)=>`<i class=\"${!x?'hn':x.n===0?'h0':x.n===1?'h1':'h2'}\" title=\"Q${j+1} ${esc(Q[j].label)}：${!x?'还没交':x.n===0?'一次答对':'错 '+x.n+' 次'}\"><\/i>`).join('')}<\/div><\/td>\n      <td><button type=\"button\" class=\"btn quiet\" data-del=\"${esc(r.s.sid)}\">移除<\/button><\/td><\/tr>`).join('')+'<\/tbody>';\n}\n$('#stable').addEventListener('click',e=>{\n  const so=e.target.closest('[data-sort]');if(so){SORT=so.dataset.sort;renderStudents(rowsOf(cls()));return}\n  const d=e.target.closest('[data-del]');if(!d)return;\n  if(!d.classList.contains('armed')){d.classList.add('armed','danger');d.textContent='确定移除？';setTimeout(()=>{if(d.isConnected){d.classList.remove('armed','danger');d.textContent='移除'}},4000);return}\n  const c=cls();(c.removed=c.removed||[]).push(d.dataset.del);delete c.rows[d.dataset.del];save();renderClasses();renderAll();\n});\n\n/* ---------- 答案（教师用） ---------- */\n$('#keyList').innerHTML=[0,1,2,3,4].map(k=>`<div class=\"keylist\"><b>${STN[k]} · ${PLACES[k]}（第${ST[k].para.join('、')}段）<\/b>${Q.filter(q=>q.k===k).map(q=>`<div><span class=\"qn\">Q${q.j+1}<\/span> ${q.must?'<span class=\"must\">必答<\/span>':''}${esc(q.label)}：<span class=\"a\">${esc(q.answer)}<\/span><\/div>`).join('')}<\/div>`).join('')\n  +`<div class=\"keylist\"><b>四个导游秘诀<\/b>${SECRETS.map((x,i)=>`<div>${i+1}. ${esc(x.name)}：${esc(x.full)}<\/div>`).join('')}<\/div>`;\n\n/* ---------- 开始 ---------- */\nif(!CUR&&CLASSES.length)CUR=CLASSES[CLASSES.length-1].code;\nstoreNote(SAVED?'各班作答存在这台电脑的浏览器里':'');\nrenderClasses();renderAll();listen();\n\n<\/script>\n<\/html>\n";document.body.appendChild(f)}
+addEventListener("hashchange",()=>location.reload());
+</script>
+</html>
