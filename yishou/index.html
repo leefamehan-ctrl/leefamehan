@@ -445,7 +445,8 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .newbeast{width:clamp(110px,17cqw,220px)}
 .newbeast .nb-fly{position:relative;width:100%;height:100%}
 .newbeast.fly .nb-img{animation:nbFly var(--fd,10s) ease-in-out var(--fdl,0s) infinite}
-.newbeast .nb-img{width:100%;height:100%;display:grid;place-items:center;filter:drop-shadow(0 0 10px rgba(255,230,160,.85)) drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.newbeast .nb-img{width:100%;height:100%;display:grid;place-items:center;filter:drop-shadow(0 8px 10px rgba(0,0,0,.4))}
+.newbeast:not(.cut) .nb-img{filter:drop-shadow(0 0 10px rgba(255,230,160,.85)) drop-shadow(0 6px 10px rgba(0,0,0,.35))}
 .newbeast .nb-img img{width:100%;height:100%;object-fit:contain}
 .newbeast .nb-img.none{border-radius:50%;background:#efe1bf;border:3px solid var(--gold)}
 .newbeast:not(.cut) .nb-img img{-webkit-mask:radial-gradient(closest-side,#000 70%,transparent);mask:radial-gradient(closest-side,#000 70%,transparent)}
@@ -459,10 +460,19 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .hatch-foot{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:10px}
 /* 学生页工具列 */
 .sbar .snav{display:flex;gap:6px;flex-shrink:0}
-.sbar .nv{background:linear-gradient(180deg,#2a3a5a,#1a2740);color:#e8eef6;border-color:#5b6b8a}
-.sbar .nv::before,.sbar .nv::after{background:#8fa0c0;border-color:#3a4a68}
-.sbar .nv.on{background:linear-gradient(180deg,#fbe7a6 0%,var(--gold) 45%,#b07a2a 100%);color:#3a2a14;border-color:var(--gold-d);box-shadow:0 0 0 2px rgba(246,220,147,.45),0 4px 10px rgba(0,0,0,.35);font-weight:800}
-.sbar .nv.locked{background:#20283a;color:#8a93a6;border-color:#3a4458;filter:none;cursor:not-allowed;box-shadow:none}
+/* 四个按钮各有颜色：石青、朱砂、琥珀、黛紫；目前所在页最亮并有金边 */
+.sbar .nv{--c1:#4a7fb8;--c2:#1f4a7a;--c3:#12304f;color:#fff;font-weight:700;border:2px solid var(--c3);
+  background:linear-gradient(180deg,var(--c1) 0%,var(--c2) 55%,var(--c3) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -3px 0 rgba(0,0,0,.25),0 3px 8px rgba(0,0,0,.35);
+  text-shadow:0 1px 2px rgba(0,0,0,.45);opacity:.78;filter:saturate(.8)}
+.sbar .nv::before,.sbar .nv::after{background:rgba(255,255,255,.75);border-color:var(--c3)}
+.sbar .nv[data-navk="map"]{--c1:#5b93cf;--c2:#2a5d96;--c3:#163a63}
+.sbar .nv[data-navk="dex"]{--c1:#e0705f;--c2:#b0362b;--c3:#6b1a13}
+.sbar .nv[data-navk="lab"]{--c1:#f2c063;--c2:#c98a1f;--c3:#7a4f08;color:#2e1d04;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.sbar .nv[data-navk="hatch"]{--c1:#a77bd0;--c2:#6c4199;--c3:#3d2160}
+.sbar .nv:hover{opacity:1;filter:none}
+.sbar .nv.on{opacity:1;filter:none;border-color:#f6dc93;box-shadow:0 0 0 2px rgba(246,220,147,.55),0 0 14px rgba(246,220,147,.55),inset 0 1px 0 rgba(255,255,255,.45),0 4px 10px rgba(0,0,0,.4);transform:translateY(-1px)}
+.sbar .nv.on::before,.sbar .nv.on::after{background:#fff3c4;border-color:#8a5a1c}
+.sbar .nv.locked{--c1:#3a4252;--c2:#2a303d;--c3:#1c212b;color:#9aa3b5;text-shadow:none;opacity:1;filter:none;cursor:not-allowed;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
 .sbar .nv.locked::before,.sbar .nv.locked::after{display:none}
 .sbar .page-chip{padding:4px 12px;border-radius:30px;background:rgba(246,220,147,.15);border:1px solid var(--gold);color:var(--gold-l);font-weight:700;white-space:nowrap}
 .sbar [data-sync],.sbar .sync-pill{display:none!important}
@@ -3490,12 +3500,42 @@ function beastHTML(g, p) {
     <div class="nb-fly"><div class="nb-img${cr.image ? "" : " none"}">${cr.image ? `<img data-cut="${g.groupId}" alt="${esc(cr.name)}">` : `<div class="noimg"><span class="seal" style="min-width:50px;height:50px;font-size:1.6rem">${esc((cr.name || "兽").slice(0, 1))}</span></div>`}</div><i class="nb-shadow"></i></div>
     <span class="beast-label">${TP(cr.name)} · ${GH(g.groupId)}</span></div>`;
 }
+/* 异兽描边：在剪好的外形外围画上「深褐细线 + 金色粗边 + 柔光」，只计算一次 */
+const outlineCache = {};
+function outlineImg(url) {
+  if (outlineCache[url]) return outlineCache[url];
+  return (outlineCache[url] = new Promise(ok => {
+    const im = new Image();
+    im.onload = () => {
+      try {
+        const M = 420, k = Math.min(1, M / Math.max(im.width, im.height)), w = Math.round(im.width * k), h = Math.round(im.height * k), P = 16;
+        const c = document.createElement("canvas"); c.width = w + P * 2; c.height = h + P * 2; const x = c.getContext("2d");
+        const sil = (fill) => { const t = document.createElement("canvas"); t.width = w; t.height = h; const tx = t.getContext("2d"); tx.drawImage(im, 0, 0, w, h);
+          tx.globalCompositeOperation = "source-in"; tx.fillStyle = fill(tx); tx.fillRect(0, 0, w, h); return t; };
+        const ring = (img, r, step = 12) => { for (let a = 0; a < 360; a += step) { const rad = a * Math.PI / 180; x.drawImage(img, P + Math.cos(rad) * r, P + Math.sin(rad) * r); } };
+        // 1. 外层柔光
+        const glow = sil(() => "rgba(255,214,120,1)"); x.save(); x.shadowColor = "rgba(255,210,110,.6)"; x.shadowBlur = 9; x.globalAlpha = .55; ring(glow, 4, 45); x.globalAlpha = 1; x.restore();
+        // 2. 金色粗边（上亮下暗的渐层）
+        const gold = sil(tx => { const g = tx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "#fff0b8"); g.addColorStop(.45, "#e9b84c"); g.addColorStop(1, "#a8701f"); return g; });
+        ring(gold, 3.2); ring(gold, 2.2);
+        // 3. 深褐细线（让金边更立体）
+        const dark = sil(() => "#3d2209"); ring(dark, 1, 30);
+        // 4. 异兽本体
+        x.drawImage(im, P, P, w, h);
+        ok(c.toDataURL("image/png"));
+      } catch (e) { ok(url); }
+    };
+    im.onerror = () => ok(url); im.src = url;
+  }));
+}
 /* 把图片换成去背景的版本 */
 function fillCutouts(root) {
   $$("img[data-cut]", root).forEach(im => { if (im.dataset.done) return; im.dataset.done = 1; const g = hatchGroups[im.dataset.cut]; if (!g) return;
     const set = url => { im.src = url; };
-    if (g.creation.cutout && SAFE_IMG.test(g.creation.cutout)) { set(g.creation.cutout); im.closest(".newbeast").classList.add("cut"); return; }
-    Cutout.get(g.creation.image).then(r => { set(r ? r.url : g.creation.image); im.closest(".newbeast").classList.toggle("cut", !!(r && r.cut)); }); });
+    const nb = im.closest(".newbeast");
+    if (g.creation.cutout && SAFE_IMG.test(g.creation.cutout)) { nb.classList.add("cut"); outlineImg(g.creation.cutout).then(set); return; }
+    Cutout.get(g.creation.image).then(r => { const cut = !!(r && r.cut); nb.classList.toggle("cut", cut);
+      if (cut) outlineImg(r.url).then(set); else set(r ? r.url : g.creation.image); }); });
 }
 function bindHatch(stage) {
   $$(".egg", stage).forEach(e => e.onclick = () => {
