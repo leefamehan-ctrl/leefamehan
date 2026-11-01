@@ -37,7 +37,7 @@
   --ink:#2b1d10; --ink-2:#5a4128;
   --paper:#f3e5c4; --paper-2:#e8d3a2; --paper-3:#d6b97c;
   --wood:#6b3f1d; --wood-d:#3d220e;
-  --ok:#2f8f5b; --warn:#c0841a; --bad:#b8322a;
+  --ok:#1f5fae; --warn:#c0841a; --bad:#b8322a;
   --f-title:"Ma Shan Zheng","STKaiti","KaiTi","BiauKai","Kaiti SC",serif;
   --f-body:"Noto Serif SC","Songti SC","STSong","SimSun","PMingLiU",serif;
   --shadow:0 10px 30px rgba(0,0,0,.45);
@@ -164,7 +164,7 @@ img{max-width:100%;display:block}
 .cj-row{display:flex;gap:10px;justify-content:center}.cj-row .txt{max-width:220px;font-size:1.5rem;letter-spacing:5px;text-align:center;text-transform:uppercase;font-weight:700}
 .cj-err{min-height:1.4em;margin-top:8px;color:#ffb4a8;font-size:.92rem}.cj-tip{font-size:.85rem;color:#cdd7e4;opacity:.85}
 .class-pill{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;padding:6px 8px 6px 16px;border-radius:30px;background:rgba(10,20,36,.75);border:1.5px solid var(--gold-d);color:#e8eef6}
-.class-pill b{font-size:1.3rem;letter-spacing:3px;color:var(--gold-l)}.cp-live{color:#8fe3c4;font-size:.85rem}.cp-off{color:#c9cfd8;font-size:.85rem}
+.class-pill b{font-size:1.3rem;letter-spacing:3px;color:var(--gold-l)}.cp-live{color:#b9d6ff;font-size:.85rem;font-weight:700}.cp-off{color:#c9cfd8;font-size:.85rem}
 .t-class{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:1400px;width:calc(100% - 32px);margin:12px auto 0;padding:10px 16px;border-radius:12px;background:rgba(10,20,36,.8);border:1.5px solid var(--gold-d)}
 .tc-code small{display:block;font-size:.75rem;color:#c9cfd8}.tc-code b{font-size:1.9rem;letter-spacing:4px;color:var(--gold-l);font-family:Georgia,serif}
 .tc-btns{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}.ts-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
@@ -178,15 +178,27 @@ img{max-width:100%;display:block}
 .safe-warn{border-color:#d98b3a!important;box-shadow:0 0 0 2px rgba(217,139,58,.25)}.safe-care{border-color:#d9b23a!important}
 .care{text-align:center}.care p{margin:8px 0;line-height:1.7}.care-c{font-weight:700;color:#7d1d17}.care-s{font-size:.9rem;color:var(--ink-2)}
 .sf-text{white-space:pre-wrap;background:rgba(255,255,255,.08);padding:6px 8px;border-radius:6px;max-width:360px}
-.cv-wrap h3 small{font-size:.8rem;margin-left:8px}.cv-live{font-size:.85rem;color:#2f7a52;margin:2px 0 8px}.cv-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cv-wrap h3 small{font-size:.8rem;margin-left:8px}.cv-live{font-size:.85rem;color:#1f5fae;font-weight:700;margin:2px 0 8px}.cv-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .cv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}.cv-card{background:rgba(255,255,255,.55);border:1.5px solid var(--paper-3);border-radius:10px;padding:10px 12px}
-.cv-card.me{border-color:#2f7a52;box-shadow:0 0 0 2px rgba(47,122,82,.25)}.cv-card.off{opacity:.6}.cv-card b{font-size:1.05rem;color:#7d1d17}
-.cv-bar{height:7px;border-radius:4px;background:#e2d3ad;margin:6px 0;overflow:hidden}.cv-bar i{display:block;height:100%;background:linear-gradient(90deg,#d9a441,#2f7a52)}
-.cv-row{font-size:.85rem;color:var(--ink-2);margin:3px 0}.cv-pills{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0}.cv-me{font-size:.75rem;background:#2f7a52;color:#fff;border-radius:8px;padding:1px 6px;margin-left:4px}
+.cv-card.me{border-color:#1f5fae;box-shadow:0 0 0 2px rgba(31,95,174,.25)}.cv-card.off{opacity:.6}.cv-card b{font-size:1.05rem;color:#7d1d17}
+.cv-bar{height:7px;border-radius:4px;background:#e2d3ad;margin:6px 0;overflow:hidden}.cv-bar i{display:block;height:100%;background:linear-gradient(90deg,#d9a441,#1f5fae)}
+.cv-row{font-size:.85rem;color:var(--ink-2);margin:3px 0}.cv-pills{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0}.cv-me{font-size:.75rem;background:#1f5fae;color:#fff;border-radius:8px;padding:1px 6px;margin-left:4px}
 .cv-sec{margin-bottom:14px}.cv-sec h4{font-family:var(--f-title);font-weight:400;font-size:1.3rem;color:#7d1d17;margin-bottom:4px}
 .cv-table{width:100%;border-collapse:collapse;font-size:.88rem}.cv-table th,.cv-table td{border:1px solid var(--paper-3);padding:5px 7px;vertical-align:top;text-align:left;white-space:pre-wrap}.cv-table th{background:#f1e2bd}.cv-table tr.me td{background:rgba(47,122,82,.08)}
 .cv-works{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}.cv-work{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:10px;border:1.5px solid var(--paper-3);background:rgba(255,255,255,.55);cursor:pointer}
 .cv-img{width:100%;aspect-ratio:1;display:grid;place-items:center;background:#efe1bf;border-radius:8px;overflow:hidden}.cv-img img{width:100%;height:100%;object-fit:cover}
+.tk-mem{display:flex;flex-wrap:wrap;justify-content:center;gap:3px 6px;margin:6px 4px 0}.tk-mem i{font-style:normal;font-size:.82rem;font-weight:700;line-height:1.15;display:flex;flex-direction:column;align-items:center}
+.tk-mem small{font-size:.62rem;font-weight:500;opacity:.85;font-family:Georgia,serif}
+.roster-btn{margin-top:4px}.roster-wrap h3{font-family:var(--f-title);font-weight:400;font-size:1.8rem;color:#7d1d17;text-align:center;margin-bottom:12px}
+.roster{width:100%;border-collapse:separate;border-spacing:0 8px}.roster th{font-family:var(--f-title);font-weight:400;font-size:1.1rem;color:#7d1d17;text-align:left;padding:4px 14px;border-bottom:2px solid var(--gold-d)}
+.roster td{padding:10px 14px;background:rgba(255,255,255,.6);border-top:1.5px solid var(--paper-3);border-bottom:1.5px solid var(--paper-3);vertical-align:middle}
+.roster td:first-child{border-left:6px solid #2f6db0;border-radius:10px 0 0 10px}.roster tr.team-B td:first-child{border-left-color:#c8702a}.roster td:last-child{border-right:1.5px solid var(--paper-3);border-radius:0 10px 10px 0}
+.roster tr.me td{background:#fff6dc;box-shadow:inset 0 0 0 1px var(--gold)}.rg-n{font-family:var(--f-title);font-size:1.25rem;color:#3a2a14;white-space:nowrap}
+.ra span{display:inline-block;margin:2px 4px 2px 0;padding:2px 10px;border-radius:12px;background:#f1e2bd;border:1px solid var(--gold-d);font-weight:700;font-size:.9rem}
+.rm{display:flex;flex-wrap:wrap;gap:8px}.rm-p{display:inline-flex;flex-direction:column;align-items:center;min-width:86px;padding:6px 12px;border-radius:10px;background:linear-gradient(180deg,#fffaf0,#f3e5c3);border:1.5px solid var(--gold-d);box-shadow:0 2px 4px rgba(0,0,0,.08)}
+.rm-p b{font-size:1.15rem;color:#3a2a14}.rm-p small{font-family:Georgia,serif;font-style:italic;font-size:.82rem;color:#44506a}
+.pg-mem{margin-top:6px}.pg-mem span{display:inline-block;margin:2px 8px 2px 0;padding:2px 10px;border-radius:10px;background:#f1e2bd}
+@media (max-width:640px){.roster th:nth-child(2),.roster td.ra{display:none}.rm-p{min-width:70px;padding:4px 8px}}
 .group-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;width:100%;max-width:720px}
 .token{position:relative;padding:16px 6px 12px;border-radius:40px 40px 12px 12px;color:#fff;
   background:radial-gradient(ellipse at 30% 20%,#9fe3d3 0%,var(--jade) 45%,var(--jade-d) 100%);
@@ -270,13 +282,13 @@ img{max-width:100%;display:block}
 .opt:disabled{cursor:default}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .feedback{padding:8px 14px;border-radius:8px;font-weight:600;animation:lineIn .3s}
-.feedback.ok{background:rgba(47,143,91,.15);border:1px solid var(--ok);color:#1d5c3a}
+.feedback.ok{background:rgba(31,95,174,.12);border:1px solid var(--ok);color:#163f7a;font-weight:700}
 .feedback.no{background:rgba(184,50,42,.1);border:1px solid var(--bad);color:var(--cinnabar-d)}
 .feedback.hint{background:rgba(192,132,26,.12);border:1px dashed var(--warn);color:#7a4f08}
 .node-track{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:14px 0 0}
 .node-track .nd{display:flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:.9rem;background:rgba(0,0,0,.35);border:1px solid #556;color:#aab}
 .node-track .nd.cur{border-color:var(--gold);color:var(--gold-l);box-shadow:0 0 10px rgba(217,164,65,.5)}
-.node-track .nd.ok{background:rgba(47,143,91,.35);border-color:var(--ok);color:#d9ffe9}
+.node-track .nd.ok{background:rgba(31,95,174,.45);border-color:#9cc8ff;color:#fff;font-weight:700}
 .idiom-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
 .idiom{padding:8px 12px;border-radius:8px;background:#fff8e6;border:1px solid var(--paper-3);border-left:5px solid var(--cinnabar);animation:lineIn .5s both}
 .idiom b{display:block;font-family:var(--f-title);font-size:1.3rem;font-weight:400;color:var(--cinnabar-d)}
@@ -336,7 +348,7 @@ img{max-width:100%;display:block}
 .clue-table textarea{width:100%;min-height:64px;resize:vertical;border:1px dashed var(--paper-3);background:rgba(255,255,255,.55);border-radius:4px;padding:4px 6px;color:var(--ink)}
 .clue-table textarea:focus{outline:2px solid var(--jade);background:#fff}
 .table-scroll{overflow-x:auto}
-.save-hint{font-size:.8rem;color:var(--ok);margin-left:8px}
+.save-hint{font-size:.8rem;color:var(--ok);font-weight:700;margin-left:8px}
 
 /* 档案卡 */
 .profile{display:grid;grid-template-columns:minmax(200px,38%) 1fr;gap:20px}
@@ -371,7 +383,7 @@ img{max-width:100%;display:block}
 .fs-btn{position:fixed;top:10px;right:12px;z-index:60}
 .screen .topbar ~ * .fs-btn{display:none}
 .sync-pill{font-size:.78rem;padding:2px 10px;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid #556;color:#ccd}
-.sync-pill.ok{border-color:var(--ok);color:#bff0d2}
+.sync-pill.ok{border-color:#9cc8ff;color:#d6e7ff;font-weight:700}
 .sync-pill.err{border-color:var(--bad);color:#ffc9c3}
 
 /* ============================================================
@@ -387,7 +399,7 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
 .chip{padding:4px 12px;border-radius:16px;font-size:.92rem;border:1.5px solid var(--paper-3);background:rgba(255,255,255,.5);color:var(--ink);transition:.15s}
 .chip:hover{border-color:var(--jade)}
-.chip.on{background:var(--jade);border-color:var(--jade-d);color:#fff;box-shadow:0 0 0 2px rgba(108,195,179,.4)}
+.chip.on{background:var(--jade-d);border-color:#0b2f2b;color:#fff;font-weight:700;box-shadow:0 0 0 2px rgba(108,195,179,.4)}
 .trait-row{display:grid;grid-template-columns:118px 1fr;gap:8px;align-items:start;padding:8px 0;border-top:1px dashed var(--paper-3)}
 .trait-row .tr-name{font-weight:700;color:var(--ink);padding-top:4px}
 .trait-row .tr-name i{font-style:normal;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--cinnabar);color:#fff;font-size:.8rem;margin-right:4px}
@@ -430,9 +442,17 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .egg-label,.beast-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(.7rem,1.3cqw,.95rem);padding:1px 10px;border-radius:10px;
   background:rgba(15,29,51,.85);border:1px solid var(--gold);color:var(--gold-l);margin-top:4px}
 .newbeast{position:absolute;transform:translate(-50%,-50%);width:clamp(70px,12cqw,150px);aspect-ratio:1;z-index:4;cursor:pointer;animation:beastPop 1s cubic-bezier(.2,1.5,.4,1) both}
-.newbeast .nb-img{width:100%;height:100%;border-radius:50%;overflow:hidden;border:4px solid var(--gold);background:#efe1bf;display:grid;place-items:center;
-  box-shadow:0 0 0 3px var(--wood),0 0 24px rgba(246,220,147,.9)}
-.newbeast .nb-img img{width:100%;height:100%;object-fit:cover}
+.newbeast{width:clamp(110px,17cqw,220px)}
+.newbeast .nb-fly{position:relative;width:100%;height:100%}
+.newbeast.fly .nb-img{animation:nbFly var(--fd,10s) ease-in-out var(--fdl,0s) infinite}
+.newbeast .nb-img{width:100%;height:100%;display:grid;place-items:center;filter:drop-shadow(0 0 10px rgba(255,230,160,.85)) drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.newbeast .nb-img img{width:100%;height:100%;object-fit:contain}
+.newbeast .nb-img.none{border-radius:50%;background:#efe1bf;border:3px solid var(--gold)}
+.newbeast .nb-shadow{position:absolute;left:20%;right:20%;bottom:-8%;height:10%;border-radius:50%;background:radial-gradient(rgba(0,0,0,.35),transparent 70%);animation:nbShadow var(--fd,10s) ease-in-out var(--fdl,0s) infinite;pointer-events:none}
+@keyframes nbFly{0%{transform:translate(0,0) rotate(-3deg) scale(1)}20%{transform:translate(18%,-22%) rotate(4deg) scale(1.05)}40%{transform:translate(30%,-6%) rotate(-2deg) scale(.98)}
+  60%{transform:translate(0,-28%) rotate(3deg) scale(1.06)}80%{transform:translate(-26%,-10%) rotate(-4deg) scale(1)}100%{transform:translate(0,0) rotate(-3deg) scale(1)}}
+@keyframes nbShadow{0%,100%{transform:translateX(0) scale(1);opacity:.9}20%{transform:translateX(18%) scale(.75);opacity:.5}40%{transform:translateX(30%) scale(.9);opacity:.75}60%{transform:translateX(0) scale(.65);opacity:.4}80%{transform:translateX(-26%) scale(.85);opacity:.7}}
+@media (prefers-reduced-motion:reduce){.newbeast.fly .nb-img,.newbeast .nb-shadow{animation:none}}
 .newbeast:hover{filter:brightness(1.1)}
 @keyframes beastPop{0%{transform:translate(-50%,-50%) scale(0) rotate(-20deg);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .burst{position:absolute;transform:translate(-50%,-50%);width:clamp(120px,22cqw,260px);aspect-ratio:1;z-index:2;pointer-events:none;border-radius:50%;
@@ -462,7 +482,7 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .pill{display:inline-block;font-size:.75rem;padding:1px 9px;border-radius:10px;white-space:nowrap;font-weight:600}
 .pill.no{background:#3a4458;color:#b8c0d0}
 .pill.ing{background:#1f5a8a;color:#d5ecff}
-.pill.done{background:#2f7a52;color:#dfffe9}
+.pill.done{background:#1f5fae;color:#fff;font-weight:700}
 .pill.err{background:#8a2a1f;color:#ffe3dc}
 .pill.team{background:var(--jade-d);color:#fff}
 .pill.team.B{background:#7a3a12}
@@ -474,7 +494,7 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .t-sec{margin-bottom:18px}
 .t-sec h3{font-family:var(--f-title);font-weight:400;font-size:1.45rem;color:var(--gold-l);margin-bottom:8px}
 .muted{color:#8f9bb0}
-.ok-t{color:#8fe3b1}.bad-t{color:#ff9e94}
+.ok-t{color:#9cc8ff;font-weight:700}.bad-t{color:#ff9e94}
 .t-map-marker{position:absolute;transform:translate(-50%,-50%);width:clamp(58px,8cqw,96px);aspect-ratio:1;border-radius:50%;cursor:pointer;display:grid;place-items:center;
   font-weight:900;color:#fff;font-size:clamp(.75rem,1.4cqw,1rem);text-shadow:0 1px 3px #000;border:3px solid}
 .t-map-marker.gold{border-color:var(--gold-l);background:rgba(217,164,65,.35);box-shadow:0 0 24px var(--gold),inset 0 0 18px var(--gold)}
@@ -515,12 +535,14 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .lang-tg .tg{padding:2px 10px;border-radius:12px;font-size:.82rem;font-weight:700;border:1.5px solid var(--gold-d);background:rgba(255,255,255,.5);color:var(--ink-2)}
 .lang-tg .tg.on{background:var(--jade);border-color:var(--jade-d);color:#fff}
 .dlg-node{flex-wrap:wrap}
-ruby{ruby-position:over}
-rt{font-size:.56em;color:#8a5a1c;font-family:"Noto Serif SC",serif;font-weight:400;letter-spacing:0}
+/* 拼音：每个字连同拼音做成一个小方块，宽度取两者较大者 → 拼音不会挤在一起，长句子也能自动换行（含 iPad Safari） */
+ruby{display:inline-flex;flex-direction:column-reverse;align-items:center;vertical-align:bottom;line-height:1.2;margin:0 .07em;text-indent:0}
+.zh .nb{white-space:nowrap;display:inline-flex;align-items:flex-end;vertical-align:bottom}
+rt{display:block;font-size:.56em;line-height:1.15;color:#8a5a1c;font-family:"Noto Serif SC",serif;font-weight:400;letter-spacing:0;white-space:nowrap;text-align:center}
 .dlg-body.py .dlg-text,.dlg-body.py .q-text,.dlg-body.py .feedback,.dlg-body.py .idiom span{line-height:2.35}
 .dlg-body.py .opt{line-height:2.1}
 .opt rt{color:#f3d58a}
-.en{display:block;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;font-size:.86em;line-height:1.45;color:#2b5b66;margin-top:4px}
+.en{display:block;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;font-size:.86em;line-height:1.45;color:#44506a;margin-top:4px}
 .opt .en{color:#efdcb0}
 .feedback .en{color:inherit;opacity:.85}
 .idiom .en{font-size:.8rem}
@@ -575,18 +597,19 @@ rt{font-size:.56em;color:#8a5a1c;font-family:"Noto Serif SC",serif;font-weight:4
 #langBar .tg{padding:5px 12px;border-radius:16px;font-size:.85rem;font-weight:700;color:var(--gold-l)}
 #langBar .tg.on{background:var(--jade);color:#fff}
 body.teacher-mode #langBar{display:none}
-.topbar{padding-right:170px}
+#langBar .tg.mus{min-width:34px;font-size:16px;opacity:.6}#langBar .tg.mus.on{opacity:1;background:var(--gold);color:#3a2a14;font-weight:700}
+.topbar{padding-right:210px}
 .en.in{display:inline;margin:0 0 0 6px;font-size:.78em;opacity:.9}
 h3 .en,h4 .en,.title-plate .en,th .en,.hd .en,.side .en,.tr-name .en,.chip .en,.lab-sec label .en,.lab-h .en,.sl-name .en,.og .en,.m3-lbl .en,dt .en{display:block;margin:2px 0 0;font-size:.62em;line-height:1.2;font-family:Georgia,serif;font-style:italic;font-weight:400;letter-spacing:0}
-.panel-dark .en,.cover-story .en{color:#9fd6cc}
-.scroll .en,.modal .en{color:#2b5b66}
-#missionText .en{color:#2b5b66}
-.map-legend .en{color:#bfe3dc}
+.panel-dark .en,.cover-story .en{color:#d5def0}
+.scroll .en,.modal .en{color:#44506a}
+#missionText .en{color:#44506a}
+.map-legend .en{color:#d5def0}
 body.py-on :is(.cover-story p,#missionText,.pf-sec li,.cmp>div,.tip,.lab-sec p,.scroll>p,.modal p,.prompt-box,.m3-card p,.cp-msg,.style-opt small){line-height:2.3}
 body.py-on .chip,body.py-on .tr-name{line-height:2.1}
 .cover-story rt{color:#8a5a1c}
 .pf-sec ul.looks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 18px;padding-left:1.1em}
-.m3-lbl .en{color:#cfe3dd}
+.m3-lbl .en{color:#e3e8f2}
 .m3-lbl.beast .en{color:#7d1d17}
 .sl-name{line-height:1.3}
 /* ---------- 立体地图 ---------- */
@@ -627,7 +650,7 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
   padding:6px 16px;border-radius:18px;background:rgba(5,8,15,.55);pointer-events:none}
 .cp-msg:empty{display:none}
 .cp-msg .cnt{font-family:var(--f-title);font-size:2.3rem;line-height:1.1}
-.cp-msg .en{color:#cfe9e4}
+.cp-msg .en{color:#e8ecf5}
 .cp-btns{position:absolute;left:50%;bottom:12px;transform:translateX(-50%)}
 .cp-stamp{position:absolute;left:50%;top:32%;transform:translate(-50%,-50%) scale(0);font-family:var(--f-title);font-size:clamp(2.2rem,6cqw,4.4rem);color:#fff4d6;padding:4px 30px;
   border:4px solid #fff4d6;border-radius:12px;background:rgba(184,50,42,.9);box-shadow:0 0 0 4px rgba(184,50,42,.9),0 0 40px rgba(246,220,147,.7);pointer-events:none;opacity:0;white-space:nowrap}
@@ -685,7 +708,7 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
 <!-- 全屏按钮（所有页面通用） -->
 <button class="icon-btn fs-btn" id="fsBtn" title="全屏展示 / 退出全屏" aria-label="全屏">⛶</button>
 <!-- 拼音 / 英文 开关（所有学生页面通用） -->
-<div id="langBar"><button class="tg" data-lang="py" title="显示 / 隐藏拼音">拼音</button><button class="tg" data-lang="en" title="Show / hide English">EN</button></div>
+<div id="langBar"><button class="tg mus" id="musicBtn" type="button" onclick="Music.toggle()" title="背景音乐" aria-pressed="false">♪</button><button class="tg" data-lang="py" title="显示 / 隐藏拼音">拼音</button><button class="tg" data-lang="en" title="Show / hide English">EN</button></div>
 
 <!-- ======================= 第一页：封面 + 小组选择 ======================= -->
 <section class="screen" id="s-cover">
@@ -699,6 +722,7 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
     <div id="classPanel"></div>
     <h3 id="groupTitle" style="font-family:var(--f-title);font-weight:400;font-size:1.7rem;color:var(--gold-l);margin-top:6px" data-t="in">请选择你们的小组</h3>
     <div class="group-grid" id="groupGrid"></div>
+    <button class="btn ghost roster-btn" id="rosterBtn">📋 <span data-t="in">分组名单</span></button>
   </div>
   <button class="teacher-entry" id="teacherEntry">🔒 教师端入口</button>
 </section>
@@ -712,7 +736,6 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
     <span class="sync-pill hidden" data-sync></span>
     <button class="btn small jade" data-go="dex">📜 神兽图鉴</button>
     <button class="btn small" id="mapLabBtn">🥚 异兽研究所</button>
-    <button class="btn small ghost" data-classview>👥 <span data-t="in">全班情况</span></button>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
@@ -780,7 +803,6 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
     <span class="group-badge" data-badge></span>
     <span class="progress-chip" id="dexProgress"></span>
     <span class="sync-pill hidden" data-sync></span>
-    <button class="btn small ghost" data-classview>👥 <span data-t="in">全班情况</span></button>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
@@ -813,7 +835,6 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
     <div class="brand" data-t="in">异兽创造研究所</div>
     <span class="group-badge" data-badge></span>
     <span class="sync-pill hidden" data-sync></span>
-    <button class="btn small ghost" data-classview>👥 <span data-t="in">全班情况</span></button>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main" id="labMain"></div>
@@ -867,6 +888,18 @@ const CONFIG = {
 
   // 小组名单：最后一个字母 A / B 决定解锁哪一组动物
   GROUPS: ["1A", "1B", "2A", "2B", "3A", "3B", "4A", "4B"],
+
+  // 分组名单（中文名 / 英文名）
+  ROSTER: {
+    "1A": [["政宇", "Zhengyu"], ["施恩", "Shze Enn"], ["尚益", "Shang Yi"]],
+    "1B": [["佩颖", "Jayzel"], ["淑恩", "Amelia"], ["万里", "Wanli"]],
+    "2A": [["吕嫣", "Ler Yan"], ["其颖", "Qi Ying"], ["韩健", "Han Jian"]],
+    "2B": [["郝玮", "Hao Wei"], ["谌乐", "Chen Le"], ["晖淇", "Hui Qi"]],
+    "3A": [["玉仪", "Yoke Yee"], ["雅雯", "Ya Wen"], ["慧卿", "Hwee Keng"]],
+    "3B": [["耀雄", "Yao Seong"], ["丽苇", "Elizabeth"], ["佩燕", "Jasmine"]],
+    "4A": [["何静", "He Jing"], ["凤梅", "Feng Mei"]],
+    "4B": [["雯雯", "Wenwen"], ["琬霖", "Coreen"]]
+  },
 
   // A、B 组各自可以探索的动物（填写下面 ANIMALS 里的 id）
   TEAMS: {
@@ -1391,8 +1424,8 @@ const EGG_SPOTS = [
    - PY_WORDS：多音字、轻声等需要按词语决定读音的情况（优先使用）
    老师修改对话后，如果出现新的字，可在 PY_CHARS 末尾补上「字+拼音」。
    ================================================================ */
-const PY_CHARS = `认rèn 识shí 我wǒ 龙lóng 的de 外wài 形xíng 特tè 点diǎn 哈hā 欢huān 迎yíng 来lái 到dào 世shì 界jiè 是shì 中zhōng 国guó 神shén 话huà 非fēi 常cháng 有yǒu 代dài 表biǎo 性xìng 兽shòu 虽suī 然rán 你nǐ 们men 在zài 现xiàn 实shí 生shēng 活huó 看kàn 不bù 但dàn 一yī 定dìng 对duì 模mó 样yàng 陌mò 吧ba 知zhī 道dào 吗ma 可kě 普pǔ 通tōng 动dòng 物wù 身shēn 体tǐ 结jié 合hé 了le 许xǔ 多duō 鹿lù 角jiǎo 蛇shé 鱼yú 鳞lín 片piàn 鹰yīng 爪zhuǎ 子zi 还hái 像xiàng 牛niú 耳ěr 朵duǒ 能néng 够gòu 腾téng 云yún 驾jià 雾wù 呼hū 风fēng 唤huàn 雨yǔ 古gǔ 传chuán 说shuō 掌zhǎng 管guǎn 着zhe 水shuǐ 因yīn 此cǐ 人rén 祈qí 求qiú 带dài 调tiáo 顺shùn 根gēn 据jù 介jiè 绍shào 以yǐ 下xià 哪nǎ 项xiàng 最zuì 符fú 马mǎ 翅chì 膀bǎng 喷pēn 火huǒ 种zhǒng 如rú 和hé 狮shī 长cháng 尖jiān 四sì 条tiáo 腿tuǐ 坚jiān 硬yìng 壳ké 回huí 想xiǎng 它tā 些xiē 呢ne 没méi 错cuò 上shàng 接jiē 让ràng 告gào 诉sù 同tóng 文wén 化huà 怎zěn 象xiàng 东dōng 西xī 方fāng 征zhēng 重zhòng 要yào 地dì 位wèi 皇huáng 权quán 尊zūn 贵guì 威wēi 帝dì 被bèi 称chēng 为wéi 真zhēn 天tiān 他tā 穿chuān 衣yī 服fú 图tú 案àn 坐zuò 宝bǎo 座zuò 也yě 椅yǐ 除chú 之zhī 吉jí 祥xiáng 力lì 量liàng 相xiāng 信xìn 希xī 望wàng 丰fēng 收shōu 心xīn 目mù 受shòu 敬jìng 过guò 果guǒ 去qù 故gù 事shì 就jiù 会huì 发fā 完wán 全quán 奇qí 幻huàn 描miáo 绘huì 成chéng 凶xiōng 猛měng 邪xié 恶è 具jù 破pò 坏huài 怪guài 巨jù 大dà 锋fēng 利lì 锐ruì 牙yá 齿chǐ 从cóng 嘴zuǐ 里lǐ 出chū 熊xióng 烈liè 袭xí 击jī 村cūn 庄zhuāng 抢qiǎng 夺duó 财cái 甚shèn 至zhì 囚qiú 禁jìn 公gōng 主zhǔ 害hài 怕pà 灾zāi 难nán 而ér 勇yǒng 敢gǎn 骑qí 士shì 或huò 英yīng 雄xióng 则zé 必bì 须xū 与yǔ 搏bó 斗dòu 打dǎ 败bài 拯zhěng 救jiù 胁xié 危wēi 险xiǎn 贪tān 婪lán 鲜xiān 明míng 比bǐ 趣qù 都dōu 叫jiào 作zuò 赋fù 予yǔ 意yì 义yì 却què 当dāng 并bìng 所suǒ 哦o 刚gāng 才cái 差chā 异yì 视shì 敌dí 只zhǐ 殊shū 关guān 答dá 得de 好hǎo 藏cáng 什shén 么me 踪zōng 迹jì 存cún 于yú 影yǐng 早zǎo 已yǐ 融róng 入rù 每měi 逢féng 农nóng 历lì 新xīn 年nián 舞wǔ 演yǎn 躯qū 锣luó 鼓gǔ 喧xuān 统tǒng 建jiàn 筑zhù 饰shì 艺yì 术shù 品pǐn 例lì 袍páo 宫gōng 殿diàn 雕diāo 刻kè 及jí 各gè 装zhuāng 语yǔ 言yán 孩hái 将jiāng 息xī 取qǔ 期qī 间jiān 举jǔ 行xíng 寄jì 托tuō 愿yuàn 其qí 家jiā 找zhǎo 正zhèng 确què 次cì 别bié 忘wàng 背bèi 后hòu 美měi 祝zhù 恭gōng 喜xǐ 经jīng 鉴jiàn 伙huǒ 伴bàn 虎hǔ 跃yuè 容róng 充chōng 满mǎn 气qì 势shì 旺wàng 盛shèng 凤fèng 呈chéng 呀ya 凰huáng 鸟niǎo 拥yōng 华huá 丽lì 羽yǔ 毛máo 优yōu 雅yǎ 姿zī 色sè 彩cǎi 富fù 红hóng 黄huáng 青qīng 等děng 尾wěi 部bù 拖tuō 翎líng 起qǐ 类lèi 百bǎi 围wéi 绕rào 飞fēi 翔xiáng 向xiàng 达dá 听tīng 这zhè 个gè 词cí 覆fù 盖gài 乌wū 龟guī 黑hēi 自zì 己jǐ 标biāo 志zhì 那nà 又yòu 平píng 瑞ruì 室shì 把bǎ 用yòng 女nǚ 纹wén 婚hūn 礼lǐ 使shǐ 幸xìng 福fú 命mìng 束shù 焰yàn 灰huī 烬jìn 延yán 续xù 似sì 很hěn 见jiàn 战zhàn 争zhēng 贫pín 穷qióng 两liǎng 者zhě 任rèn 何hé 太tài 棒bàng 妙miào 处chù 场chǎng 十shí 分fēn 庆qìng 姻yīn 廷tíng 头tóu 运yùn 朝cháo 儿ér 聚jù 集jí 景jǐng 喻yù 德dé 高gāo 众zhòng 仰yǎng 另lìng 麟lín 稀xī 少shǎo 珍zhēn 老lǎo 聪cōng 解jiě 加jiā 探tàn 索suǒ 涅niè 槃pán 磨mó 获huò 麒qí 名míng 巴bā 固gù 画huà 时shí 候hòu 武wǔ 吓xià 情qíng 温wēn 伤shāng 短duǎn 鬃zōng 更gèng 仁rén 慈cí 思sī 爱ài 轻qīng 易yì 走zǒu 路lù 小xiǎo 避bì 开kāi 草cǎo 昆kūn 虫chóng 尚shàng 预yù 兆zhào 即jí 秘mì 独dú 匹pǐ 纯chún 洁jié 寿shòu 瓷cí 器qì 坡pō 客kè 节jié 日rì 白bái 直zhí 流liú 今jīn 族zú 典diǎn 送sòng 门mén 口kǒu 摆bǎi 放fàng 石shí 守shǒu 护hù 园yuán 松sōng 树shù 鹤hè 提tí 献xiàn 吼hǒu 应yīng 该gāi 王wáng 强qiáng 壮zhuàng 肢zhī 颈jǐng 浓nóng 密mì 显xiǎn 母mǔ 仅jǐn 声shēng 响xiǎng 亮liàng 觉jué 严yán 细xì 遇yù 缩suō 进jìn 双shuāng 修xiū 宽kuān 寺sì 庙miào 驱qū 保bǎo 安ān 欧ōu 洲zhōu 章zhāng 盾dùn 牌pái 智zhì 慧huì 负fù 责zé 做zuò 街jiē 热rè 闹nào 商shāng 店diàn 张zhāng 兴xīng 价jià 钱qián 邀yāo 请qǐng 队duì 读dú 书shū 绩jì 旅lǚ 途tú 赛sài 奖jiǎng 兔tù 亦yì 面miàn 待dài 赴fù 采cǎi 式shì 嘿hēi 员yuán 仔zǐ 罩zhào 总zǒng 慢màn 吞tūn 陆lù 缓huǎn 游yóu 快kuài 翼yì 啦la 猜cāi 健jiàn 康kāng 联lián 系xì 曾céng 甲jiǎ 占zhān 卜bǔ 裂liè 尝cháng 试shì 寻xún 问wèn 题tí 切qiè 跑pǎo 骄jiāo 傲ào 停tíng 休xiū 反fǎn 弃qì 努nǔ 前qián 赢yíng 耐nài 持chí 精jīng 懈xiè 寓yù 速sù 度dù 由yóu 久jiǔ 凡fán 困kùn 逃táo 胆dǎn 原yuán 境jìng 辈bèi 适shì 河hé 断duàn 步bù 贬biǎn 醒xǐng 仙xiān 脖bó 丹dān 顶dǐng 皮pí 肤fū 山shān 态tài 份fèn 警jǐng 随suí 注zhù 周zhōu 夜yè 脚jiǎo 抓zhuā 住zhù 块kuài 睡shuì 掉diào 惊jīng 墨mò 立lì 鸡jī 群qún 眼yǎn 闲xián 野yě 悠yōu 限xiàn 制zhì 师shī 学xué 突tū 且qiě 站zhàn 承chéng 载zài 展zhǎn 拘jū 功gōng 线xiàn 再zài 锁suǒ 六liù 散sàn 落luò 碎suì 先xiān 三sān 光guāng 岛dǎo 屿yǔ 球qiú 组zǔ 齐qí 整zhěng 颗kē 查chá 档dàng 往wǎng 创chuàng 造zào 研yán 究jiū 厉lì 理lǐ 闪shǎn 封fēng 印yìn 阁gé 按àn 甩shuǎi 钮niǔ 投tóu 偏piān 灵líng 缠chán 二èr 务wù 某mǒu 环huán 选xuǎn 写xiě 设shè 计jì 参cān 考kǎo 句jù 择zé 指zhǐ 令lìng 本běn 戏xì 连lián 复fù 贴tiē 工gōng 金jīn 蛋dàn 孵fū 交jiāo 海hǎi 记jì 岁suì 月yuè 逝shì 扮bàn 失shī 属shǔ 暗àn 班bān 旋xuán 转zhuǎn 滚gǔn 轮lún 示shì 右yòu 边biān 内nèi 瀑pù 赤chì 林lín 幽yōu 泽zé 翠cuì 竹zhú 谷gǔ 沙shā 窟kū 需xū 闻wén 毁huǐ 灭miè 始shǐ 民mín 户hù 领lǐng 导dǎo 踏tà 较jiào 格gé 惕tì 仍réng 状zhuàng 圆yuán 润rùn 矫jiǎo 盈yíng 颜yán 朱zhū 绿lǜ 深shēn 蓝lán 雪xuě 七qī 波bō 星xīng 辰chén 花huā 型xíng 般bān 巧qiǎo 猫māo 睛jīng 透tòu 变biàn 治zhì 愈yù 控kòng 森sēn 感gǎn 绪xù 未wèi 科kē 技jì 城chéng 市shì 底dǐ 机jī 团tuán 壁bì 仿fǎng 质zhì 朴pǔ 矿kuàng 料liào 斑bān 驳bó 痕hén 插chā 腻nì 缭liáo 梦mèng 氛fēn 笔bǐ 致zhì 绢juàn 籍jí 谱pǔ 米mǐ 旧jiù 纸zhǐ 勾gōu 勒lè 淡dàn 供gōng 删shān 包bāo 单dān 友yǒu 号hào 含hán 启qǐ 善shàn 址zhǐ 堂táng 填tián 套tào 字zì 尽jìn 左zuǒ 扫sǎo 拼pīn 挥huī 换huàn 支zhī 改gǎi 教jiào 数shù 无wú 暂zàn 栏lán 校xiào 检jiǎn 段duàn 法fǎ 电diàn 留liú 码mǎ 私sī 端duān 给gěi 继jì 维wéi 翻fān 证zhèng 译yì 诞dàn 课kè 谈tán 谢xiè 资zī 超chāo 跟gēn 辅fǔ 输shū 返fǎn 邮yóu 闭bì 隐yǐn 音yīn 况kuàng 台tái 备bèi 监jiān 览lǎn`;
-const PY_WORDS = {"尽快":"jǐn kuài","教人":"jiāo rén","处理":"chǔ lǐ","为止":"wéi zhǐ","朝神兽":"cháo shén shòu","一个":"yí gè","一下":"yí xià",
+const PY_CHARS = `认rèn 识shí 我wǒ 龙lóng 的de 外wài 形xíng 特tè 点diǎn 哈hā 欢huān 迎yíng 来lái 到dào 世shì 界jiè 是shì 中zhōng 国guó 神shén 话huà 非fēi 常cháng 有yǒu 代dài 表biǎo 性xìng 兽shòu 虽suī 然rán 你nǐ 们men 在zài 现xiàn 实shí 生shēng 活huó 看kàn 不bù 但dàn 一yī 定dìng 对duì 模mó 样yàng 陌mò 吧ba 知zhī 道dào 吗ma 可kě 普pǔ 通tōng 动dòng 物wù 身shēn 体tǐ 结jié 合hé 了le 许xǔ 多duō 鹿lù 角jiǎo 蛇shé 鱼yú 鳞lín 片piàn 鹰yīng 爪zhuǎ 子zi 还hái 像xiàng 牛niú 耳ěr 朵duǒ 能néng 够gòu 腾téng 云yún 驾jià 雾wù 呼hū 风fēng 唤huàn 雨yǔ 古gǔ 传chuán 说shuō 掌zhǎng 管guǎn 着zhe 水shuǐ 因yīn 此cǐ 人rén 祈qí 求qiú 带dài 调tiáo 顺shùn 根gēn 据jù 介jiè 绍shào 以yǐ 下xià 哪nǎ 项xiàng 最zuì 符fú 马mǎ 翅chì 膀bǎng 喷pēn 火huǒ 种zhǒng 如rú 和hé 狮shī 长cháng 尖jiān 四sì 条tiáo 腿tuǐ 坚jiān 硬yìng 壳ké 回huí 想xiǎng 它tā 些xiē 呢ne 没méi 错cuò 上shàng 接jiē 让ràng 告gào 诉sù 同tóng 文wén 化huà 怎zěn 象xiàng 东dōng 西xī 方fāng 征zhēng 重zhòng 要yào 地dì 位wèi 皇huáng 权quán 尊zūn 贵guì 威wēi 帝dì 被bèi 称chēng 为wéi 真zhēn 天tiān 他tā 穿chuān 衣yī 服fú 图tú 案àn 坐zuò 宝bǎo 座zuò 也yě 椅yǐ 除chú 之zhī 吉jí 祥xiáng 力lì 量liàng 相xiāng 信xìn 希xī 望wàng 丰fēng 收shōu 心xīn 目mù 受shòu 敬jìng 过guò 果guǒ 去qù 故gù 事shì 就jiù 会huì 发fā 完wán 全quán 奇qí 幻huàn 描miáo 绘huì 成chéng 凶xiōng 猛měng 邪xié 恶è 具jù 破pò 坏huài 怪guài 巨jù 大dà 锋fēng 利lì 锐ruì 牙yá 齿chǐ 从cóng 嘴zuǐ 里lǐ 出chū 熊xióng 烈liè 袭xí 击jī 村cūn 庄zhuāng 抢qiǎng 夺duó 财cái 甚shèn 至zhì 囚qiú 禁jìn 公gōng 主zhǔ 害hài 怕pà 灾zāi 难nán 而ér 勇yǒng 敢gǎn 骑qí 士shì 或huò 英yīng 雄xióng 则zé 必bì 须xū 与yǔ 搏bó 斗dòu 打dǎ 败bài 拯zhěng 救jiù 胁xié 危wēi 险xiǎn 贪tān 婪lán 鲜xiān 明míng 比bǐ 趣qù 都dōu 叫jiào 作zuò 赋fù 予yǔ 意yì 义yì 却què 当dāng 并bìng 所suǒ 哦o 刚gāng 才cái 差chā 异yì 视shì 敌dí 只zhǐ 殊shū 关guān 答dá 得de 好hǎo 藏cáng 什shén 么me 踪zōng 迹jì 存cún 于yú 影yǐng 早zǎo 已yǐ 融róng 入rù 每měi 逢féng 农nóng 历lì 新xīn 年nián 舞wǔ 演yǎn 躯qū 锣luó 鼓gǔ 喧xuān 统tǒng 建jiàn 筑zhù 饰shì 艺yì 术shù 品pǐn 例lì 袍páo 宫gōng 殿diàn 雕diāo 刻kè 及jí 各gè 装zhuāng 语yǔ 言yán 孩hái 将jiāng 息xī 取qǔ 期qī 间jiān 举jǔ 行xíng 寄jì 托tuō 愿yuàn 其qí 家jiā 找zhǎo 正zhèng 确què 次cì 别bié 忘wàng 背bèi 后hòu 美měi 祝zhù 恭gōng 喜xǐ 经jīng 鉴jiàn 伙huǒ 伴bàn 虎hǔ 跃yuè 容róng 充chōng 满mǎn 气qì 势shì 旺wàng 盛shèng 凤fèng 呈chéng 呀ya 凰huáng 鸟niǎo 拥yōng 华huá 丽lì 羽yǔ 毛máo 优yōu 雅yǎ 姿zī 色sè 彩cǎi 富fù 红hóng 黄huáng 青qīng 等děng 尾wěi 部bù 拖tuō 翎líng 起qǐ 类lèi 百bǎi 围wéi 绕rào 飞fēi 翔xiáng 向xiàng 达dá 听tīng 这zhè 个gè 词cí 覆fù 盖gài 乌wū 龟guī 黑hēi 自zì 己jǐ 标biāo 志zhì 那nà 又yòu 平píng 瑞ruì 室shì 把bǎ 用yòng 女nǚ 纹wén 婚hūn 礼lǐ 使shǐ 幸xìng 福fú 命mìng 束shù 焰yàn 灰huī 烬jìn 延yán 续xù 似sì 很hěn 见jiàn 战zhàn 争zhēng 贫pín 穷qióng 两liǎng 者zhě 任rèn 何hé 太tài 棒bàng 妙miào 处chù 场chǎng 十shí 分fēn 庆qìng 姻yīn 廷tíng 头tóu 运yùn 朝cháo 儿ér 聚jù 集jí 景jǐng 喻yù 德dé 高gāo 众zhòng 仰yǎng 另lìng 麟lín 稀xī 少shǎo 珍zhēn 老lǎo 聪cōng 解jiě 加jiā 探tàn 索suǒ 涅niè 槃pán 磨mó 获huò 麒qí 名míng 巴bā 固gù 画huà 时shí 候hòu 武wǔ 吓xià 情qíng 温wēn 伤shāng 短duǎn 鬃zōng 更gèng 仁rén 慈cí 思sī 爱ài 轻qīng 易yì 走zǒu 路lù 小xiǎo 避bì 开kāi 草cǎo 昆kūn 虫chóng 尚shàng 预yù 兆zhào 即jí 秘mì 独dú 匹pǐ 纯chún 洁jié 寿shòu 瓷cí 器qì 坡pō 客kè 节jié 日rì 白bái 直zhí 流liú 今jīn 族zú 典diǎn 送sòng 门mén 口kǒu 摆bǎi 放fàng 石shí 守shǒu 护hù 园yuán 松sōng 树shù 鹤hè 提tí 献xiàn 吼hǒu 应yīng 该gāi 王wáng 强qiáng 壮zhuàng 肢zhī 颈jǐng 浓nóng 密mì 显xiǎn 母mǔ 仅jǐn 声shēng 响xiǎng 亮liàng 觉jué 严yán 细xì 遇yù 缩suō 进jìn 双shuāng 修xiū 宽kuān 寺sì 庙miào 驱qū 保bǎo 安ān 欧ōu 洲zhōu 章zhāng 盾dùn 牌pái 智zhì 慧huì 负fù 责zé 做zuò 街jiē 热rè 闹nào 商shāng 店diàn 张zhāng 兴xīng 价jià 钱qián 邀yāo 请qǐng 队duì 读dú 书shū 绩jì 旅lǚ 途tú 赛sài 奖jiǎng 兔tù 亦yì 面miàn 待dài 赴fù 采cǎi 式shì 嘿hēi 员yuán 仔zǐ 罩zhào 总zǒng 慢màn 吞tūn 陆lù 缓huǎn 游yóu 快kuài 翼yì 啦la 猜cāi 健jiàn 康kāng 联lián 系xì 曾céng 甲jiǎ 占zhān 卜bǔ 裂liè 尝cháng 试shì 寻xún 问wèn 题tí 切qiè 跑pǎo 骄jiāo 傲ào 停tíng 休xiū 反fǎn 弃qì 努nǔ 前qián 赢yíng 耐nài 持chí 精jīng 懈xiè 寓yù 速sù 度dù 由yóu 久jiǔ 凡fán 困kùn 逃táo 胆dǎn 原yuán 境jìng 辈bèi 适shì 河hé 断duàn 步bù 贬biǎn 醒xǐng 仙xiān 脖bó 丹dān 顶dǐng 皮pí 肤fū 山shān 态tài 份fèn 警jǐng 随suí 注zhù 周zhōu 夜yè 脚jiǎo 抓zhuā 住zhù 块kuài 睡shuì 掉diào 惊jīng 墨mò 立lì 鸡jī 群qún 眼yǎn 闲xián 野yě 悠yōu 限xiàn 制zhì 师shī 学xué 突tū 且qiě 站zhàn 承chéng 载zài 展zhǎn 拘jū 功gōng 线xiàn 再zài 锁suǒ 六liù 散sàn 落luò 碎suì 先xiān 三sān 光guāng 岛dǎo 屿yǔ 球qiú 组zǔ 齐qí 整zhěng 颗kē 查chá 档dàng 往wǎng 创chuàng 造zào 研yán 究jiū 厉lì 理lǐ 闪shǎn 封fēng 印yìn 阁gé 按àn 甩shuǎi 钮niǔ 投tóu 偏piān 灵líng 缠chán 二èr 务wù 某mǒu 环huán 选xuǎn 写xiě 设shè 计jì 参cān 考kǎo 句jù 择zé 指zhǐ 令lìng 本běn 戏xì 连lián 复fù 贴tiē 工gōng 金jīn 蛋dàn 孵fū 交jiāo 海hǎi 记jì 岁suì 月yuè 逝shì 扮bàn 失shī 属shǔ 暗àn 班bān 旋xuán 转zhuǎn 滚gǔn 轮lún 示shì 右yòu 边biān 内nèi 瀑pù 赤chì 林lín 幽yōu 泽zé 翠cuì 竹zhú 谷gǔ 沙shā 窟kū 需xū 闻wén 毁huǐ 灭miè 始shǐ 民mín 户hù 领lǐng 导dǎo 踏tà 较jiào 格gé 惕tì 仍réng 状zhuàng 圆yuán 润rùn 矫jiǎo 盈yíng 颜yán 朱zhū 绿lǜ 深shēn 蓝lán 雪xuě 七qī 波bō 星xīng 辰chén 花huā 型xíng 般bān 巧qiǎo 猫māo 睛jīng 透tòu 变biàn 治zhì 愈yù 控kòng 森sēn 感gǎn 绪xù 未wèi 科kē 技jì 城chéng 市shì 底dǐ 机jī 团tuán 壁bì 仿fǎng 质zhì 朴pǔ 矿kuàng 料liào 斑bān 驳bó 痕hén 插chā 腻nì 缭liáo 梦mèng 氛fēn 笔bǐ 致zhì 绢juàn 籍jí 谱pǔ 米mǐ 旧jiù 纸zhǐ 勾gōu 勒lè 淡dàn 供gōng 删shān 包bāo 单dān 友yǒu 号hào 含hán 启qǐ 善shàn 址zhǐ 堂táng 填tián 套tào 字zì 尽jìn 左zuǒ 扫sǎo 拼pīn 挥huī 换huàn 支zhī 改gǎi 教jiào 数shù 无wú 暂zàn 栏lán 校xiào 检jiǎn 段duàn 法fǎ 电diàn 留liú 码mǎ 私sī 端duān 给gěi 继jì 维wéi 翻fān 证zhèng 译yì 诞dàn 课kè 谈tán 谢xiè 资zī 超chāo 跟gēn 辅fǔ 输shū 返fǎn 邮yóu 闭bì 隐yǐn 音yīn 况kuàng 台tái 备bèi 监jiān 览lǎn 政zhèng 宇yǔ 施shī 恩ēn 益yì 佩pèi 颖yǐng 淑shū 万wàn 吕lǚ 嫣yān 韩hán 郝hǎo 玮wěi 谌chén 乐lè 晖huī 淇qí 玉yù 仪yí 雯wén 卿qīng 耀yào 苇wěi 燕yàn 静jìng 梅méi 琬wǎn 霖lín`;
+const PY_WORDS = {"谌乐":"chén lè","音乐":"yīn yuè","尽快":"jǐn kuài","教人":"jiāo rén","处理":"chǔ lǐ","为止":"wéi zhǐ","朝神兽":"cháo shén shòu","一个":"yí gè","一下":"yí xià",
   "强调":"qiáng diào", "头上长角":"tóu shàng zhǎng jiǎo", "散落":"sàn luò", "长命百岁":"cháng mìng bǎi suì",
   "天子":"tiān zǐ", "望子成龙":"wàng zǐ chéng lóng", "麒麟送子":"qí lín sòng zǐ",
   "长着":"zhǎng zhe", "长辈":"zhǎng bèi", "长出":"zhǎng chū",
@@ -1439,58 +1472,58 @@ const PY = (() => {
    老师修改中文后，请同时修改这里对应的中文和英文。
    ================================================================ */
 const EN = {
-"认识我——龙的外形特点": "Get to know me — what the Dragon looks like",
-"哈哈！欢迎来到我的世界！我是龙，是中国神话中非常有代表性的神兽。虽然你们在现实生活中看不到我，但你们一定对我的模样不陌生吧！": "Ha ha! Welcome to my world! I am the Dragon, one of the most famous mythical creatures in Chinese mythology. You can't see me in real life, but I'm sure you already know what I look like!",
+"认识我——龙的外形特点": "Get to know me — what the Loong looks like",
+"哈哈！欢迎来到我的世界！我是龙，是中国神话中非常有代表性的神兽。虽然你们在现实生活中看不到我，但你们一定对我的模样不陌生吧！": "Ha ha! Welcome to my world! I am the Loong, one of the most famous mythical creatures in Chinese mythology. You can't see me in real life, but I'm sure you already know what I look like!",
 "你们知道吗？我可不是普通的动物！我的身体结合了许多动物的特点：我有鹿一样的角、蛇一样的身体、鱼一样的鳞片、鹰一样的爪子，还有像牛一样的耳朵。": "Did you know? I'm no ordinary animal! My body combines features of many animals: antlers like a deer, a body like a snake, scales like a fish, claws like an eagle, and ears like an ox.",
 "我能够腾云驾雾、呼风唤雨。在古代传说中，我还掌管着雨水，因此人们常常祈求我带来风调雨顺。": "I can ride on clouds and mist, and summon wind and rain. In ancient legends I was also in charge of rain, so people often prayed to me for good weather.",
-"根据龙的介绍，以下哪一项最符合龙的外形特点？": "Based on the Dragon's introduction, which of these best describes how the Dragon looks?",
+"根据龙的介绍，以下哪一项最符合龙的外形特点？": "Based on the Loong's introduction, which of these best describes how the Loong looks?",
 "身体像马，有翅膀，能够喷火": "A body like a horse, with wings, and it can breathe fire",
 "结合多种动物的特点，如鹿角、蛇身、鱼鳞和鹰爪": "It combines features of many animals, such as deer antlers, a snake body, fish scales and eagle claws",
 "身体像狮子，长着翅膀和尖角": "A body like a lion, with wings and sharp horns",
 "身体像鱼，长着四条腿和坚硬的外壳": "A body like a fish, with four legs and a hard shell",
-"回想一下：龙说它的身体「结合了许多动物的特点」，有哪些动物呢？": "Think back: the Dragon said its body \"combines features of many animals\". Which animals were they?",
+"回想一下：龙说它的身体「结合了许多动物的特点」，有哪些动物呢？": "Think back: the Loong said its body \"combines features of many animals\". Which animals were they?",
 "没错！我的身上有鹿、蛇、鱼、鹰和牛的特点。接下来，让我告诉你们，我在不同文化中有着怎样的形象吧！": "That's right! My body has features of the deer, snake, fish, eagle and ox. Next, let me tell you how people see me in different cultures!",
-"认识我——龙在东西方文化中的象征": "Get to know me — what the Dragon stands for in the East and the West",
+"认识我——龙在东西方文化中的象征": "Get to know me — what the Loong stands for in the East and the West",
 "你们可能不知道，在中国文化中，我有着非常重要的地位！": "You may not know this, but I am very important in Chinese culture!",
-"在古代，我常常代表着皇权、尊贵和权威。古代皇帝被称为『真龙天子』，他们穿的衣服上有龙的图案，坐的宝座也称为『龙椅』。": "In ancient times, I often stood for imperial power, nobility and authority. Emperors were called \"the true son of the dragon\". Their robes had dragon patterns, and their throne was called the \"dragon throne\".",
+"在古代，我常常代表着皇权、尊贵和权威。古代皇帝被称为『真龙天子』，他们穿的衣服上有龙的图案，坐的宝座也称为『龙椅』。": "In ancient times, I often stood for imperial power, nobility and authority. Emperors were called \"the true son of the loong\". Their robes had loong patterns, and their throne was called the \"loong throne\".",
 "除此之外，我也象征着吉祥和力量。人们相信我能够呼风唤雨，因此也希望我带来风调雨顺和丰收。在中国人的心目中，我是一种受到尊敬的神兽。": "Besides that, I also stand for good luck and strength. People believed I could summon wind and rain, so they hoped I would bring good weather and a rich harvest. In the hearts of Chinese people, I am a respected mythical creature.",
 "不过，如果你们去看看西方的神话故事，就会发现我的形象可能完全不一样！": "But if you read Western myths and stories, you will find that I may look completely different!",
 "在许多西方传说和奇幻故事中，龙常常被描绘成凶猛、邪恶和具有破坏力的怪兽。它们通常长着巨大的翅膀、锋利的爪子和尖锐的牙齿，有些还会从嘴里喷出熊熊烈火！": "In many Western legends and fantasy stories, dragons are fierce, evil and destructive monsters. They usually have huge wings, sharp claws and pointed teeth, and some even breathe out roaring flames!",
 "有些西方故事中的龙会袭击村庄、抢夺财宝，甚至囚禁公主。人们害怕它们带来的灾难，而勇敢的骑士或英雄则必须与龙搏斗，打败它们，拯救受威胁的人们。": "In some Western stories, dragons attack villages, steal treasure and even lock up princesses. People fear the disasters they bring, so brave knights or heroes must fight the dragons, defeat them and save the people in danger.",
-"因此，在许多西方故事中，龙常常象征着邪恶、危险、贪婪和破坏力量，与中国文化中受到尊敬、象征吉祥的龙形成鲜明对比。": "So in many Western stories, the dragon stands for evil, danger, greed and destruction — a sharp contrast with the respected, lucky dragon in Chinese culture.",
-"有趣的是，虽然我们都叫作『龙』，但不同文化赋予我们的形象和意义却大不相同！当然，并不是所有西方故事中的龙都是邪恶的哦。": "Interestingly, we are both called \"dragon\", but different cultures give us very different images and meanings! Of course, not every dragon in Western stories is evil.",
-"根据刚才的介绍，以下哪一项最能说明中国龙（Loong）与西方龙（Dragon）在文化象征上的差异？": "Based on what you just heard, which of these best explains the difference in meaning between the Chinese dragon (Loong) and the Western dragon (Dragon)?",
-"中国龙和西方龙都代表邪恶与破坏。": "Both the Chinese dragon and the Western dragon stand for evil and destruction.",
-"中国龙常象征尊贵、吉祥和权威；西方龙在许多故事中则象征邪恶、危险和破坏。": "The Chinese dragon often stands for nobility, good luck and authority; in many stories the Western dragon stands for evil, danger and destruction.",
-"中国龙常被视为英雄的敌人；西方龙则代表皇帝的权力。": "The Chinese dragon is often seen as the hero's enemy; the Western dragon stands for the emperor's power.",
+"因此，在许多西方故事中，龙常常象征着邪恶、危险、贪婪和破坏力量，与中国文化中受到尊敬、象征吉祥的龙形成鲜明对比。": "So in many Western stories, the dragon stands for evil, danger, greed and destruction — a sharp contrast with the respected, lucky Loong in Chinese culture.",
+"有趣的是，虽然我们都叫作『龙』，但不同文化赋予我们的形象和意义却大不相同！当然，并不是所有西方故事中的龙都是邪恶的哦。": "Interestingly, in Chinese we share the same name \"龙\" (in English: the Chinese Loong and the Western dragon), but different cultures give us very different images and meanings! Of course, not every dragon in Western stories is evil.",
+"根据刚才的介绍，以下哪一项最能说明中国龙（Loong）与西方龙（Dragon）在文化象征上的差异？": "Based on what you just heard, which of these best explains the difference in meaning between the Chinese Loong and the Western dragon?",
+"中国龙和西方龙都代表邪恶与破坏。": "Both the Chinese Loong and the Western dragon stand for evil and destruction.",
+"中国龙常象征尊贵、吉祥和权威；西方龙在许多故事中则象征邪恶、危险和破坏。": "The Chinese Loong often stands for nobility, good luck and authority; in many stories the Western dragon stands for evil, danger and destruction.",
+"中国龙常被视为英雄的敌人；西方龙则代表皇帝的权力。": "The Chinese Loong is often seen as the hero's enemy; the Western dragon stands for the emperor's power.",
 "中国龙和西方龙都只是普通动物，没有特殊的文化意义。": "Both are just ordinary animals with no special cultural meaning.",
-"想一想：中国龙和皇帝、吉祥有关；西方故事里的龙常常要被骑士打败。": "Think: the Chinese dragon is linked to emperors and good luck; dragons in Western stories are often defeated by knights.",
-"答得好！同样叫『龙』，在中国常受到尊敬，在许多西方故事中却常是英雄要打败的对象。现在，来看看我藏在你们生活中的什么地方吧！": "Well answered! Both are called \"dragon\", but in China I am respected, while in many Western stories the dragon is the one heroes must defeat. Now, let's see where I'm hiding in your daily life!",
-"认识我——龙在现实生活中的踪迹": "Get to know me — where you can find the Dragon in real life",
+"想一想：中国龙和皇帝、吉祥有关；西方故事里的龙常常要被骑士打败。": "Think: the Chinese Loong is linked to emperors and good luck; dragons in Western stories are often defeated by knights.",
+"答得好！同样叫『龙』，在中国常受到尊敬，在许多西方故事中却常是英雄要打败的对象。现在，来看看我藏在你们生活中的什么地方吧！": "Well answered! Both are called \"龙\" in Chinese, but in China I, the Loong, am respected, while in many Western stories the dragon is the one heroes must defeat. Now, let's see where I'm hiding in your daily life!",
+"认识我——龙在现实生活中的踪迹": "Get to know me — where you can find the Loong in real life",
 "虽然我只存在于神话传说中，但我的身影早已融入你们的生活！": "Although I only exist in myths and legends, I have long been part of your everyday life!",
-"每逢农历新年，你们可能会看到舞龙表演。人们舞动着我的身躯，锣鼓喧天，希望新的一年风调雨顺、吉祥如意。": "Every Lunar New Year, you may see a dragon dance. People move my long body to the loud beat of gongs and drums, wishing for good weather and good luck in the new year.",
-"在中国传统文化中，我也常出现在建筑、服饰和艺术品上。例如，古代皇帝的龙袍、宫殿中的龙形雕刻，以及各种传统装饰。": "In traditional Chinese culture, I also appear on buildings, clothing and artwork — for example, the emperor's dragon robe, dragon carvings in palaces, and all kinds of traditional decorations.",
+"每逢农历新年，你们可能会看到舞龙表演。人们舞动着我的身躯，锣鼓喧天，希望新的一年风调雨顺、吉祥如意。": "Every Lunar New Year, you may see a loong dance. People move my long body to the loud beat of gongs and drums, wishing for good weather and good luck in the new year.",
+"在中国传统文化中，我也常出现在建筑、服饰和艺术品上。例如，古代皇帝的龙袍、宫殿中的龙形雕刻，以及各种传统装饰。": "In traditional Chinese culture, I also appear on buildings, clothing and artwork — for example, the emperor's loong robe, loong carvings in palaces, and all kinds of traditional decorations.",
 "你们的语言中也有我的身影！例如『望子成龙』，就是希望孩子将来能够有出息、取得成就。": "I am in your language too! For example, \"望子成龙\" means hoping your child will grow up to be successful.",
-"农历新年期间，人们举行舞龙表演，通常寄托着什么愿望？": "During Lunar New Year, people perform the dragon dance. What wish does it usually carry?",
+"农历新年期间，人们举行舞龙表演，通常寄托着什么愿望？": "During Lunar New Year, people perform the loong dance. What wish does it usually carry?",
 "希望新的一年风调雨顺、吉祥如意": "Hoping for good weather and good luck in the new year",
 "希望新的一年能够打败其他国家": "Hoping to defeat other countries in the new year",
 "希望大家都能成为皇帝": "Hoping that everyone can become emperor",
-"希望能够找到真正的龙": "Hoping to find a real dragon",
-"龙说过：人们舞动它的身躯、锣鼓喧天，是希望新的一年怎么样？": "The Dragon said: people move its body to the beat of gongs and drums, hoping the new year will be…?",
-"完全正确！下次看到舞龙表演，别忘了它背后的美好祝愿哦！": "Completely correct! Next time you watch a dragon dance, remember the good wishes behind it!",
+"希望能够找到真正的龙": "Hoping to find a real loong",
+"龙说过：人们舞动它的身躯、锣鼓喧天，是希望新的一年怎么样？": "The Loong said: people move its body to the beat of gongs and drums, hoping the new year will be…?",
+"完全正确！下次看到舞龙表演，别忘了它背后的美好祝愿哦！": "Completely correct! Next time you watch a loong dance, remember the good wishes behind it!",
 "恭喜你们！看来你们已经认识我了。现在，就让我成为你们图鉴中的神兽伙伴吧！": "Congratulations! You know me well now. Let me become a mythical partner in your collection book!",
-"望子成龙": "Hoping one's child becomes a dragon",
+"望子成龙": "Hoping one's child becomes a loong",
 "希望孩子将来有出息": "Hoping one's child will be successful in future",
-"龙腾虎跃": "The dragon soars and the tiger leaps",
+"龙腾虎跃": "The loong soars and the tiger leaps",
 "形容充满活力、气势旺盛": "Describes being full of energy and high spirits",
-"龙凤呈祥": "The dragon and phoenix bring good fortune",
+"龙凤呈祥": "The loong and phoenix bring good fortune",
 "象征吉祥和美好的祝愿": "A symbol of good luck and happy wishes",
-"神兽 · 龙": "Mythical creature · Dragon",
+"神兽 · 龙": "Mythical creature · Loong",
 "认识我——凤的外形特点": "Get to know me — what the Phoenix looks like",
 "你好呀！我是凤，也常被称为凤凰。我是中国神话中的一种神鸟，拥有华丽的羽毛和优雅的身姿。": "Hello! I am the Feng, also often called the Fenghuang (Chinese phoenix). I am a sacred bird in Chinese mythology, with gorgeous feathers and a graceful shape.",
 "你们看，我的羽毛色彩丰富，有红色、黄色、青色等，尾部还拖着长长的羽翎，看起来是不是非常美丽？": "Look — my feathers are very colourful, in red, yellow, blue-green and more, and I have long, trailing tail feathers. Don't I look beautiful?",
 "在中国传统传说中，我常被描绘成结合多种鸟类特点的神鸟。有些传说还认为，百鸟会围绕着我飞翔，向我表达敬意。": "In traditional Chinese legends, I am often drawn as a sacred bird that combines features of many birds. Some legends even say that all the birds fly around me to show their respect.",
-"我和龙一样，都是中国文化中非常重要的神话形象。你们听过『龙凤呈祥』这个词语吗？": "Like the Dragon, I am a very important mythical image in Chinese culture. Have you heard the phrase \"龙凤呈祥\"?",
+"我和龙一样，都是中国文化中非常重要的神话形象。你们听过『龙凤呈祥』这个词语吗？": "Like the Loong, I am a very important mythical image in Chinese culture. Have you heard the phrase \"龙凤呈祥\"?",
 "根据凤的介绍，以下哪一项最符合中国传统凤凰的形象？": "Based on the Phoenix's introduction, which of these best matches the traditional Chinese phoenix?",
 "羽毛色彩丰富，拥有优雅的身姿和长长的尾羽": "Colourful feathers, a graceful shape and long tail feathers",
 "身体覆盖坚硬的鳞片，拥有四只爪子": "A body covered in hard scales, with four claws",
@@ -1500,7 +1533,7 @@ const EN = {
 "说得对！华丽的羽毛和长长的尾羽，就是我最美丽的标志。那么，我在不同文化中又代表什么呢？": "Right! My gorgeous feathers and long tail feathers are my most beautiful features. So, what do I stand for in different cultures?",
 "认识我——凤在东西方文化中的象征": "Get to know me — what the Phoenix stands for in the East and the West",
 "在中国文化中，我是吉祥的象征，代表着美好、尊贵、和平与祥瑞。": "In Chinese culture, I am a symbol of good luck. I stand for beauty, nobility, peace and good fortune.",
-"古代皇室常把我的图案用于女性的服饰和装饰，例如传统服饰上的凤纹。在一些传统婚礼中，人们也会使用龙凤图案，象征美满和幸福。": "In ancient times, the royal family often used my image on women's clothing and decorations, such as phoenix patterns on traditional dresses. At some traditional weddings, people also use dragon-and-phoenix patterns to stand for a happy marriage.",
+"古代皇室常把我的图案用于女性的服饰和装饰，例如传统服饰上的凤纹。在一些传统婚礼中，人们也会使用龙凤图案，象征美满和幸福。": "In ancient times, the royal family often used my image on women's clothing and decorations, such as phoenix patterns on traditional dresses. At some traditional weddings, people also use loong-and-phoenix patterns to stand for a happy marriage.",
 "不过，在西方神话中，也有一种叫作 Phoenix 的神鸟。它与中国凤凰并不完全相同。西方传说中的 Phoenix 最特别的能力，就是在生命结束后从火焰和灰烬中重生，因此常象征着重生、希望和生命的延续。": "In Western myths there is also a sacred bird called the Phoenix, but it is not exactly the same as the Chinese phoenix. The Western Phoenix's special power is to be reborn from fire and ashes after it dies, so it often stands for rebirth, hope and life going on.",
 "虽然我们有相似的外形，但不同文化赋予我们的意义却不完全一样。这是不是很有趣呢？": "Although we look a little alike, different cultures give us meanings that are not quite the same. Isn't that interesting?",
 "以下哪一项正确说明了中国凤凰与西方 Phoenix 常见的象征意义？": "Which of these correctly explains the common meanings of the Chinese phoenix and the Western Phoenix?",
@@ -1512,17 +1545,17 @@ const EN = {
 "太棒了！外形相似，意义却不完全一样，这就是文化的奇妙之处。接下来，看看你们在哪里能见到我吧！": "Excellent! We look alike, yet our meanings are not quite the same — that's the wonder of culture. Next, let's see where you can find me!",
 "认识我——凤在现实生活中的踪迹": "Get to know me — where you can find the Phoenix in real life",
 "你们可能在许多传统文化场合见过我的身影！": "You may have seen me at many traditional cultural events!",
-"在中国传统婚礼中，龙凤图案十分常见。例如，新人的服饰、婚礼装饰和喜庆用品上，都可能出现龙凤的图案，寄托着对婚姻幸福、美满的祝愿。": "At traditional Chinese weddings, dragon-and-phoenix patterns are very common. They may appear on the couple's clothes, wedding decorations and festive items, carrying wishes for a happy and blessed marriage.",
+"在中国传统婚礼中，龙凤图案十分常见。例如，新人的服饰、婚礼装饰和喜庆用品上，都可能出现龙凤的图案，寄托着对婚姻幸福、美满的祝愿。": "At traditional Chinese weddings, loong-and-phoenix patterns are very common. They may appear on the couple's clothes, wedding decorations and festive items, carrying wishes for a happy and blessed marriage.",
 "在古代宫廷文化中，我也常出现在女性的服饰和头饰上，象征尊贵与美好。": "In ancient palace culture, I also appeared on women's clothing and hair ornaments, standing for nobility and beauty.",
 "除了生活中的运用，我也出现在成语和传统故事中。例如『百鸟朝凤』，描绘各种鸟儿向凤凰聚集的景象，比喻德高望重的人受到众人的敬仰。": "Besides daily life, I also appear in idioms and traditional stories. For example, \"百鸟朝凤\" shows all kinds of birds gathering around the phoenix. It describes a respected, virtuous person admired by everyone.",
 "另外，你们可能听过『凤毛麟角』，用来形容非常稀少、珍贵的人或事物。": "You may also have heard \"凤毛麟角\", which describes people or things that are very rare and precious.",
-"传统婚礼中，人们常使用龙凤图案，主要寄托着什么愿望？": "At traditional weddings, people often use dragon-and-phoenix patterns. What is the main wish behind them?",
+"传统婚礼中，人们常使用龙凤图案，主要寄托着什么愿望？": "At traditional weddings, people often use loong-and-phoenix patterns. What is the main wish behind them?",
 "希望新人拥有美满幸福的婚姻": "Hoping the couple will have a happy and blessed marriage",
 "希望新人将来成为皇帝和皇后": "Hoping the couple will become emperor and empress",
 "希望新人能够长生不老": "Hoping the couple will live forever",
 "希望新人能够拥有许多财富": "Hoping the couple will have lots of money",
-"凤说过：婚礼上的龙凤图案，寄托着对婚姻怎样的祝愿？": "The Phoenix said: what kind of wish for the marriage do the dragon-and-phoenix patterns at weddings carry?",
-"没错！龙凤图案出现在婚礼上，代表人们对新人美满幸福的祝福。": "That's right! Dragon-and-phoenix patterns at weddings show people's wishes for a happy marriage for the couple.",
+"凤说过：婚礼上的龙凤图案，寄托着对婚姻怎样的祝愿？": "The Phoenix said: what kind of wish for the marriage do the loong-and-phoenix patterns at weddings carry?",
+"没错！龙凤图案出现在婚礼上，代表人们对新人美满幸福的祝福。": "That's right! Loong-and-phoenix patterns at weddings show people's wishes for a happy marriage for the couple.",
 "你们真聪明！现在，你们已经认识我的外形，也了解我在不同文化中的意义。让我加入你们的神兽图鉴，一起完成这场文化探索吧！": "You're so clever! Now you know what I look like and what I mean in different cultures. Let me join your collection book and finish this cultural adventure together!",
 "象征吉祥、美好": "A symbol of good luck and beauty",
 "百鸟朝凤": "A hundred birds pay homage to the phoenix",
@@ -1535,7 +1568,7 @@ const EN = {
 "认识我——麒麟的外形特点": "Get to know me — what the Qilin looks like",
 "哈哈！欢迎来到我的世界！我是麒麟，是中国神话中非常特别的神兽。虽然你们在现实生活中看不到我，但我可是中国传统文化中非常有名的瑞兽哦！": "Ha ha! Welcome to my world! I am the Qilin, a very special creature in Chinese mythology. You can't see me in real life, but I am a very famous lucky creature in traditional Chinese culture!",
 "你们知道吗？我可不是普通的动物！我的身体结合了许多动物的特点。在一些传统描绘中，我有鹿一样的身体、牛一样的尾巴，身上长着像鱼一样的鳞片，头上还长着角！": "Did you know? I'm no ordinary animal! My body combines features of many animals. In some traditional pictures, I have a body like a deer, a tail like an ox, scales like a fish, and horns on my head!",
-"不过，我的样子并不是固定的。在不同的古代绘画和雕刻中，我的外形可能有所不同。有时候我看起来像鹿，有时候又带有龙的特点。": "But my look is not fixed. In different ancient paintings and carvings, I may look a little different. Sometimes I look like a deer, and sometimes I look a bit like a dragon.",
+"不过，我的样子并不是固定的。在不同的古代绘画和雕刻中，我的外形可能有所不同。有时候我看起来像鹿，有时候又带有龙的特点。": "But my look is not fixed. In different ancient paintings and carvings, I may look a little different. Sometimes I look like a deer, and sometimes I look a bit like a loong.",
 "虽然我的样子看起来很威武，但不要被我的外表吓到了！传说中的我其实性情温和，不喜欢伤害其他生命哦！": "I may look mighty, but don't be scared by my appearance! In legends I am actually gentle and don't like to hurt any living thing!",
 "根据麒麟的介绍，以下哪一项最符合麒麟的外形特点？": "Based on the Qilin's introduction, which of these best describes how the Qilin looks?",
 "身体像鸟，有羽毛和翅膀。": "A body like a bird, with feathers and wings.",
@@ -1569,7 +1602,7 @@ const EN = {
 "庆典上表演麒麟舞，送上祝福。": "Performing the Qilin Dance at a celebration to give blessings.",
 "门口摆放石狮子，守护家园。": "Placing stone lions at the door to guard the home.",
 "画中画上松树和鹤，祝愿长寿。": "Painting pine trees and cranes to wish for long life.",
-"新年时表演舞龙，祈求好天气。": "Performing a dragon dance at New Year to pray for good weather.",
+"新年时表演舞龙，祈求好天气。": "Performing a loong dance at New Year to pray for good weather.",
 "麒麟提到：在新加坡的客家传统文化中，有一种和它有关的表演。": "The Qilin mentioned: in Singapore's Hakka culture, there is a performance related to it.",
 "正确！下次在喜庆场合看到麒麟舞，你们就知道它是在为大家送上祝福了。": "Correct! Next time you see a Qilin Dance at a celebration, you'll know it is giving blessings to everyone.",
 "恭喜你们！看来你们已经认识我了。虽然我的外表十分威武，但真正让我受到人们喜爱的，是我所象征的仁慈、和平与吉祥！": "Congratulations! You know me well now. I may look mighty, but what people truly love about me is the kindness, peace and good luck I stand for!",
@@ -1582,7 +1615,7 @@ const EN = {
 "神兽 · 麒麟": "Mythical creature · Qilin",
 "认识我——狮子的外形特点": "Get to know me — what the Lion looks like",
 "吼——！欢迎来到我的世界！我是狮子！你们应该都认识我吧？我可是被人们称为『百兽之王』的动物呢！": "Roar! Welcome to my world! I am the Lion! You all know me, right? People call me \"the king of beasts\"!",
-"和龙、凤凰、麒麟不一样，我是真实存在于世界上的动物！": "Unlike the Dragon, Phoenix and Qilin, I am an animal that really exists in the world!",
+"和龙、凤凰、麒麟不一样，我是真实存在于世界上的动物！": "Unlike the Loong, Phoenix and Qilin, I am an animal that really exists in the world!",
 "我拥有强壮的身体、有力的四肢、锋利的爪子和尖锐的牙齿。": "I have a strong body, powerful legs, sharp claws and pointed teeth.",
 "你们有没有发现，成年雄狮的头部和颈部通常长着浓密的鬃毛？这也是雄狮最明显的外形特点之一。不过，母狮通常没有这样的鬃毛哦！": "Have you noticed that adult male lions usually have a thick mane around the head and neck? It is one of the most obvious features of a male lion. But female lions usually don't have a mane!",
 "我不仅外形威武，吼叫声也十分响亮。因此，许多人都觉得我是一种强大、勇猛而充满威严的动物。": "I don't just look mighty — my roar is very loud too. That's why many people think of me as strong, fierce and majestic.",
@@ -1630,7 +1663,7 @@ const EN = {
 "传统舞狮中的一种表演形式，寄托着吉祥、兴旺的美好期望": "A form of traditional lion dance performance, carrying wishes for good luck and prosperity",
 "神兽 · 狮子": "Mythical creature · Lion",
 "认识我——龟的外形特点": "Get to know me — what the Tortoise looks like",
-"嘿嘿！欢迎来到我的世界！我是龟！虽然我不像龙那么威风，也不像凤凰那么华丽，但我可是动物世界中非常特别的一员哦！": "Hee hee! Welcome to my world! I am the Tortoise! I'm not as mighty as the Dragon or as gorgeous as the Phoenix, but I'm a very special member of the animal world!",
+"嘿嘿！欢迎来到我的世界！我是龟！虽然我不像龙那么威风，也不像凤凰那么华丽，但我可是动物世界中非常特别的一员哦！": "Hee hee! Welcome to my world! I am the Tortoise! I'm not as mighty as the Loong or as gorgeous as the Phoenix, but I'm a very special member of the animal world!",
 "你们仔细看看我！我有一个坚硬的外壳、四条腿，还有一条小尾巴。你们知道吗？我的龟壳可不只是普通的保护罩，它其实是我身体的一部分！": "Look at me carefully! I have a hard shell, four legs and a small tail. Did you know? My shell is not just an ordinary cover — it is actually part of my body!",
 "当遇到危险时，有些龟类能够把头和四肢缩进壳里，保护自己。不过，并不是所有龟类都能够这样做哦！": "When in danger, some tortoises and turtles can pull their head and legs into their shell to protect themselves. But not all of them can do this!",
 "你们是不是觉得我总是慢吞吞的？哈哈！其实，有些龟类虽然在陆地上行动缓慢，但在水中却能游得很快呢！": "Do you think I'm always slow? Ha ha! Actually, some turtles are slow on land but can swim very fast in water!",
@@ -1802,11 +1835,11 @@ Object.assign(EN, {
 "幽林古泽": "Ancient Forest Marsh",
 "翠竹灵谷": "Green Bamboo Valley",
 "黄沙秘窟": "Yellow Sand Cave",
-"龙": "Dragon",
+"龙": "Loong",
 "东方的祥瑞之兽": "The lucky creature of the East",
-"龙 Loong（中国龙）": "Loong (Chinese dragon)",
-"Dragon（西方龙）": "Dragon (Western dragon)",
-"中国龙与西方龙虽然都有强大的力量，但在许多传统故事中，它们的形象和象征意义却大不相同。中国龙常受到人们尊敬，而西方龙则常成为英雄需要面对的敌人。": "The Chinese dragon and the Western dragon are both very powerful, but in many traditional stories their images and meanings are very different. The Chinese dragon is usually respected, while the Western dragon is often the enemy that heroes must face.",
+"龙 Loong（中国龙）": "Loong (the Chinese 龙)",
+"Dragon（西方龙）": "Dragon (the Western dragon)",
+"中国龙与西方龙虽然都有强大的力量，但在许多传统故事中，它们的形象和象征意义却大不相同。中国龙常受到人们尊敬，而西方龙则常成为英雄需要面对的敌人。": "The Chinese Loong and the Western dragon are both very powerful, but in many traditional stories their images and meanings are very different. The Chinese Loong is usually respected, while the Western dragon is often the enemy that heroes must face.",
 "皇权、尊贵与权威": "Imperial power, nobility and authority",
 "吉祥、力量与祥瑞": "Good luck, strength and good fortune",
 "呼风唤雨、带来丰收": "Brings wind and rain, and a rich harvest",
@@ -1818,10 +1851,10 @@ Object.assign(EN, {
 "鱼一样的鳞片": "Scales like a fish",
 "鹰一样的爪子": "Claws like an eagle",
 "牛一样的耳朵": "Ears like an ox",
-"舞龙表演": "Dragon dance",
-"农历新年期间，人们通过舞龙祈求风调雨顺、吉祥如意。": "During Lunar New Year, people perform the dragon dance to pray for good weather and good luck.",
-"龙袍与宫殿装饰": "Dragon robes and palace decorations",
-"古代皇帝的服饰和宫殿常出现龙的图案，象征皇权与尊贵。": "Dragon patterns often appeared on emperors' clothing and in palaces, standing for imperial power and nobility.",
+"舞龙表演": "Loong dance",
+"农历新年期间，人们通过舞龙祈求风调雨顺、吉祥如意。": "During Lunar New Year, people perform the loong dance to pray for good weather and good luck.",
+"龙袍与宫殿装饰": "Loong robes and palace decorations",
+"古代皇帝的服饰和宫殿常出现龙的图案，象征皇权与尊贵。": "Loong patterns often appeared on emperors' clothing and in palaces, standing for imperial power and nobility.",
 "凤凰": "Phoenix",
 "象征吉祥与美好的神鸟": "A sacred bird of good luck and beauty",
 "凤凰（中国）": "Fenghuang (Chinese phoenix)",
@@ -1838,7 +1871,7 @@ Object.assign(EN, {
 "尾部拖着长长的羽翎": "Long, trailing tail feathers",
 "结合多种鸟类的特点，是中国神话中的神鸟": "A sacred bird in Chinese mythology that combines features of many birds",
 "传统婚礼": "Traditional weddings",
-"龙凤图案常出现在婚礼服饰和装饰上，寄托新人婚姻美满、幸福的祝愿。": "Dragon-and-phoenix patterns often appear on wedding clothes and decorations, carrying wishes for a happy marriage.",
+"龙凤图案常出现在婚礼服饰和装饰上，寄托新人婚姻美满、幸福的祝愿。": "Loong-and-phoenix patterns often appear on wedding clothes and decorations, carrying wishes for a happy marriage.",
 "传统服饰与头饰": "Traditional clothing and hair ornaments",
 "凤凰图案常用于古代女性服饰和头饰，象征尊贵与美好。": "Phoenix patterns were often used on women's clothing and hair ornaments in ancient times, standing for nobility and beauty.",
 "比喻经历磨难后重生，获得新的希望": "Describes being reborn after hardship and gaining new hope",
@@ -1937,7 +1970,7 @@ Object.assign(EN, {
 "一些和鹤有关的成语，今天仍然常被人使用。": "Some idioms about cranes are still commonly used today.",
 "象征健康长寿，常用来祝福长辈": "A symbol of a long and healthy life, often used to bless elders",
 "身体形状": "Body shape",
-"修长如龙": "Long like a dragon",
+"修长如龙": "Long like a loong",
 "圆润如龟": "Round like a tortoise",
 "矫健如鹿": "Agile like a deer",
 "轻盈如鹤": "Light like a crane",
@@ -2081,7 +2114,11 @@ Object.assign(EN, {
   "已提交异兽作品": "Creation submitted",
   "小组": "Group",
   "还没有小组填写线索整理表。": "No group has filled in the clue table yet.",
-  "还没有小组提交异兽作品。": "No group has submitted a creation yet."
+  "还没有小组提交异兽作品。": "No group has submitted a creation yet.",
+  "组别": "Group",
+  "负责的神兽": "Creatures",
+  "组员": "Members",
+  "分组名单": "Group list"
 });
 </script>
 <script>
@@ -2112,7 +2149,21 @@ const orbImg = (id, cls = "") => `<img class="orb-img ${cls}" src="${ASSETS["orb
 /* ---------------- 拼音 / 英文 显示 ---------------- */
 const Lang = (() => { let v = {}; try { v = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY + "_lang") || "{}"); } catch (e) {}
   return { py: !!v.py, en: !!v.en, save() { try { localStorage.setItem(CONFIG.STORAGE_KEY + "_lang", JSON.stringify({ py: this.py, en: this.en })); } catch (e) {} } }; })();
-const rubyHTML = s => `<span class="zh">` + PY.tokens(s).map(([c, p]) => p ? `<ruby>${esc(c)}<rt>${p}</rt></ruby>` : esc(c)).join("") + `</span>`;
+const NOBREAK_BEFORE = /^[，。、！？；：」』）》〉,.!?;:)\]…—]/;
+/* 没有拼音的字（标点、英文、数字）也放进同样的小方块，和汉字对齐在同一条基线上 */
+const rubyHTML = s => {
+  const out = []; let run = "";
+  const box = (b, r, cls) => `<ruby${cls ? ` class="${cls}"` : ""}>${esc(b)}<rt>${r ? r : "&nbsp;"}</rt></ruby>`;
+  const flush = () => { if (run) { out.push(box(run, "", "np")); run = ""; } };
+  PY.tokens(s).forEach(([c, p]) => {
+    if (p) { flush(); out.push(box(c, p)); }
+    else if (/\s/.test(c)) { flush(); out.push(" "); }
+    else if (NOBREAK_BEFORE.test(c) && !run && out.length && out[out.length - 1] !== " ") { out.push(`<span class="nb">${out.pop()}${box(c, "", "np")}</span>`); }
+    else run += c;
+  });
+  flush();
+  return `<span class="zh">` + out.join("<wbr>") + `</span>`;
+};
 function T(s, quote, inline) {
   s = String(s == null ? "" : s);
   const zh = Lang.py ? rubyHTML(s) : esc(s);
@@ -2132,7 +2183,7 @@ const TP = s => (Lang.py ? rubyHTML(String(s || "")) : esc(s || ""));
 /* 输入框提示文字（不能放 HTML）：英文模式时加上英文 */
 const PH = s => esc(s + (Lang.en && EN[s] ? " / " + EN[s] : ""));
 /* 带变量的句子：EN 里用同样的 {n}、{c} 等占位 */
-const NAME_EN = { dragon: "Dragon", phoenix: "Phoenix", qilin: "Qilin", turtle: "Tortoise", crane: "Crane", lion: "Lion" };
+const NAME_EN = { dragon: "Loong", phoenix: "Phoenix", qilin: "Qilin", turtle: "Tortoise", crane: "Crane", lion: "Lion" };
 const NM = id => ({ zh: A(id).name, en: NAME_EN[id] });
 /* 小组名称：1A → 第一组·A队（Group 1 · Team A） */
 const CN_NUM = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
@@ -2152,7 +2203,7 @@ function applyI18n(root = document) {
 let modalRe = null;   // 语言切换时重画目前打开的弹出框
 function refreshLang() {
   document.body.classList.toggle("py-on", Lang.py); document.body.classList.toggle("en-on", Lang.en);
-  $$("#langBar .tg").forEach(b => b.classList.toggle("on", !!Lang[b.dataset.lang]));
+  $$("#langBar .tg[data-lang]").forEach(b => b.classList.toggle("on", !!Lang[b.dataset.lang]));
   applyI18n();
   const r = { explore: () => renderExplore(), map: () => renderMap(), dex: () => renderDex(), lab: () => renderLab(), cover: () => renderCover(), capture: () => Capture.refreshText(), hatch: () => renderHatch() }[S.screen];
   if (r) r();
@@ -2479,6 +2530,7 @@ const S = { gid: null, animal: null, screen: "cover", teacher: false, hatchFrom:
 const curGroup = () => (S.gid ? Store.ensure(S.gid) : null);
 
 function go(screen, opts = {}) {
+  if (typeof Music !== "undefined") { if (screen === "teacher") Music.stop(); }
   if (screen !== "teacher") Cloud.unsubscribe();
   if (screen !== "capture" && typeof Capture !== "undefined") Capture.stop();
   if ((screen === "map" || screen === "dex") && typeof MapView !== "undefined" && MapView.m3) { MapView.m3.home(); ["#map3dCard", "#dex3dCard"].forEach(q => { const c = $(q); if (c) c.classList.remove("show"); }); }
@@ -2572,10 +2624,26 @@ function renderCover() {
     const names = animalsOf(gid).map(id => A(id).name).join("·");
     let st = "未开始";
     if (g) { const c = capturedCount(g); st = g.creation.submitted ? "已完成创作" : c === 3 ? "已集齐 3/3" : `已收集 ${c}/3`; }
-    return `<button class="token team-${t}" data-gid="${gid}"><span class="tk-name">${T(GZ(gid).split("·")[0])}</span><span class="tk-team">${t} 队 · ${names}</span>${Lang.en ? `<span class="tk-team">${esc(GE(gid))}</span>` : ""}<span class="tk-state">${st}</span></button>`;
+    const mem = (CONFIG.ROSTER && CONFIG.ROSTER[gid]) || [];
+    return `<button class="token team-${t}" data-gid="${gid}"><span class="tk-name">${T(GZ(gid).split("·")[0])}</span><span class="tk-team">${t} 队 · ${names}</span>${Lang.en ? `<span class="tk-team">${esc(GE(gid))}</span>` : ""}
+      ${mem.length ? `<span class="tk-mem">${mem.map(m => `<i>${esc(m[0])}<small>${esc(m[1])}</small></i>`).join("")}</span>` : ""}<span class="tk-state">${st}</span></button>`;
   }).join("");
   $$("#groupGrid .token").forEach(b => b.onclick = () => pickGroup(b.dataset.gid));
+  const rb = $("#rosterBtn"); if (rb) rb.onclick = () => showRoster();
   if (Cloud.on) Cover.pull();
+}
+/* 分组名单（表格） */
+function rosterHTML(opts = {}) {
+  const R = CONFIG.ROSTER || {};
+  return `<table class="roster"><thead><tr><th>${T("组别", false, true)}</th><th>${T("负责的神兽", false, true)}</th><th>${T("组员", false, true)}</th></tr></thead><tbody>
+    ${CONFIG.GROUPS.map(gid => { const t = teamOf(gid);
+      return `<tr class="team-${t}${opts.me === gid ? " me" : ""}"><td class="rg"><span class="rg-n">${GH(gid)}</span></td>
+        <td class="ra">${animalsOf(gid).map(id => `<span>${T(A(id).name, false, true)}</span>`).join("")}</td>
+        <td class="rm">${(R[gid] || []).map(m => `<span class="rm-p"><b>${Lang.py ? rubyHTML(m[0]) : esc(m[0])}</b><small>${esc(m[1])}</small></span>`).join("") || '<span class="muted">—</span>'}</td></tr>`; }).join("")}
+    </tbody></table>`;
+}
+function showRoster() {
+  openModal(`<div class="roster-wrap"><h3>📋 ${T("分组名单", false, true)}</h3>${rosterHTML({ me: S.gid })}</div>`, { wide: true, re: showRoster });
 }
 const Cover = {
   busy: false,
@@ -2610,6 +2678,7 @@ function pickGroup(gid) {
   const has = g && (g.updatedAt - g.createdAt > 1000 || capturedCount(g) > 0);
   const b = openModal(`<h3>${has ? `欢迎回来，${GZ(gid)}的调查员！` : `确认小组：${GZ(gid)}`}</h3>
     <p style="margin-top:8px">你们属于 <b>${teamOf(gid)} 队</b>，本次任务要寻找的神兽是：<b>${names}</b>。</p>
+    ${(CONFIG.ROSTER || {})[gid] ? `<p class="pg-mem">组员：${CONFIG.ROSTER[gid].map(m => `<span><b>${esc(m[0])}</b> ${esc(m[1])}</span>`).join("")}</p>` : ""}
     ${has ? `<p style="margin-top:6px">目前进度：已收集 <b>${capturedCount(g)}/3</b> 只神兽。</p>` : `<p style="margin-top:6px">请确认这是你们的小组，进入后进度会保存在这个小组名下。</p>`}
     <div class="modal-actions"><button class="btn ghost" style="color:var(--ink)" data-close>选错了</button><button class="btn jade big" id="pgOk">${has ? "继续冒险 ▸" : "进入秘境 ▸"}</button></div>`);
   $("#pgOk", b).onclick = async () => {
@@ -2950,7 +3019,7 @@ function profileHTML(a) {
   return `<div class="profile">
     <div class="pf-art"><img src="${ASSETS["art_" + a.id]}" alt="${a.name}插画"></div>
     <div class="pf-txt">
-      <div class="pf-head"><span class="title-plate">${Tf("神兽档案 · {n}", { n: NM(a.id) }, true)}</span><span style="color:var(--ink-2)">${T(a.nick, false, true)}</span></div>
+      <div class="pf-head"><span class="title-plate">${Tf("神兽档案 · {n}", { n: NM(a.id) }, true)}</span><span style="color:var(--ink-2)">${T(a.nick, false, true)}</span>${langBtns()}</div>
       <div class="pf-sec"><h4>${T("一、外形特点", false, true)}</h4><ul class="looks">${p.looks.map(x => `<li>${T(x)}</li>`).join("")}</ul></div>
       <div class="pf-sec"><h4>${T("二、文化象征", false, true)}</h4>${cmp}</div>
       <div class="pf-sec"><h4>${T("三、现实生活中的踪迹", false, true)}</h4><ul>${p.life.map(l => `<li><b>${T(l[0], false, true)}</b>：${T(l[1])}</li>`).join("")}</ul></div>
@@ -2961,8 +3030,8 @@ function profileHTML(a) {
 function openProfile(id, fromCapture) {
   const a = A(id);
   const b = openModal(profileHTML(a) + `<div class="modal-actions">
-    ${S.screen !== "dex" && S.gid ? '<button class="btn jade" id="pfDex">前往神兽图鉴</button>' : ""}
-    ${fromCapture ? '<button class="btn ghost" style="color:var(--ink)" id="pfMap">◂ 返回地图</button>' : '<button class="btn" data-close>关闭</button>'}</div>`, { wide: true, card3d: true, re: () => openProfile(id, fromCapture) });
+    ${S.screen !== "dex" && S.gid ? `<button class="btn jade" id="pfDex">${T("前往神兽图鉴", false, true)}</button>` : ""}
+    ${fromCapture ? `<button class="btn ghost" style="color:var(--ink)" id="pfMap">◂ ${T("返回地图", false, true)}</button>` : `<button class="btn" data-close>${T("关闭", false, true)}</button>`}</div>`, { wide: true, card3d: true, noClose: true, re: () => openProfile(id, fromCapture) });
   if ($("#pfDex", b)) $("#pfDex", b).onclick = () => { closeModal(); go("dex"); };
   if ($("#pfMap", b)) $("#pfMap", b).onclick = () => { closeModal(); go("map"); };
 }
@@ -2996,7 +3065,7 @@ function renderDex() {
   $("#dexSlots").innerHTML = slots;
   $$("#dexSlots .slot").forEach(s => s.onclick = () => {
     const id = s.dataset.id; if (!id) return;
-    if (s.classList.contains("got")) openProfile(id);
+    if (s.classList.contains("got")) showBeastThenProfile(id);
     else if (s.classList.contains("other")) toast(`「${A(id).name}」还被封印着。等你们和${partnerOf(g.groupId) ? GZ(partnerOf(g.groupId)) : "另一组"}都集齐三只神兽，就会直接获得这颗神兽球！`);
     else toast("这只神兽还没有收集，回到地图继续探索吧！");
   });
@@ -3004,7 +3073,7 @@ function renderDex() {
   const cols = [["looks", "外形特点"], ["east", "东方文化含义"], ["west", "西方文化含义（如适用）"], ["life", "现实生活中的运用"], ["idiom", "相关成语 / 故事"]];
   $("#clueTable").innerHTML = `<tr><th>${T("神兽", false, true)}</th>${cols.map(c => `<th>${T(c[1], false, true)}</th>`).join("")}</tr>` + mine.map(id => {
     const a = A(id), st = g.animals[id], v = g.clues[id] || {};
-    return `<tr><td>${T(a.name, false, true)}${st.captured ? "<br><small style='color:var(--ok)'>✓已收集</small>" : "<br><small style='color:#999'>未收集</small>"}</td>${cols.map(c => `<td><textarea data-a="${id}" data-k="${c[0]}" placeholder="${st.captured ? "用自己的话写下线索…" : "收集后再填写"}">${esc(v[c[0]] || "")}</textarea></td>`).join("")}</tr>`;
+    return `<tr><td>${T(a.name, false, true)}${st.captured ? "<br><small style='color:var(--ok);font-weight:800'>✓ 已收集</small>" : "<br><small style='color:#999'>未收集</small>"}</td>${cols.map(c => `<td><textarea data-a="${id}" data-k="${c[0]}" placeholder="${st.captured ? "用自己的话写下线索…" : "收集后再填写"}">${esc(v[c[0]] || "")}</textarea></td>`).join("")}</tr>`;
   }).join("");
   let t;
   /* 每一格都先经过安全检测；不适当或需要关注的内容不会保存到小组资料 */
@@ -3021,6 +3090,17 @@ function renderDex() {
     ? `<button class="btn red big" data-go="lab">前往异兽创造研究所 🥚</button>`
     : `<p class="muted">收集全部三只神兽后，即可进入异兽创造研究所（目前 ${c}/3）。</p><button class="btn jade" data-go="map" style="margin-top:8px">◂ 返回地图继续探索</button>`);
   if ($("#dexArchive")) $("#dexArchive").onclick = () => openArchive(g);
+}
+/* 多宝阁：先让神兽在地图上立体飞出来，再打开档案 */
+let beastShowTimer = null;
+function showBeastThenProfile(id) {
+  clearTimeout(beastShowTimer);
+  const box = $("#dex3dBox");
+  if (!(MapView.m3 && MapView.mode === "3d" && Map3D.supported && box && !box.classList.contains("hidden"))) { openProfile(id); return; }
+  const r = box.getBoundingClientRect();
+  if (r.top < 60 || r.bottom > innerHeight) box.scrollIntoView({ behavior: "smooth", block: "center" });
+  MapView.m3.flyTo(id); MapView.card(id);
+  beastShowTimer = setTimeout(() => { if (S.screen === "dex") openProfile(id); }, 3200);
 }
 /* 图鉴页也检查全图解锁 */
 const _renderDex = renderDex;
@@ -3144,7 +3224,7 @@ function buildPrompt(cr) {
 画面主角：一只名叫「${cr.name.trim()}」的原创神兽。
 外形特点：${allTraitsText(cr).join("；")}。
 特殊能力：${listText(cr.abilities)}，请在画面中表现出这种能力。
-生活环境：它生活在${worldText(cr)}，背景要体现这个世界的特色。
+生活环境：它生活在${worldText(cr)}。背景请用干净、浅色的素色背景，只放少量代表这个世界的小元素，让神兽的外形清楚完整（方便放进「异兽诞生地图」里飞翔）。
 象征意义：它象征着${listText(cr.symbols)}，整体气氛要让人感受到这种意义。
 画风要求：${st.desc}；神兽位于画面中央，构图完整，色彩以金橙、朱红、青绿、深蓝为主，带有东方神话气息。
 注意：画面中不要出现文字、水印，也不要模仿任何现有的动漫或游戏角色。
@@ -3202,7 +3282,7 @@ function archiveHTML(g, opts = {}) {
   const items = o => [...(o.chips || []), (o.text || "").trim()].filter(Boolean);
   const traits = LAB_OPTIONS.traits.filter(t => traitText(cr, t.key)).map(t => `<div class="ar-tr"><b>${T(t.name, false, true)}：</b>${TL(items(cr.traits[t.key]), true)}</div>`).join("");
   const world = (cr.world.text || "").trim() ? TP(cr.world.text.trim()) : cr.world.chip ? TL([cr.world.chip]) : none;
-  return `<div class="pf-head"><span class="title-plate" style="font-size:1.35rem">${T("异兽文化档案", false, true)}</span><span class="seal">${esc(g.groupId)}</span>${cr.submitted ? `<span class="pill done">${T("已提交", false, true)}</span>` : `<span class="pill no">${T("尚未提交", false, true)}</span>`}</div>
+  return `<div class="pf-head"><span class="title-plate" style="font-size:1.35rem">${T("异兽文化档案", false, true)}</span><span class="seal">${esc(g.groupId)}</span>${cr.submitted ? `<span class="pill done">${T("已提交", false, true)}</span>` : `<span class="pill no">${T("尚未提交", false, true)}</span>`}${opts.full ? langBtns() : ""}</div>
     <div class="ar-img" ${cr.image ? `data-zoom="1"` : ""}>${cr.image ? `<img src="${cr.image}" alt="${esc(cr.name)}">` : `<div class="noimg"><span class="seal">${esc((cr.name || "兽").slice(0, 1))}</span><span>${T("尚未上传图片", false, true)}</span></div>`}</div>
     <dl>
       <dt>${T("动物名称", false, true)}</dt><dd>${cr.name.trim() ? TP(cr.name.trim()) : none}</dd>
@@ -3243,7 +3323,7 @@ function renderArchivePreview(g) {
   if ($("#lToHatch")) $("#lToHatch").onclick = () => { S.hatchFrom = "lab"; go("hatch"); };
 }
 function openArchive(g) {
-  const b = openModal(`<div class="archive">${archiveHTML(g, { full: true })}</div><div class="modal-actions"><button class="btn" data-close>${T("关闭", false, true)}</button></div>`, { re: () => openArchive(g) });
+  const b = openModal(`<div class="archive">${archiveHTML(g, { full: true })}</div><div class="modal-actions"><button class="btn" data-close>${T("关闭", false, true)}</button></div>`, { noClose: true, re: () => openArchive(g) });
   const z = $("[data-zoom]", b); if (z) z.onclick = () => zoomImage(g.creation.image);
 }
 
@@ -3274,12 +3354,18 @@ async function renderHatch() {
       <div class="egg-bot" style="clip-path:polygon(0 52%,16% 60%,30% 50%,44% 60%,58% 50%,72% 60%,86% 50%,100% 56%,100% 100%,0 100%)">${eggSVG()}</div>
       <span class="egg-label">${GH(x.gid)} · ${T("点击孵化", false, true)}</span></div>`;
   }).join("");
-  bindHatch(stage);
+  bindHatch(stage); fillCutouts(stage);
 }
 function beastHTML(g, p) {
-  const cr = g.creation;
-  return `<div class="newbeast" data-beast="${g.groupId}" style="left:${p.x}%;top:${p.y}%" role="button" tabindex="0"><div class="nb-img">${cr.image ? `<img src="${cr.image}" alt="${esc(cr.name)}">` : `<div class="noimg"><span class="seal" style="min-width:50px;height:50px;font-size:1.6rem">${esc((cr.name || "兽").slice(0, 1))}</span></div>`}</div>
+  const cr = g.creation, k = CONFIG.GROUPS.indexOf(g.groupId);
+  return `<div class="newbeast fly" data-beast="${g.groupId}" style="left:${p.x}%;top:${p.y}%;--fd:${(9 + (k % 4) * 1.7).toFixed(1)}s;--fdl:-${(k * 1.3).toFixed(1)}s" role="button" tabindex="0">
+    <div class="nb-fly"><div class="nb-img${cr.image ? "" : " none"}">${cr.image ? `<img data-cut="${g.groupId}" alt="${esc(cr.name)}">` : `<div class="noimg"><span class="seal" style="min-width:50px;height:50px;font-size:1.6rem">${esc((cr.name || "兽").slice(0, 1))}</span></div>`}</div><i class="nb-shadow"></i></div>
     <span class="beast-label">${TP(cr.name)} · ${GH(g.groupId)}</span></div>`;
+}
+/* 把图片换成去背景的版本 */
+function fillCutouts(root) {
+  $$("img[data-cut]", root).forEach(im => { if (im.dataset.done) return; im.dataset.done = 1; const g = hatchGroups[im.dataset.cut]; if (!g) return;
+    Cutout.get(g.creation.image).then(r => { im.src = r ? r.url : g.creation.image; im.closest(".newbeast").classList.toggle("cut", !!(r && r.cut)); }); });
 }
 function bindHatch(stage) {
   $$(".egg", stage).forEach(e => e.onclick = () => {
@@ -3290,7 +3376,7 @@ function bindHatch(stage) {
       const p = { x: parseFloat(e.style.left), y: parseFloat(e.style.top) };
       stage.insertAdjacentHTML("beforeend", `<div class="burst" style="left:${p.x}%;top:${p.y}%"></div>`);
       setTimeout(() => {
-        e.remove(); stage.insertAdjacentHTML("beforeend", beastHTML(g, p));
+        e.remove(); stage.insertAdjacentHTML("beforeend", beastHTML(g, p)); fillCutouts(stage);
         const h = Store.hatched(); h[gid] = true; Store.hatched(h);
         bindHatch(stage);
         const hh = Store.hatched();
@@ -3407,7 +3493,7 @@ const Teacher = {
       <div class="tc-state">${cloud ? `<span class="sync-pill ok">☁ 云端已设定：学生在不同设备作答，这里实时更新</span>` : `<span class="sync-pill err">⚠ 尚未设定云端：只能看到这台设备的资料</span>`}</div>
       <div class="tc-btns">${c ? `<button class="btn small jade" data-tqr>📱 学生链接 / 二维码</button>` : ""}
         <button class="btn small red" data-tnew>✦ 生成新课堂码</button><button class="btn small ghost" data-tswitch>⇄ 切换课堂</button>
-        <button class="btn small ghost" data-tcloud>☁ 云端设定</button><button class="btn small ghost" data-tsafe>🛡 安全设定</button></div>`;
+        <button class="btn small ghost" data-tcloud>☁ 云端设定</button><button class="btn small ghost" data-tsafe>🛡 安全设定</button><button class="btn small ghost" data-troster>📋 分组名单</button></div>`;
     this.bindClassBtns(el);
   },
   bindClassBtns(r) {
@@ -3416,6 +3502,7 @@ const Teacher = {
     $$("[data-tqr]", r).forEach(b => b.onclick = () => this.showQR());
     $$("[data-tcloud]", r).forEach(b => b.onclick = () => this.cloudSettings());
     $$("[data-tsafe]", r).forEach(b => b.onclick = () => SafetyUI.settings());
+    $$("[data-troster]", r).forEach(b => b.onclick = () => showRoster());
   },
   async newClass() {
     let code = Cls.gen();
@@ -3536,11 +3623,12 @@ const Teacher = {
   },
   cardHTML(gid, g) {
     const t = teamOf(gid);
-    if (!g) return `<button class="gcard" data-g="${gid}"><div class="gc-h"><b>${GZ(gid)}</b>${pill("no", "尚未进入")}</div><div class="row muted">尚未提交任何资料</div></button>`;
+    if (!g) return `<button class="gcard" data-g="${gid}"><div class="gc-h"><b>${GZ(gid)}</b>${pill("no", "尚未进入")}</div>${(CONFIG.ROSTER || {})[gid] ? `<div class="row muted" style="font-size:.85rem">${CONFIG.ROSTER[gid].map(m => esc(m[0] + " " + m[1])).join(" · ")}</div>` : ""}<div class="row muted">尚未提交任何资料</div></button>`;
     const s = groupStats(g);
     const cr = g.creation;
     return `<button class="gcard" data-g="${gid}">
       <div class="gc-h"><b>${GZ(gid)}</b>${pill(s.exploreState === "done" && s.creationState === "done" ? "done" : "ing", s.stage)}</div>
+${(CONFIG.ROSTER || {})[gid] ? `<div class="row muted" style="font-size:.85rem">${CONFIG.ROSTER[gid].map(m => esc(m[0] + " " + m[1])).join(" · ")}</div>` : ""}
       <div class="row"><span>探索进度</span><span>${s.cap}/3</span></div><div class="bar"><i style="width:${s.cap / 3 * 100}%"></i></div>
       <div class="animal-pills">${s.mine.map(id => pill(animalStatus(g.animals[id]), A(id).name + (g.animals[id].captured ? " ✓" : g.animals[id].started ? " …" : ""))).join("")}</div>
       <div class="row"><span>全图解锁</span>${g.fullMap ? pill("done", `已解锁 · 共享 ${s.extra} 颗`) : pill("no", "未解锁")}</div>
@@ -3763,11 +3851,64 @@ $("#fsBtn").onclick = () => {
     requestAnimationFrame(tick);
   })();
 })();
+
+/* ================================================================
+   异兽去背景：把学生上传的 AI 图片自动剪出动物外形（在浏览器内计算，不上传任何地方）
+   背景太复杂、剪不准时，改用柔和的渐隐边缘，不会出现生硬的圆框
+   ================================================================ */
+const Cutout = {
+  cache: {},
+  get(src) {
+    if (!src || !SAFE_IMG.test(src)) return Promise.resolve(null);
+    const key = src.length + ":" + src.slice(-40);
+    if (this.cache[key]) return this.cache[key];
+    return (this.cache[key] = new Promise(ok => { const im = new Image(); im.onload = () => { try { ok(this.make(im)); } catch (e) { ok(null); } }; im.onerror = () => ok(null); im.src = src; }));
+  },
+  make(im) {
+    const M = 360, sc = Math.min(1, M / Math.max(im.width, im.height)), w = Math.max(8, Math.round(im.width * sc)), h = Math.max(8, Math.round(im.height * sc));
+    const c = document.createElement("canvas"); c.width = w; c.height = h; const x = c.getContext("2d"); x.drawImage(im, 0, 0, w, h);
+    const id = x.getImageData(0, 0, w, h), d = id.data, N = w * h, bg = new Uint8Array(N);
+    const col = i => [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]], dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+    // 边框颜色表
+    const border = []; for (let i = 0; i < w; i++) border.push(i, (h - 1) * w + i); for (let j = 0; j < h; j++) border.push(j * w, j * w + w - 1);
+    const bins = {}; border.forEach(i => { const p = col(i), k = (p[0] >> 4) + "," + (p[1] >> 4) + "," + (p[2] >> 4); (bins[k] = bins[k] || []).push(p); });
+    const pal = Object.values(bins).filter(v => v.length > border.length * .015).map(v => v.reduce((a, p) => [a[0] + p[0] / v.length, a[1] + p[1] / v.length, a[2] + p[2] / v.length], [0, 0, 0]));
+    if (!pal.length) return this.soft(c);
+    const near = p => pal.reduce((m, q) => Math.min(m, dist(p, q)), 1e9);
+    // 从四边往内生长：颜色接近背景、和邻近像素变化不大才算背景
+    const q = []; border.forEach(i => { if (!bg[i] && near(col(i)) < 46) { bg[i] = 1; q.push(i); } });
+    while (q.length) { const i = q.pop(), xi = i % w, yi = (i / w) | 0, pc = col(i);
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = xi + dx, ny = yi + dy; if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue; const j = ny * w + nx; if (bg[j]) continue;
+        const pj = col(j); if (dist(pj, pc) < 20 && near(pj) < 70) { bg[j] = 1; q.push(j); } } }
+    // 保留最大的一块前景，并补上小洞
+    const lab = new Int32Array(N).fill(-1); let best = -1, bestN = 0, cur = 0;
+    for (let i = 0; i < N; i++) { if (bg[i] || lab[i] >= 0) continue; let n = 0; const st = [i]; lab[i] = cur;
+      while (st.length) { const k = st.pop(); n++; const kx = k % w, ky = (k / w) | 0;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = kx + dx, ny = ky + dy; if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue; const j = ny * w + nx; if (!bg[j] && lab[j] < 0) { lab[j] = cur; st.push(j); } } }
+      if (n > bestN) { bestN = n; best = cur; } cur++; }
+    const ratio = bestN / N;
+    if (ratio < .06 || ratio > .82) return this.soft(c);
+    let a = new Float32Array(N); for (let i = 0; i < N; i++) a[i] = lab[i] === best ? 255 : 0;
+    // 柔化边缘
+    const blur = (src, r) => { const o = new Float32Array(N); for (let y = 0; y < h; y++) for (let xx = 0; xx < w; xx++) { let s = 0, n = 0;
+      for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) { const nx = xx + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue; s += src[ny * w + nx]; n++; } o[y * w + xx] = s / n; } return o; };
+    a = blur(a, 1);
+    for (let i = 0; i < N; i++) d[i * 4 + 3] = Math.min(d[i * 4 + 3], a[i]);
+    x.putImageData(id, 0, 0); return { url: c.toDataURL("image/png"), cut: true };
+  },
+  soft(c) {   // 剪不准时：边缘柔和渐隐的椭圆
+    const w = c.width, h = c.height, x = c.getContext("2d"); x.globalCompositeOperation = "destination-in";
+    const g = x.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .3, w / 2, h / 2, Math.max(w, h) * .55); g.addColorStop(0, "rgba(0,0,0,1)"); g.addColorStop(.75, "rgba(0,0,0,.85)"); g.addColorStop(1, "rgba(0,0,0,0)");
+    x.fillStyle = g; x.fillRect(0, 0, w, h); return { url: c.toDataURL("image/png"), cut: false };
+  }
+};
+
 function init() {
   Cls.init();
+  Music.arm();
   $("#s-cover").style.backgroundImage = `url(${ASSETS.cover})`;
   document.body.classList.toggle("py-on", Lang.py); document.body.classList.toggle("en-on", Lang.en);
-  $$("#langBar .tg").forEach(b => b.classList.toggle("on", !!Lang[b.dataset.lang])); applyI18n();
+  $$("#langBar .tg[data-lang]").forEach(b => b.classList.toggle("on", !!Lang[b.dataset.lang])); applyI18n();
   Cloud.setStatus(Cloud.on ? "ing" : "off");
   const ses = Store.session();
   if (sessionStorage.getItem(CONFIG.STORAGE_KEY + "_t") === "1" && ses.teacher) { S.teacher = true; go("teacher"); return; }
@@ -4017,10 +4158,16 @@ const Safety = (() => {
     if (hit(ABUSE_ZH, c) || hit(ABUSE_EN, s)) return { level: 3, category: "harmed" };
     if (hit(SELF_STRONG_ZH, c) || hit(SELF_STRONG_EN, s)) return { level: 3, category: "selfharm" };
     const academic = ACADEMIC.test(s) || ACADEMIC.test(c);
-    if (SELF_MENTION.test(s) || SELF_MENTION_C.test(c)) {
-      if (academic && !/我(想|要|会|打算|准备)|(^|[^a-z])(i|i'?m) (want|wanna|will|plan)/.test(s)) { /* 文学分析中的客观提及 → 安全 */ }
-      else return { level: 3, category: "selfharm", soft: !FIRST.test(s) };
-    }
+    /* 老师要求：只要出现安全关键词就触发关怀提示（含打错字、拼音、重复字母，例如 "i wan to die"、"diiie"、"zisha"）。
+       提示是关怀、非惩罚性的；日常夸张说法（笑死、累死）与正面词语（长生不死、起死回生）除外。 */
+    if (SELF_MENTION.test(s) || SELF_MENTION_C.test(c)) return { level: 3, category: "selfharm", soft: !FIRST.test(s) };
+    const sq = s.replace(/([a-z])\1+/g, "$1").replace(/never die[sd]?|after death|from (the )?dead|from death|life and death|dead ?sea|death ?valey|die ?out/g, " ");
+    if (/(^|[^a-z])(dy?ing|die[sd]?|to dye|kil(s|ed|ing)?|suicid\w*|sucid\w*|suicde|self ?harm|cut(ing)? my ?self|hurt(ing)? my ?self|end(ing)? my life|kms|kys|unalive|dead|death)([^a-z]|$)/.test(sq))
+      return { level: 3, category: /kil|kys/.test(sq) ? "threat" : "selfharm", soft: true };
+    const ck = c.replace(HYPER, "");
+    if (/死|自尽|上吊|安眠药|伤害自己|轻生|跳楼|割腕|自残/.test(ck)) return { level: 3, category: "selfharm", soft: true };
+    if (/杀(?!菌|手锏|毒软件)/.test(ck)) return { level: 3, category: "threat", soft: true };
+    if (/zisha|buxianghuo|woxiangsi|xiangsile|qusiba|wodesi/.test(c)) return { level: 3, category: "selfharm", soft: true };
     if (hit(SELF_SOFT_ZH, c) || hit(SELF_SOFT_EN, s)) return { level: 3, category: "distress", soft: true };
     /* 只写了「死」「杀」「die」这类字、没有其他内容：无法判断意思 → 以关怀方式提醒（不责备），并请老师留意 */
     const cz = c.replace(HYPER, "").replace(/[a-z0-9]/g, "");
@@ -4276,6 +4423,105 @@ const ClassView = {
     }
   }
 };
+</script>
+<script>
+/* ================================================================
+   背景音乐：用程序即时生成的古风音乐（不需要音乐档案，没有版权问题）
+   · 古筝拨弦（Karplus-Strong 拨弦合成）弹五声音阶旋律
+   · 柔和的长音铺底 + 偶尔的风铃
+   · 右上角「♪」按钮开关；浏览器规定要先点一下画面才能播放声音
+   ================================================================ */
+const Music = (() => {
+  let ctx = null, master = null, verb = null, on = false, timer = null, nextT = 0, step = 0, bar = 0, phrase = [], plucks = {};
+  const BPM = 66, BEAT = 60 / BPM, SUB = BEAT / 2;            // 八分音符为一步
+  const SCALE = [0, 2, 4, 7, 9];                               // 宫商角徵羽（D 调）
+  const ROOT = 50;                                             // D3
+  const CHORDS = [[38, 45], [35, 42], [43, 50], [45, 52]];     // 低音长音：D、B、G、A
+  const want = () => { try { return localStorage.getItem(CONFIG.STORAGE_KEY + "_music") !== "0"; } catch (e) { return true; } };
+  const save = v => { try { localStorage.setItem(CONFIG.STORAGE_KEY + "_music", v ? "1" : "0"); } catch (e) { } };
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  const noteOf = deg => { const o = Math.floor(deg / 5), i = ((deg % 5) + 5) % 5; return ROOT + 12 + o * 12 + SCALE[i]; };
+
+  function makeReverb() {
+    const len = ctx.sampleRate * 3.2, b = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
+    const cv = ctx.createConvolver(); cv.buffer = b; return cv;
+  }
+  /* 古筝拨弦音色：Karplus-Strong，预先算好每个音 */
+  function pluckBuf(m, bright = .5) {
+    if (plucks[m + ":" + bright]) return plucks[m + ":" + bright];
+    const sr = ctx.sampleRate, N = Math.round(sr / hz(m)), len = Math.round(sr * 2.6), b = ctx.createBuffer(1, len, sr), d = b.getChannelData(0);
+    const ring = new Float32Array(N); for (let i = 0; i < N; i++) ring[i] = (Math.random() * 2 - 1) * (i < N * bright ? 1 : .4);
+    let p = 0, decay = .996 - Math.max(0, (m - 60)) * .0004;
+    for (let i = 0; i < len; i++) { const a = ring[p], nb = ring[(p + 1) % N]; d[i] = a; ring[p] = (a + nb) * .5 * decay; p = (p + 1) % N; }
+    for (let i = 0; i < 200; i++) d[i] *= i / 200;
+    return (plucks[m + ":" + bright] = b);
+  }
+  function pluck(m, t, vel = .5, slide = 0) {
+    const s = ctx.createBufferSource(); s.buffer = pluckBuf(m, .55); const g = ctx.createGain(), f = ctx.createBiquadFilter();
+    f.type = "lowpass"; f.frequency.value = 3200; g.gain.value = vel;
+    if (slide) { s.playbackRate.setValueAtTime(Math.pow(2, -slide / 12), t); s.playbackRate.linearRampToValueAtTime(1, t + .18); }   // 古筝的「滑音」
+    s.connect(f); f.connect(g); g.connect(master); g.connect(verb.input);
+    s.start(t); s.stop(t + 2.6);
+  }
+  function pad(notes, t, dur) {
+    notes.forEach((m, k) => [-.06, .06].forEach(det => {
+      const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+      o.type = k ? "sine" : "triangle"; o.frequency.value = hz(m) * Math.pow(2, det / 12);
+      f.type = "lowpass"; f.frequency.value = 700;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + 2.2); g.gain.setValueAtTime(.05, t + dur - 2.4); g.gain.linearRampToValueAtTime(0, t + dur);
+      o.connect(f); f.connect(g); g.connect(master); g.connect(verb.input); o.start(t); o.stop(t + dur + .1);
+    }));
+  }
+  function chime(t) {
+    for (let i = 0; i < 3; i++) { const m = noteOf(10 + Math.floor(Math.random() * 6)), o = ctx.createOscillator(), g = ctx.createGain(), tt = t + i * .23;
+      o.type = "sine"; o.frequency.value = hz(m); g.gain.setValueAtTime(0, tt); g.gain.linearRampToValueAtTime(.035, tt + .01); g.gain.exponentialRampToValueAtTime(.0001, tt + 2.4);
+      o.connect(g); g.connect(verb.input); o.start(tt); o.stop(tt + 2.5); }
+  }
+  /* 生成一句旋律：在五声音阶上行走，句尾落在稳定的音上 */
+  function newPhrase() {
+    const ph = []; let d = 4 + Math.floor(Math.random() * 3);
+    const rhythm = [[2, 1, 1, 2, 2], [1, 1, 2, 1, 1, 2], [3, 1, 2, 2], [2, 2, 1, 1, 2], [1, 1, 1, 1, 2, 2]][Math.floor(Math.random() * 5)];
+    rhythm.forEach((len, i) => { d += [-2, -1, -1, 1, 1, 2, 0][Math.floor(Math.random() * 7)]; d = Math.max(1, Math.min(9, d)); if (i === rhythm.length - 1) d = [0, 2, 5, 7][Math.floor(Math.random() * 4)] + 0; ph.push({ d, len }); });
+    ph.push({ rest: 4 + Math.floor(Math.random() * 4) }); return ph;
+  }
+  let pi = 0, wait = 0;
+  function schedule() {
+    while (nextT < ctx.currentTime + .6) {
+      if (step % 16 === 0) { if (bar % 2 === 0) pad(CHORDS[(bar / 2) % CHORDS.length], nextT, SUB * 32 + .5); bar++; }
+      if (step % 16 === 0) pluck(CHORDS[((bar - 1) >> 1) % CHORDS.length][0] + 12, nextT, .32);           // 低音拨弦
+      if (step % 16 === 8 && Math.random() < .5) pluck(CHORDS[((bar - 1) >> 1) % CHORDS.length][1] + 12, nextT, .2);
+      if (wait > 0) wait--;
+      else { if (!phrase.length || pi >= phrase.length) { phrase = newPhrase(); pi = 0; }
+        const n = phrase[pi++];
+        if (n.rest) wait = n.rest - 1;
+        else { pluck(noteOf(n.d), nextT, .42 + Math.random() * .12, Math.random() < .18 ? 2 : 0); if (Math.random() < .12) pluck(noteOf(n.d) + 12, nextT + SUB * .5, .15); wait = n.len - 1; } }
+      if (step % 64 === 40 && Math.random() < .6) chime(nextT);
+      nextT += SUB; step++;
+    }
+  }
+  function start() {
+    if (on) return;
+    try {
+      if (!ctx) { ctx = new (window.AudioContext || window.webkitAudioContext)(); master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+        const cv = makeReverb(), vg = ctx.createGain(); vg.gain.value = .55; cv.connect(vg); vg.connect(master); verb = { input: cv }; }
+      if (ctx.state === "suspended") ctx.resume();
+      on = true; nextT = ctx.currentTime + .1; master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setTargetAtTime(.5, ctx.currentTime, .8);
+      clearInterval(timer); timer = setInterval(schedule, 120); schedule();
+    } catch (e) { on = false; }
+    ui();
+  }
+  function stop() { on = false; clearInterval(timer); timer = null; if (ctx && master) master.gain.setTargetAtTime(0, ctx.currentTime, .25); ui(); }
+  function ui() { const b = document.getElementById("musicBtn"); if (b) { b.classList.toggle("on", on); b.title = on ? "关闭背景音乐" : "播放背景音乐"; b.setAttribute("aria-pressed", on ? "true" : "false"); } }
+  function toggle() { if (on) { stop(); save(false); } else { save(true); start(); } }
+  /* 浏览器要求：使用者第一次点画面后才能出声 */
+  function arm() {
+    const go1 = () => { document.removeEventListener("pointerdown", go1, true); document.removeEventListener("keydown", go1, true); if (want() && !on && !(S && S.screen === "teacher")) start(); };
+    document.addEventListener("pointerdown", go1, true); document.addEventListener("keydown", go1, true); ui();
+  }
+  document.addEventListener("visibilitychange", () => { if (!ctx) return; if (document.hidden) ctx.suspend(); else if (on) ctx.resume(); });
+  return { start, stop, toggle, arm, get on() { return on; } };
+})();
 </script>
 <script>
 /* ================================================================

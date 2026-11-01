@@ -87,6 +87,8 @@ const Safety = (() => {
     R("\\bno reason to (live|go on)\\b"), R("\\b(i'?d|i would) be better off dead\\b"), R("\\bwish i (was|were) dead\\b"), R("\\bkms\\b"),
   ];
   const SELF_SOFT_EN = [R("\\b(i )?want to disappear\\b"), R("\\bnobody (cares|would care|loves|needs) (about )?me\\b"), R("\\bi'?m (so )?(worthless|useless|a burden)\\b")];
+  /* 日常夸张说法与正面词语，不算伤害（笑死、累死、长生不死……） */
+  const HYPER = R("笑死|累死|热死|冷死|饿死|困死|吓死|气死|烦死|忙死|渴死|痛死|美死|帅死|萌死|丑死|无聊死|死定了|不死|生死|起死回生|死而复生|出生入死|视死如归|不怕死|死亡谷|死海|血统|血缘|血脉|热血|心血|杀手锏|杀菌", "g");
   const SELF_MENTION = R("自杀|轻生|跳楼|割腕|自残|自尽|(^|[^a-z])(suicid(e|al)|self[- ]?harm)([^a-z]|$)");
   const SELF_MENTION_C = R("自杀|轻生|割腕|自残|suicide|selfharm");
 
@@ -150,11 +152,21 @@ const Safety = (() => {
     if (hit(ABUSE_ZH, c) || hit(ABUSE_EN, s)) return { level: 3, category: "harmed" };
     if (hit(SELF_STRONG_ZH, c) || hit(SELF_STRONG_EN, s)) return { level: 3, category: "selfharm" };
     const academic = ACADEMIC.test(s) || ACADEMIC.test(c);
-    if (SELF_MENTION.test(s) || SELF_MENTION_C.test(c)) {
-      if (academic && !/我(想|要|会|打算|准备)|(^|[^a-z])(i|i'?m) (want|wanna|will|plan)/.test(s)) { /* 文学分析中的客观提及 → 安全 */ }
-      else return { level: 3, category: "selfharm", soft: !FIRST.test(s) };
-    }
+    /* 老师要求：只要出现安全关键词就触发关怀提示（含打错字、拼音、重复字母，例如 "i wan to die"、"diiie"、"zisha"）。
+       提示是关怀、非惩罚性的；日常夸张说法（笑死、累死）与正面词语（长生不死、起死回生）除外。 */
+    if (SELF_MENTION.test(s) || SELF_MENTION_C.test(c)) return { level: 3, category: "selfharm", soft: !FIRST.test(s) };
+    const sq = s.replace(/([a-z])\1+/g, "$1").replace(/never die[sd]?|after death|from (the )?dead|from death|life and death|dead ?sea|death ?valey|die ?out/g, " ");
+    if (/(^|[^a-z])(dy?ing|die[sd]?|to dye|kil(s|ed|ing)?|suicid\w*|sucid\w*|suicde|self ?harm|cut(ing)? my ?self|hurt(ing)? my ?self|end(ing)? my life|kms|kys|unalive|dead|death)([^a-z]|$)/.test(sq))
+      return { level: 3, category: /kil|kys/.test(sq) ? "threat" : "selfharm", soft: true };
+    const ck = c.replace(HYPER, "");
+    if (/死|自尽|上吊|安眠药|伤害自己|轻生|跳楼|割腕|自残/.test(ck)) return { level: 3, category: "selfharm", soft: true };
+    if (/杀(?!菌|手锏|毒软件)/.test(ck)) return { level: 3, category: "threat", soft: true };
+    if (/zisha|buxianghuo|woxiangsi|xiangsile|qusiba|wodesi/.test(c)) return { level: 3, category: "selfharm", soft: true };
     if (hit(SELF_SOFT_ZH, c) || hit(SELF_SOFT_EN, s)) return { level: 3, category: "distress", soft: true };
+    /* 只写了「死」「杀」「die」这类字、没有其他内容：无法判断意思 → 以关怀方式提醒（不责备），并请老师留意 */
+    const cz = c.replace(HYPER, "").replace(/[a-z0-9]/g, "");
+    if (/死|杀|自尽|血/.test(cz) && cz.replace(/[死杀血了啊呀吧吗呢的我你他她就要想好去]/g, "").length <= 2 && !/[a-z]{4,}/.test(c.replace(/die|dead|death|kill|killed|killing|me|myself/g, ""))) return { level: 3, category: "distress", soft: true };
+    if (/^[\s\p{P}]*(i'?m |i am |just )?(die|dead|death|kill|kill me|killed|suicide|want to die)[\s\p{P}]*$/u.test(s)) return { level: 3, category: "distress", soft: true };
     // —— 个人资料 ——
     for (const [name, r] of PII) if (r.test(N.spaced)) return { level: 2, category: "privacy", detail: name };
     // —— 第二级 ——
