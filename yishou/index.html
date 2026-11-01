@@ -178,6 +178,15 @@ img{max-width:100%;display:block}
 .safe-warn{border-color:#d98b3a!important;box-shadow:0 0 0 2px rgba(217,139,58,.25)}.safe-care{border-color:#d9b23a!important}
 .care{text-align:center}.care p{margin:8px 0;line-height:1.7}.care-c{font-weight:700;color:#7d1d17}.care-s{font-size:.9rem;color:var(--ink-2)}
 .sf-text{white-space:pre-wrap;background:rgba(255,255,255,.08);padding:6px 8px;border-radius:6px;max-width:360px}
+.cv-wrap h3 small{font-size:.8rem;margin-left:8px}.cv-live{font-size:.85rem;color:#2f7a52;margin:2px 0 8px}.cv-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cv-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}.cv-card{background:rgba(255,255,255,.55);border:1.5px solid var(--paper-3);border-radius:10px;padding:10px 12px}
+.cv-card.me{border-color:#2f7a52;box-shadow:0 0 0 2px rgba(47,122,82,.25)}.cv-card.off{opacity:.6}.cv-card b{font-size:1.05rem;color:#7d1d17}
+.cv-bar{height:7px;border-radius:4px;background:#e2d3ad;margin:6px 0;overflow:hidden}.cv-bar i{display:block;height:100%;background:linear-gradient(90deg,#d9a441,#2f7a52)}
+.cv-row{font-size:.85rem;color:var(--ink-2);margin:3px 0}.cv-pills{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0}.cv-me{font-size:.75rem;background:#2f7a52;color:#fff;border-radius:8px;padding:1px 6px;margin-left:4px}
+.cv-sec{margin-bottom:14px}.cv-sec h4{font-family:var(--f-title);font-weight:400;font-size:1.3rem;color:#7d1d17;margin-bottom:4px}
+.cv-table{width:100%;border-collapse:collapse;font-size:.88rem}.cv-table th,.cv-table td{border:1px solid var(--paper-3);padding:5px 7px;vertical-align:top;text-align:left;white-space:pre-wrap}.cv-table th{background:#f1e2bd}.cv-table tr.me td{background:rgba(47,122,82,.08)}
+.cv-works{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}.cv-work{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:10px;border:1.5px solid var(--paper-3);background:rgba(255,255,255,.55);cursor:pointer}
+.cv-img{width:100%;aspect-ratio:1;display:grid;place-items:center;background:#efe1bf;border-radius:8px;overflow:hidden}.cv-img img{width:100%;height:100%;object-fit:cover}
 .group-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;width:100%;max-width:720px}
 .token{position:relative;padding:16px 6px 12px;border-radius:40px 40px 12px 12px;color:#fff;
   background:radial-gradient(ellipse at 30% 20%,#9fe3d3 0%,var(--jade) 45%,var(--jade-d) 100%);
@@ -703,6 +712,7 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
     <span class="sync-pill hidden" data-sync></span>
     <button class="btn small jade" data-go="dex">📜 神兽图鉴</button>
     <button class="btn small" id="mapLabBtn">🥚 异兽研究所</button>
+    <button class="btn small ghost" data-classview>👥 <span data-t="in">全班情况</span></button>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
@@ -770,6 +780,7 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
     <span class="group-badge" data-badge></span>
     <span class="progress-chip" id="dexProgress"></span>
     <span class="sync-pill hidden" data-sync></span>
+    <button class="btn small ghost" data-classview>👥 <span data-t="in">全班情况</span></button>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
@@ -802,6 +813,7 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
     <div class="brand" data-t="in">异兽创造研究所</div>
     <span class="group-badge" data-badge></span>
     <span class="sync-pill hidden" data-sync></span>
+    <button class="btn small ghost" data-classview>👥 <span data-t="in">全班情况</span></button>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main" id="labMain"></div>
@@ -1379,7 +1391,7 @@ const EGG_SPOTS = [
    - PY_WORDS：多音字、轻声等需要按词语决定读音的情况（优先使用）
    老师修改对话后，如果出现新的字，可在 PY_CHARS 末尾补上「字+拼音」。
    ================================================================ */
-const PY_CHARS = `认rèn 识shí 我wǒ 龙lóng 的de 外wài 形xíng 特tè 点diǎn 哈hā 欢huān 迎yíng 来lái 到dào 世shì 界jiè 是shì 中zhōng 国guó 神shén 话huà 非fēi 常cháng 有yǒu 代dài 表biǎo 性xìng 兽shòu 虽suī 然rán 你nǐ 们men 在zài 现xiàn 实shí 生shēng 活huó 看kàn 不bù 但dàn 一yī 定dìng 对duì 模mó 样yàng 陌mò 吧ba 知zhī 道dào 吗ma 可kě 普pǔ 通tōng 动dòng 物wù 身shēn 体tǐ 结jié 合hé 了le 许xǔ 多duō 鹿lù 角jiǎo 蛇shé 鱼yú 鳞lín 片piàn 鹰yīng 爪zhuǎ 子zi 还hái 像xiàng 牛niú 耳ěr 朵duǒ 能néng 够gòu 腾téng 云yún 驾jià 雾wù 呼hū 风fēng 唤huàn 雨yǔ 古gǔ 传chuán 说shuō 掌zhǎng 管guǎn 着zhe 水shuǐ 因yīn 此cǐ 人rén 祈qí 求qiú 带dài 调tiáo 顺shùn 根gēn 据jù 介jiè 绍shào 以yǐ 下xià 哪nǎ 项xiàng 最zuì 符fú 马mǎ 翅chì 膀bǎng 喷pēn 火huǒ 种zhǒng 如rú 和hé 狮shī 长cháng 尖jiān 四sì 条tiáo 腿tuǐ 坚jiān 硬yìng 壳ké 回huí 想xiǎng 它tā 些xiē 呢ne 没méi 错cuò 上shàng 接jiē 让ràng 告gào 诉sù 同tóng 文wén 化huà 怎zěn 象xiàng 东dōng 西xī 方fāng 征zhēng 重zhòng 要yào 地dì 位wèi 皇huáng 权quán 尊zūn 贵guì 威wēi 帝dì 被bèi 称chēng 为wéi 真zhēn 天tiān 他tā 穿chuān 衣yī 服fú 图tú 案àn 坐zuò 宝bǎo 座zuò 也yě 椅yǐ 除chú 之zhī 吉jí 祥xiáng 力lì 量liàng 相xiāng 信xìn 希xī 望wàng 丰fēng 收shōu 心xīn 目mù 受shòu 敬jìng 过guò 果guǒ 去qù 故gù 事shì 就jiù 会huì 发fā 完wán 全quán 奇qí 幻huàn 描miáo 绘huì 成chéng 凶xiōng 猛měng 邪xié 恶è 具jù 破pò 坏huài 怪guài 巨jù 大dà 锋fēng 利lì 锐ruì 牙yá 齿chǐ 从cóng 嘴zuǐ 里lǐ 出chū 熊xióng 烈liè 袭xí 击jī 村cūn 庄zhuāng 抢qiǎng 夺duó 财cái 甚shèn 至zhì 囚qiú 禁jìn 公gōng 主zhǔ 害hài 怕pà 灾zāi 难nán 而ér 勇yǒng 敢gǎn 骑qí 士shì 或huò 英yīng 雄xióng 则zé 必bì 须xū 与yǔ 搏bó 斗dòu 打dǎ 败bài 拯zhěng 救jiù 胁xié 危wēi 险xiǎn 贪tān 婪lán 鲜xiān 明míng 比bǐ 趣qù 都dōu 叫jiào 作zuò 赋fù 予yǔ 意yì 义yì 却què 当dāng 并bìng 所suǒ 哦o 刚gāng 才cái 差chā 异yì 视shì 敌dí 只zhǐ 殊shū 关guān 答dá 得de 好hǎo 藏cáng 什shén 么me 踪zōng 迹jì 存cún 于yú 影yǐng 早zǎo 已yǐ 融róng 入rù 每měi 逢féng 农nóng 历lì 新xīn 年nián 舞wǔ 演yǎn 躯qū 锣luó 鼓gǔ 喧xuān 统tǒng 建jiàn 筑zhù 饰shì 艺yì 术shù 品pǐn 例lì 袍páo 宫gōng 殿diàn 雕diāo 刻kè 及jí 各gè 装zhuāng 语yǔ 言yán 孩hái 将jiāng 息xī 取qǔ 期qī 间jiān 举jǔ 行xíng 寄jì 托tuō 愿yuàn 其qí 家jiā 找zhǎo 正zhèng 确què 次cì 别bié 忘wàng 背bèi 后hòu 美měi 祝zhù 恭gōng 喜xǐ 经jīng 鉴jiàn 伙huǒ 伴bàn 虎hǔ 跃yuè 容róng 充chōng 满mǎn 气qì 势shì 旺wàng 盛shèng 凤fèng 呈chéng 呀ya 凰huáng 鸟niǎo 拥yōng 华huá 丽lì 羽yǔ 毛máo 优yōu 雅yǎ 姿zī 色sè 彩cǎi 富fù 红hóng 黄huáng 青qīng 等děng 尾wěi 部bù 拖tuō 翎líng 起qǐ 类lèi 百bǎi 围wéi 绕rào 飞fēi 翔xiáng 向xiàng 达dá 听tīng 这zhè 个gè 词cí 覆fù 盖gài 乌wū 龟guī 黑hēi 自zì 己jǐ 标biāo 志zhì 那nà 又yòu 平píng 瑞ruì 室shì 把bǎ 用yòng 女nǚ 纹wén 婚hūn 礼lǐ 使shǐ 幸xìng 福fú 命mìng 束shù 焰yàn 灰huī 烬jìn 延yán 续xù 似sì 很hěn 见jiàn 战zhàn 争zhēng 贫pín 穷qióng 两liǎng 者zhě 任rèn 何hé 太tài 棒bàng 妙miào 处chù 场chǎng 十shí 分fēn 庆qìng 姻yīn 廷tíng 头tóu 运yùn 朝cháo 儿ér 聚jù 集jí 景jǐng 喻yù 德dé 高gāo 众zhòng 仰yǎng 另lìng 麟lín 稀xī 少shǎo 珍zhēn 老lǎo 聪cōng 解jiě 加jiā 探tàn 索suǒ 涅niè 槃pán 磨mó 获huò 麒qí 名míng 巴bā 固gù 画huà 时shí 候hòu 武wǔ 吓xià 情qíng 温wēn 伤shāng 短duǎn 鬃zōng 更gèng 仁rén 慈cí 思sī 爱ài 轻qīng 易yì 走zǒu 路lù 小xiǎo 避bì 开kāi 草cǎo 昆kūn 虫chóng 尚shàng 预yù 兆zhào 即jí 秘mì 独dú 匹pǐ 纯chún 洁jié 寿shòu 瓷cí 器qì 坡pō 客kè 节jié 日rì 白bái 直zhí 流liú 今jīn 族zú 典diǎn 送sòng 门mén 口kǒu 摆bǎi 放fàng 石shí 守shǒu 护hù 园yuán 松sōng 树shù 鹤hè 提tí 献xiàn 吼hǒu 应yīng 该gāi 王wáng 强qiáng 壮zhuàng 肢zhī 颈jǐng 浓nóng 密mì 显xiǎn 母mǔ 仅jǐn 声shēng 响xiǎng 亮liàng 觉jué 严yán 细xì 遇yù 缩suō 进jìn 双shuāng 修xiū 宽kuān 寺sì 庙miào 驱qū 保bǎo 安ān 欧ōu 洲zhōu 章zhāng 盾dùn 牌pái 智zhì 慧huì 负fù 责zé 做zuò 街jiē 热rè 闹nào 商shāng 店diàn 张zhāng 兴xīng 价jià 钱qián 邀yāo 请qǐng 队duì 读dú 书shū 绩jì 旅lǚ 途tú 赛sài 奖jiǎng 兔tù 亦yì 面miàn 待dài 赴fù 采cǎi 式shì 嘿hēi 员yuán 仔zǐ 罩zhào 总zǒng 慢màn 吞tūn 陆lù 缓huǎn 游yóu 快kuài 翼yì 啦la 猜cāi 健jiàn 康kāng 联lián 系xì 曾céng 甲jiǎ 占zhān 卜bǔ 裂liè 尝cháng 试shì 寻xún 问wèn 题tí 切qiè 跑pǎo 骄jiāo 傲ào 停tíng 休xiū 反fǎn 弃qì 努nǔ 前qián 赢yíng 耐nài 持chí 精jīng 懈xiè 寓yù 速sù 度dù 由yóu 久jiǔ 凡fán 困kùn 逃táo 胆dǎn 原yuán 境jìng 辈bèi 适shì 河hé 断duàn 步bù 贬biǎn 醒xǐng 仙xiān 脖bó 丹dān 顶dǐng 皮pí 肤fū 山shān 态tài 份fèn 警jǐng 随suí 注zhù 周zhōu 夜yè 脚jiǎo 抓zhuā 住zhù 块kuài 睡shuì 掉diào 惊jīng 墨mò 立lì 鸡jī 群qún 眼yǎn 闲xián 野yě 悠yōu 限xiàn 制zhì 师shī 学xué 突tū 且qiě 站zhàn 承chéng 载zài 展zhǎn 拘jū 功gōng 线xiàn 再zài 锁suǒ 六liù 散sàn 落luò 碎suì 先xiān 三sān 光guāng 岛dǎo 屿yǔ 球qiú 组zǔ 齐qí 整zhěng 颗kē 查chá 档dàng 往wǎng 创chuàng 造zào 研yán 究jiū 厉lì 理lǐ 闪shǎn 封fēng 印yìn 阁gé 按àn 甩shuǎi 钮niǔ 投tóu 偏piān 灵líng 缠chán 二èr 务wù 某mǒu 环huán 选xuǎn 写xiě 设shè 计jì 参cān 考kǎo 句jù 择zé 指zhǐ 令lìng 本běn 戏xì 连lián 复fù 贴tiē 工gōng 金jīn 蛋dàn 孵fū 交jiāo 海hǎi 记jì 岁suì 月yuè 逝shì 扮bàn 失shī 属shǔ 暗àn 班bān 旋xuán 转zhuǎn 滚gǔn 轮lún 示shì 右yòu 边biān 内nèi 瀑pù 赤chì 林lín 幽yōu 泽zé 翠cuì 竹zhú 谷gǔ 沙shā 窟kū 需xū 闻wén 毁huǐ 灭miè 始shǐ 民mín 户hù 领lǐng 导dǎo 踏tà 较jiào 格gé 惕tì 仍réng 状zhuàng 圆yuán 润rùn 矫jiǎo 盈yíng 颜yán 朱zhū 绿lǜ 深shēn 蓝lán 雪xuě 七qī 波bō 星xīng 辰chén 花huā 型xíng 般bān 巧qiǎo 猫māo 睛jīng 透tòu 变biàn 治zhì 愈yù 控kòng 森sēn 感gǎn 绪xù 未wèi 科kē 技jì 城chéng 市shì 底dǐ 机jī 团tuán 壁bì 仿fǎng 质zhì 朴pǔ 矿kuàng 料liào 斑bān 驳bó 痕hén 插chā 腻nì 缭liáo 梦mèng 氛fēn 笔bǐ 致zhì 绢juàn 籍jí 谱pǔ 米mǐ 旧jiù 纸zhǐ 勾gōu 勒lè 淡dàn 供gōng 删shān 包bāo 单dān 友yǒu 号hào 含hán 启qǐ 善shàn 址zhǐ 堂táng 填tián 套tào 字zì 尽jìn 左zuǒ 扫sǎo 拼pīn 挥huī 换huàn 支zhī 改gǎi 教jiào 数shù 无wú 暂zàn 栏lán 校xiào 检jiǎn 段duàn 法fǎ 电diàn 留liú 码mǎ 私sī 端duān 给gěi 继jì 维wéi 翻fān 证zhèng 译yì 诞dàn 课kè 谈tán 谢xiè 资zī 超chāo 跟gēn 辅fǔ 输shū 返fǎn 邮yóu 闭bì 隐yǐn 音yīn`;
+const PY_CHARS = `认rèn 识shí 我wǒ 龙lóng 的de 外wài 形xíng 特tè 点diǎn 哈hā 欢huān 迎yíng 来lái 到dào 世shì 界jiè 是shì 中zhōng 国guó 神shén 话huà 非fēi 常cháng 有yǒu 代dài 表biǎo 性xìng 兽shòu 虽suī 然rán 你nǐ 们men 在zài 现xiàn 实shí 生shēng 活huó 看kàn 不bù 但dàn 一yī 定dìng 对duì 模mó 样yàng 陌mò 吧ba 知zhī 道dào 吗ma 可kě 普pǔ 通tōng 动dòng 物wù 身shēn 体tǐ 结jié 合hé 了le 许xǔ 多duō 鹿lù 角jiǎo 蛇shé 鱼yú 鳞lín 片piàn 鹰yīng 爪zhuǎ 子zi 还hái 像xiàng 牛niú 耳ěr 朵duǒ 能néng 够gòu 腾téng 云yún 驾jià 雾wù 呼hū 风fēng 唤huàn 雨yǔ 古gǔ 传chuán 说shuō 掌zhǎng 管guǎn 着zhe 水shuǐ 因yīn 此cǐ 人rén 祈qí 求qiú 带dài 调tiáo 顺shùn 根gēn 据jù 介jiè 绍shào 以yǐ 下xià 哪nǎ 项xiàng 最zuì 符fú 马mǎ 翅chì 膀bǎng 喷pēn 火huǒ 种zhǒng 如rú 和hé 狮shī 长cháng 尖jiān 四sì 条tiáo 腿tuǐ 坚jiān 硬yìng 壳ké 回huí 想xiǎng 它tā 些xiē 呢ne 没méi 错cuò 上shàng 接jiē 让ràng 告gào 诉sù 同tóng 文wén 化huà 怎zěn 象xiàng 东dōng 西xī 方fāng 征zhēng 重zhòng 要yào 地dì 位wèi 皇huáng 权quán 尊zūn 贵guì 威wēi 帝dì 被bèi 称chēng 为wéi 真zhēn 天tiān 他tā 穿chuān 衣yī 服fú 图tú 案àn 坐zuò 宝bǎo 座zuò 也yě 椅yǐ 除chú 之zhī 吉jí 祥xiáng 力lì 量liàng 相xiāng 信xìn 希xī 望wàng 丰fēng 收shōu 心xīn 目mù 受shòu 敬jìng 过guò 果guǒ 去qù 故gù 事shì 就jiù 会huì 发fā 完wán 全quán 奇qí 幻huàn 描miáo 绘huì 成chéng 凶xiōng 猛měng 邪xié 恶è 具jù 破pò 坏huài 怪guài 巨jù 大dà 锋fēng 利lì 锐ruì 牙yá 齿chǐ 从cóng 嘴zuǐ 里lǐ 出chū 熊xióng 烈liè 袭xí 击jī 村cūn 庄zhuāng 抢qiǎng 夺duó 财cái 甚shèn 至zhì 囚qiú 禁jìn 公gōng 主zhǔ 害hài 怕pà 灾zāi 难nán 而ér 勇yǒng 敢gǎn 骑qí 士shì 或huò 英yīng 雄xióng 则zé 必bì 须xū 与yǔ 搏bó 斗dòu 打dǎ 败bài 拯zhěng 救jiù 胁xié 危wēi 险xiǎn 贪tān 婪lán 鲜xiān 明míng 比bǐ 趣qù 都dōu 叫jiào 作zuò 赋fù 予yǔ 意yì 义yì 却què 当dāng 并bìng 所suǒ 哦o 刚gāng 才cái 差chā 异yì 视shì 敌dí 只zhǐ 殊shū 关guān 答dá 得de 好hǎo 藏cáng 什shén 么me 踪zōng 迹jì 存cún 于yú 影yǐng 早zǎo 已yǐ 融róng 入rù 每měi 逢féng 农nóng 历lì 新xīn 年nián 舞wǔ 演yǎn 躯qū 锣luó 鼓gǔ 喧xuān 统tǒng 建jiàn 筑zhù 饰shì 艺yì 术shù 品pǐn 例lì 袍páo 宫gōng 殿diàn 雕diāo 刻kè 及jí 各gè 装zhuāng 语yǔ 言yán 孩hái 将jiāng 息xī 取qǔ 期qī 间jiān 举jǔ 行xíng 寄jì 托tuō 愿yuàn 其qí 家jiā 找zhǎo 正zhèng 确què 次cì 别bié 忘wàng 背bèi 后hòu 美měi 祝zhù 恭gōng 喜xǐ 经jīng 鉴jiàn 伙huǒ 伴bàn 虎hǔ 跃yuè 容róng 充chōng 满mǎn 气qì 势shì 旺wàng 盛shèng 凤fèng 呈chéng 呀ya 凰huáng 鸟niǎo 拥yōng 华huá 丽lì 羽yǔ 毛máo 优yōu 雅yǎ 姿zī 色sè 彩cǎi 富fù 红hóng 黄huáng 青qīng 等děng 尾wěi 部bù 拖tuō 翎líng 起qǐ 类lèi 百bǎi 围wéi 绕rào 飞fēi 翔xiáng 向xiàng 达dá 听tīng 这zhè 个gè 词cí 覆fù 盖gài 乌wū 龟guī 黑hēi 自zì 己jǐ 标biāo 志zhì 那nà 又yòu 平píng 瑞ruì 室shì 把bǎ 用yòng 女nǚ 纹wén 婚hūn 礼lǐ 使shǐ 幸xìng 福fú 命mìng 束shù 焰yàn 灰huī 烬jìn 延yán 续xù 似sì 很hěn 见jiàn 战zhàn 争zhēng 贫pín 穷qióng 两liǎng 者zhě 任rèn 何hé 太tài 棒bàng 妙miào 处chù 场chǎng 十shí 分fēn 庆qìng 姻yīn 廷tíng 头tóu 运yùn 朝cháo 儿ér 聚jù 集jí 景jǐng 喻yù 德dé 高gāo 众zhòng 仰yǎng 另lìng 麟lín 稀xī 少shǎo 珍zhēn 老lǎo 聪cōng 解jiě 加jiā 探tàn 索suǒ 涅niè 槃pán 磨mó 获huò 麒qí 名míng 巴bā 固gù 画huà 时shí 候hòu 武wǔ 吓xià 情qíng 温wēn 伤shāng 短duǎn 鬃zōng 更gèng 仁rén 慈cí 思sī 爱ài 轻qīng 易yì 走zǒu 路lù 小xiǎo 避bì 开kāi 草cǎo 昆kūn 虫chóng 尚shàng 预yù 兆zhào 即jí 秘mì 独dú 匹pǐ 纯chún 洁jié 寿shòu 瓷cí 器qì 坡pō 客kè 节jié 日rì 白bái 直zhí 流liú 今jīn 族zú 典diǎn 送sòng 门mén 口kǒu 摆bǎi 放fàng 石shí 守shǒu 护hù 园yuán 松sōng 树shù 鹤hè 提tí 献xiàn 吼hǒu 应yīng 该gāi 王wáng 强qiáng 壮zhuàng 肢zhī 颈jǐng 浓nóng 密mì 显xiǎn 母mǔ 仅jǐn 声shēng 响xiǎng 亮liàng 觉jué 严yán 细xì 遇yù 缩suō 进jìn 双shuāng 修xiū 宽kuān 寺sì 庙miào 驱qū 保bǎo 安ān 欧ōu 洲zhōu 章zhāng 盾dùn 牌pái 智zhì 慧huì 负fù 责zé 做zuò 街jiē 热rè 闹nào 商shāng 店diàn 张zhāng 兴xīng 价jià 钱qián 邀yāo 请qǐng 队duì 读dú 书shū 绩jì 旅lǚ 途tú 赛sài 奖jiǎng 兔tù 亦yì 面miàn 待dài 赴fù 采cǎi 式shì 嘿hēi 员yuán 仔zǐ 罩zhào 总zǒng 慢màn 吞tūn 陆lù 缓huǎn 游yóu 快kuài 翼yì 啦la 猜cāi 健jiàn 康kāng 联lián 系xì 曾céng 甲jiǎ 占zhān 卜bǔ 裂liè 尝cháng 试shì 寻xún 问wèn 题tí 切qiè 跑pǎo 骄jiāo 傲ào 停tíng 休xiū 反fǎn 弃qì 努nǔ 前qián 赢yíng 耐nài 持chí 精jīng 懈xiè 寓yù 速sù 度dù 由yóu 久jiǔ 凡fán 困kùn 逃táo 胆dǎn 原yuán 境jìng 辈bèi 适shì 河hé 断duàn 步bù 贬biǎn 醒xǐng 仙xiān 脖bó 丹dān 顶dǐng 皮pí 肤fū 山shān 态tài 份fèn 警jǐng 随suí 注zhù 周zhōu 夜yè 脚jiǎo 抓zhuā 住zhù 块kuài 睡shuì 掉diào 惊jīng 墨mò 立lì 鸡jī 群qún 眼yǎn 闲xián 野yě 悠yōu 限xiàn 制zhì 师shī 学xué 突tū 且qiě 站zhàn 承chéng 载zài 展zhǎn 拘jū 功gōng 线xiàn 再zài 锁suǒ 六liù 散sàn 落luò 碎suì 先xiān 三sān 光guāng 岛dǎo 屿yǔ 球qiú 组zǔ 齐qí 整zhěng 颗kē 查chá 档dàng 往wǎng 创chuàng 造zào 研yán 究jiū 厉lì 理lǐ 闪shǎn 封fēng 印yìn 阁gé 按àn 甩shuǎi 钮niǔ 投tóu 偏piān 灵líng 缠chán 二èr 务wù 某mǒu 环huán 选xuǎn 写xiě 设shè 计jì 参cān 考kǎo 句jù 择zé 指zhǐ 令lìng 本běn 戏xì 连lián 复fù 贴tiē 工gōng 金jīn 蛋dàn 孵fū 交jiāo 海hǎi 记jì 岁suì 月yuè 逝shì 扮bàn 失shī 属shǔ 暗àn 班bān 旋xuán 转zhuǎn 滚gǔn 轮lún 示shì 右yòu 边biān 内nèi 瀑pù 赤chì 林lín 幽yōu 泽zé 翠cuì 竹zhú 谷gǔ 沙shā 窟kū 需xū 闻wén 毁huǐ 灭miè 始shǐ 民mín 户hù 领lǐng 导dǎo 踏tà 较jiào 格gé 惕tì 仍réng 状zhuàng 圆yuán 润rùn 矫jiǎo 盈yíng 颜yán 朱zhū 绿lǜ 深shēn 蓝lán 雪xuě 七qī 波bō 星xīng 辰chén 花huā 型xíng 般bān 巧qiǎo 猫māo 睛jīng 透tòu 变biàn 治zhì 愈yù 控kòng 森sēn 感gǎn 绪xù 未wèi 科kē 技jì 城chéng 市shì 底dǐ 机jī 团tuán 壁bì 仿fǎng 质zhì 朴pǔ 矿kuàng 料liào 斑bān 驳bó 痕hén 插chā 腻nì 缭liáo 梦mèng 氛fēn 笔bǐ 致zhì 绢juàn 籍jí 谱pǔ 米mǐ 旧jiù 纸zhǐ 勾gōu 勒lè 淡dàn 供gōng 删shān 包bāo 单dān 友yǒu 号hào 含hán 启qǐ 善shàn 址zhǐ 堂táng 填tián 套tào 字zì 尽jìn 左zuǒ 扫sǎo 拼pīn 挥huī 换huàn 支zhī 改gǎi 教jiào 数shù 无wú 暂zàn 栏lán 校xiào 检jiǎn 段duàn 法fǎ 电diàn 留liú 码mǎ 私sī 端duān 给gěi 继jì 维wéi 翻fān 证zhèng 译yì 诞dàn 课kè 谈tán 谢xiè 资zī 超chāo 跟gēn 辅fǔ 输shū 返fǎn 邮yóu 闭bì 隐yǐn 音yīn 况kuàng 台tái 备bèi 监jiān 览lǎn`;
 const PY_WORDS = {"尽快":"jǐn kuài","教人":"jiāo rén","处理":"chǔ lǐ","为止":"wéi zhǐ","朝神兽":"cháo shén shòu","一个":"yí gè","一下":"yí xià",
   "强调":"qiáng diào", "头上长角":"tóu shàng zhǎng jiǎo", "散落":"sàn luò", "长命百岁":"cháng mìng bǎi suì",
   "天子":"tiān zǐ", "望子成龙":"wàng zǐ chéng lóng", "麒麟送子":"qí lín sòng zǐ",
@@ -2054,7 +2066,22 @@ Object.assign(EN, {
   "如果你现在有危险，请马上告诉身边的大人。": "If you are in danger right now, tell an adult near you straight away.",
   "我明白了": "I understand",
   "有一栏的内容需要先跟老师谈一谈，暂时不能生成指令。": "One of the boxes needs a chat with your teacher first, so the prompt cannot be made yet.",
-  "有一栏需要修改用语后才能继续。": "Please change the wording in one of the boxes before you continue."
+  "有一栏需要修改用语后才能继续。": "Please change the wording in one of the boxes before you continue.",
+  "全班情况": "Whole class",
+  "实时更新中": "Updating live",
+  "暂时连不上云端，只显示这台设备的资料": "Cannot reach the cloud right now; showing this device only",
+  "单机模式：只显示这台设备的资料": "This device only",
+  "各组进度": "Group progress",
+  "线索整理表": "Clue tables",
+  "异兽作品": "Creations",
+  "我们": "Us",
+  "尚未进入": "Not started",
+  "答对": "Correct",
+  "整张地图已解锁": "Whole map unlocked",
+  "已提交异兽作品": "Creation submitted",
+  "小组": "Group",
+  "还没有小组填写线索整理表。": "No group has filled in the clue table yet.",
+  "还没有小组提交异兽作品。": "No group has submitted a creation yet."
 });
 </script>
 <script>
@@ -2438,6 +2465,7 @@ document.addEventListener("click", e => {
   if (lb) { Lang[lb.dataset.lang] = !Lang[lb.dataset.lang]; Lang.save(); refreshLang(); return; }
   const b = e.target.closest("[data-go]"); if (b) { go(b.dataset.go); return; }
   if (e.target.closest("[data-menu]")) openMenu();
+  if (e.target.closest("[data-classview]")) ClassView.open();
 });
 function renderBadges() {
   const g = curGroup(); if (!g) return;
@@ -4145,6 +4173,69 @@ const SafetyUI = {
     $$("[data-sfshow]", m).forEach(b => b.onclick = () => { const key = b.dataset.sfshow, [gid, i] = key.split("|");
       const text = /^r\d+$/.test(i) ? (this.rescan || {})[key] : (groups[gid].safety[+i] || {}).text;
       const cell = document.createElement("div"); cell.className = "sf-text"; cell.textContent = text || ""; b.replaceWith(cell); });
+  }
+};
+</script>
+<script>
+/* ================================================================
+   学生端：全班情况（同一个课堂码的各组进度、线索表、异兽作品，实时更新）
+   只显示已通过安全检测而保存的文字；显示前会再检查一次
+   ================================================================ */
+const ClassView = {
+  es: null, timer: null, groups: {}, tab: "progress",
+  async open() {
+    if (!Cls.valid(Cls.code)) { toast("请先输入课堂码", true); return; }
+    openModal(`<div class="cv-wrap"><h3>👥 ${T("全班情况", false, true)} <small class="muted">${T("课堂码", false, true)} ${esc(Cls.code)}</small></h3>
+      <p class="cv-live" id="cvLive"></p>
+      <div class="cv-tabs">${[["progress", "各组进度"], ["clues", "线索整理表"], ["works", "异兽作品"]].map(([k, z]) => `<button class="btn small ${this.tab === k ? "" : "ghost"}" data-cvt="${k}">${T(z, false, true)}</button>`).join("")}</div>
+      <div id="cvBody"><p class="muted">……</p></div></div>`, { wide: true, re: () => this.open() });
+    $$("[data-cvt]").forEach(b => b.onclick = () => { this.tab = b.dataset.cvt; $$("[data-cvt]").forEach(x => x.classList.toggle("ghost", x !== b)); this.render(); });
+    await this.load(); this.live();
+  },
+  async load() {
+    const res = await loadAllGroups(); this.groups = res.groups || {};
+    const L = $("#cvLive"); if (L) L.innerHTML = Cloud.on ? (res.source === "cloud" ? `☁ ${T("实时更新中", false, true)}` : `⚠ ${T("暂时连不上云端，只显示这台设备的资料", false, true)}`) : `${T("单机模式：只显示这台设备的资料", false, true)}`;
+    this.render();
+  },
+  live() {
+    this.stop();
+    if (Cloud.on && window.EventSource) { try { this.es = new EventSource(Cloud.url()); let t; const f = () => { clearTimeout(t); t = setTimeout(() => this.load(), 500); };
+      this.es.addEventListener("put", f); this.es.addEventListener("patch", f); } catch (e) { this.es = null; } }
+    this.timer = setInterval(() => { if (!$("#cvBody")) { this.stop(); return; } this.load(); }, Cloud.on ? 15000 : 4000);
+  },
+  stop() { if (this.es) { this.es.close(); this.es = null; } clearInterval(this.timer); this.timer = null; },
+  safe(v) { if (!v || typeof v !== "string" || !v.trim()) return ""; return Safety.validateStudentInput(v, { max: 2000 }).level === 1 ? v.trim() : ""; },
+  render() {
+    const box = $("#cvBody"); if (!box) { this.stop(); return; }
+    const me = S.gid, list = CONFIG.GROUPS.map(gid => ({ gid, g: this.groups[gid] || null }));
+    const name = gid => `${GH(gid)}${gid === me ? ` <span class="cv-me">${T("我们", false, true)}</span>` : ""}`;
+    if (this.tab === "progress") {
+      box.innerHTML = `<div class="cv-cards">${list.map(({ gid, g }) => {
+        if (!g) return `<div class="cv-card off"><b>${name(gid)}</b><div class="muted">${T("尚未进入", false, true)}</div></div>`;
+        const mine = animalsOf(gid), cap = mine.filter(id => g.animals[id].captured).length;
+        const solved = mine.reduce((n, id) => n + g.animals[id].q.filter(q => q.solved).length, 0);
+        return `<div class="cv-card${gid === me ? " me" : ""}"><b>${name(gid)}</b>
+          <div class="cv-bar"><i style="width:${cap / 3 * 100}%"></i></div>
+          <div class="cv-row">${T("已收集", false, true)} ${cap}/3 · ${T("答对", false, true)} ${solved}/9</div>
+          <div class="cv-pills">${mine.map(id => `<span class="pill ${g.animals[id].captured ? "done" : g.animals[id].started ? "ing" : "no"}">${T(A(id).name, false, true)}${g.animals[id].captured ? " ✓" : ""}</span>`).join("")}</div>
+          <div class="cv-row">${g.fullMap ? `🗺 ${T("整张地图已解锁", false, true)}` : ""} ${g.creation.submitted ? `🥚 ${T("已提交异兽作品", false, true)}` : ""}</div></div>`;
+      }).join("")}</div>`;
+    } else if (this.tab === "clues") {
+      const cols = [["looks", "外形特点"], ["east", "东方文化含义"], ["west", "西方文化含义（如适用）"], ["life", "现实生活中的运用"], ["idiom", "相关成语 / 故事"]];
+      const blocks = MAP_ORDER.map(id => {
+        const rows = list.filter(({ g }) => g && g.clues && g.clues[id] && cols.some(c => this.safe(g.clues[id][c[0]])));
+        if (!rows.length) return "";
+        return `<div class="cv-sec"><h4>${T(A(id).name, false, true)}</h4><div class="table-scroll"><table class="cv-table"><tr><th>${T("小组", false, true)}</th>${cols.map(c => `<th>${T(c[1], false, true)}</th>`).join("")}</tr>
+          ${rows.map(({ gid, g }) => `<tr class="${gid === me ? "me" : ""}"><td>${name(gid)}</td>${cols.map(c => { const v = this.safe(g.clues[id][c[0]]); return `<td>${v ? TP(v) : '<span class="muted">—</span>'}</td>`; }).join("")}</tr>`).join("")}</table></div></div>`;
+      }).join("");
+      box.innerHTML = blocks || `<p class="muted">${T("还没有小组填写线索整理表。", false, true)}</p>`;
+    } else {
+      const ws = list.filter(({ g }) => g && g.creation && g.creation.submitted);
+      box.innerHTML = ws.length ? `<div class="cv-works">${ws.map(({ gid, g }) => { const cr = g.creation, nm = this.safe(cr.name) || "？";
+        return `<button class="cv-work" data-cvw="${gid}"><div class="cv-img">${cr.image && SAFE_IMG.test(cr.image) ? `<img src="${cr.image}" alt="">` : `<span class="seal">${esc(nm.slice(0, 1))}</span>`}</div><b>${TP(nm)}</b><small>${name(gid)}</small></button>`; }).join("")}</div>`
+        : `<p class="muted">${T("还没有小组提交异兽作品。", false, true)}</p>`;
+      $$("[data-cvw]", box).forEach(b => b.onclick = () => { this.stop(); openArchive(this.groups[b.dataset.cvw]); });
+    }
   }
 };
 </script>
