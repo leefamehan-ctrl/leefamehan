@@ -698,6 +698,20 @@ body.py-on .chip,body.py-on .tr-name{line-height:2.1}
   body{background:#fff}
   #sky,#particles,.clouds,.topbar,.fs-btn,.no-print{display:none !important}
 }
+
+/* ================= 拼音 / 英文：统一加深颜色、加粗（放在最后，覆盖前面的设定） =================
+   1) 深色或图片背景：浅金拼音、白色英文 + 深色描边，任何背景都看得清楚
+   2) 米色纸张背景：深褐拼音、深蓝英文                                                      */
+rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424,0 0 3px #0b1424,0 1px 2px #0b1424;font-size:.6em!important}
+.en{font-weight:700!important;color:#ffffff!important;text-shadow:0 0 2px #0b1424,0 0 4px #0b1424,0 1px 3px #0b1424;opacity:1!important}
+:is(.scroll,.modal-box,.m3-card,.m3-lbl.beast,.chip,.style-opt,.rm-p,.cv-card,.roster,.feedback,.tip,.safe-msg,.btn:not(.jade):not(.red),.ra span,.prompt-box,.trait-row,.archive,.egg-label.light) rt{color:#8a3a00!important;text-shadow:none}
+:is(.scroll,.modal-box,.m3-card,.m3-lbl.beast,.chip,.style-opt,.rm-p,.cv-card,.roster,.feedback,.tip,.safe-msg,.btn:not(.jade):not(.red),.ra span,.prompt-box,.trait-row,.archive) .en{color:#16305c!important;text-shadow:none}
+/* 纸张里的深色元件（选项按钮、选中的标签、深色面板）再换回浅色 */
+:is(.opt,.chip.on,.style-opt.on,.btn.jade,.btn.red,.pill,.seal,.panel-dark,.dlg-node,.lang-tg .tg.on) rt{color:#ffe08a!important;text-shadow:0 0 2px #0b1424,0 1px 2px #0b1424}
+:is(.opt,.chip.on,.style-opt.on,.btn.jade,.btn.red,.pill,.panel-dark,.lang-tg .tg.on) .en{color:#ffffff!important;text-shadow:0 0 2px #0b1424,0 1px 3px #0b1424}
+.btn.ghost:not(.jade):not(.red) rt{color:#ffe08a!important;text-shadow:0 0 2px #0b1424,0 1px 2px #0b1424}.btn.ghost:not(.jade):not(.red) .en{color:#fff!important;text-shadow:0 0 2px #0b1424,0 1px 3px #0b1424}
+.modal-box .btn.ghost:not(.jade):not(.red) rt{color:#8a3a00!important;text-shadow:none}.modal-box .btn.ghost:not(.jade):not(.red) .en{color:#16305c!important;text-shadow:none}
+.en.in{margin-left:6px}
 </style>
 </head>
 <body>
