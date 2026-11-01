@@ -712,6 +712,33 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
 .btn.ghost:not(.jade):not(.red) rt{color:#ffe08a!important;text-shadow:0 0 2px #0b1424,0 1px 2px #0b1424}.btn.ghost:not(.jade):not(.red) .en{color:#fff!important;text-shadow:0 0 2px #0b1424,0 1px 3px #0b1424}
 .modal-box .btn.ghost:not(.jade):not(.red) rt{color:#8a3a00!important;text-shadow:none}.modal-box .btn.ghost:not(.jade):not(.red) .en{color:#16305c!important;text-shadow:none}
 .en.in{margin-left:6px}
+
+/* ================= 上方工具列：电脑 / 平板都维持一行 ================= */
+@media (min-width:641px){
+  .topbar{flex-wrap:nowrap;padding-right:200px;gap:8px}
+  .topbar>*{flex-shrink:0}
+  .topbar .brand{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .topbar .group-badge rt,.topbar .group-badge .en{display:none!important}
+  #langBar{right:58px}#langBar .tg{padding:5px 10px}
+}
+@media (min-width:641px) and (max-width:1320px){
+  .topbar .brand{font-size:1.2rem;letter-spacing:1px}
+  .topbar .btn.small{padding:5px 18px;font-size:.84rem;letter-spacing:0}
+  .topbar .progress-chip{font-size:.84rem;padding:3px 10px}
+  .topbar .group-badge{font-size:.86rem}
+  .topbar .sync-pill{width:28px;height:24px;padding:0;overflow:hidden;white-space:nowrap;text-indent:0;text-align:center;line-height:22px;font-size:0}
+  .topbar .sync-pill::before{content:"☁";font-size:.9rem}
+  .topbar .btn.small .en{display:none!important}
+}
+@media (min-width:641px) and (max-width:1100px){
+  .topbar .brand{font-size:1rem;letter-spacing:0}
+  .topbar .btn.small{padding:4px 10px;font-size:.78rem}
+  .topbar .btn.small::before,.topbar .btn.small::after{display:none}
+  .topbar .group-badge{padding:3px 10px 3px 3px;font-size:.8rem}
+  .topbar .progress-chip{font-size:.78rem;padding:3px 8px}
+  .topbar{padding-left:10px;padding-right:172px;gap:6px}
+  #langBar{right:52px;gap:2px}#langBar .tg{padding:4px 8px;font-size:.78rem}#langBar .tg.mus{min-width:28px;font-size:14px}
+}
 </style>
 </head>
 <body>
@@ -2573,7 +2600,7 @@ document.addEventListener("click", e => {
 });
 function renderBadges() {
   const g = curGroup(); if (!g) return;
-  const html = GH(g.groupId);
+  const html = esc(GZ(g.groupId));   // 小组名称只显示中文（不加拼音、英文），节省上方空间
   $$("[data-badge]").concat([$("#mapBadge")]).forEach(b => b && (b.innerHTML = html));
 }
 const capturedCount = g => animalsOf(g.groupId).filter(id => g.animals[id].captured).length;
