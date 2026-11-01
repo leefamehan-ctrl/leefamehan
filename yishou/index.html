@@ -2337,12 +2337,19 @@ const Cloud = {
     if (!this.on) return;
     clearTimeout(this.timers[g.groupId]);
     this.setStatus("ing");
-    this.timers[g.groupId] = setTimeout(() => this.push(g), 700);
+    this.timers[g.groupId] = setTimeout(() => this.push(g), 1500);
   },
+  /* 上传：只送出资料本身；图片只有改变时才上传一次（节省免费流量） */
+  imgSent: {},
   async push(g) {
     try {
-      const r = await fetch(this.url("/" + encodeURIComponent(g.groupId)), { method: "PUT", body: JSON.stringify(g) });
+      const gid = g.groupId, img = (g.creation && g.creation.image) || "", h = img ? img.length + ":" + img.slice(-48) : "", body = {};
+      Object.keys(g).forEach(k => { if (k !== "creation") body[k] = g[k]; });
+      Object.keys(g.creation || {}).forEach(k => { if (k !== "image") body["creation/" + k] = g.creation[k]; });
+      if (this.imgSent[gid] !== h) body["creation/image"] = img;
+      const r = await fetch(this.url("/" + encodeURIComponent(gid)), { method: "PATCH", body: JSON.stringify(body) });
       if (!r.ok) throw new Error("HTTP " + r.status);
+      this.imgSent[gid] = h;
       this.setStatus("ok");
     } catch (e) {
       this.setStatus("err", String(e));
@@ -2363,6 +2370,32 @@ const Cloud = {
     const d = await r.json();
     return d ? normalizeGroup(d, gid) : null;
   },
+  /* 实时镜像：连上一次后，之后只接收改变的部分（不会每次重新下载全班资料） */
+  tree: null, ready: false, subs: new Set(),
+  setPath(tree, path, val) {
+    const ks = String(path || "/").split("/").filter(Boolean);
+    if (!ks.length) return val;
+    const root = tree && typeof tree === "object" ? tree : {}; let o = root;
+    ks.slice(0, -1).forEach(k => { if (!o[k] || typeof o[k] !== "object") o[k] = {}; o = o[k]; });
+    const last = ks[ks.length - 1]; if (val === null) delete o[last]; else o[last] = val;
+    return root;
+  },
+  watch(cb) {
+    this.subs.add(cb);
+    if (!this.es && this.on && window.EventSource) {
+      try {
+        this.tree = null; this.ready = false; this.es = new EventSource(this.url());
+        let t; const fire = () => { clearTimeout(t); t = setTimeout(() => this.subs.forEach(f => { try { f(); } catch (e) { } }), 300); };
+        this.es.addEventListener("put", e => { try { const d = JSON.parse(e.data); this.tree = this.setPath(this.tree, d.path, d.data); this.ready = true; fire(); } catch (er) { } });
+        this.es.addEventListener("patch", e => { try { const d = JSON.parse(e.data); Object.keys(d.data || {}).forEach(k => { this.tree = this.setPath(this.tree, (d.path === "/" ? "" : d.path) + "/" + k, d.data[k]); }); fire(); } catch (er) { } });
+        this.es.onerror = () => { this.setStatus("err", "实时连接中断，正在重新连接"); };
+      } catch (e) { this.es = null; }
+    } else if (this.ready) setTimeout(cb, 0);
+    return () => { this.subs.delete(cb); if (!this.subs.size) this.unsubscribe(); };
+  },
+  get live() { return !!(this.es && this.es.readyState === 1 && this.ready); },
+  snapshot() { const d = (this.tree && typeof this.tree === "object") ? this.tree : {}, out = {};
+    Object.keys(d).forEach(k => { if (CONFIG.GROUPS.includes(k) && d[k] && typeof d[k] === "object") out[k] = normalizeGroup(d[k], k); }); return out; },
   subscribe(cb) {
     if (!this.on || this.es || !window.EventSource) return;
     try {
@@ -2373,7 +2406,7 @@ const Cloud = {
       this.es.onerror = () => { this.setStatus("err", "实时连接中断"); };
     } catch (e) { /* 浏览器不支持时改用手动刷新 */ }
   },
-  unsubscribe() { if (this.es) { this.es.close(); this.es = null; } }
+  unsubscribe() { if (this.es) { this.es.close(); this.es = null; } this.subs.clear(); this.ready = false; }
 };
 window.addEventListener("online", () => { if (Cloud.on && Cloud.pending && Store.get(Cloud.pending)) Cloud.push(Store.get(Cloud.pending)); });
 
@@ -2381,6 +2414,11 @@ window.addEventListener("online", () => { if (Cloud.on && Cloud.pending && Store
 async function loadAllGroups() {
   const local = Store.reload();
   if (!Cloud.on) return { groups: { ...local }, source: "local" };
+  if (Cloud.live) {
+    const remote = Cloud.snapshot(), out = { ...local };
+    Object.keys(remote).forEach(k => { if (!out[k] || (remote[k].updatedAt || 0) >= (out[k].updatedAt || 0)) out[k] = remote[k]; });
+    return { groups: out, source: "cloud" };
+  }
   try {
     const remote = await Cloud.fetchAll();
     const out = { ...local };
@@ -3356,8 +3394,9 @@ const Teacher = {
   },
   live() {
     Cloud.unsubscribe(); clearInterval(this.timer); this.timer = null;
-    if (Cloud.on) Cloud.subscribe(() => { if (S.screen === "teacher") this.refresh(true); });
-    this.timer = setInterval(() => { if (S.screen === "teacher" && !$("#modal").classList.contains("show")) this.refresh(true); }, Cloud.on ? 20000 : 5000);
+    if (Cloud.on) Cloud.watch(() => { if (S.screen === "teacher") this.refresh(true); });
+    /* 实时连线正常时只靠「改变通知」更新；连线中断或单机模式才定时重新读取 */
+    this.timer = setInterval(() => { if (S.screen === "teacher" && !$("#modal").classList.contains("show") && !Cloud.live) this.refresh(true); }, Cloud.on ? 20000 : 5000);
   },
   /* ---------- 课堂码 ---------- */
   classes() { try { return JSON.parse(LS.get("tclasses", "[]")) || []; } catch (e) { return []; } },
@@ -4182,7 +4221,7 @@ const SafetyUI = {
    只显示已通过安全检测而保存的文字；显示前会再检查一次
    ================================================================ */
 const ClassView = {
-  es: null, timer: null, groups: {}, tab: "progress",
+  unwatch: null, timer: null, groups: {}, tab: "progress",
   async open() {
     if (!Cls.valid(Cls.code)) { toast("请先输入课堂码", true); return; }
     openModal(`<div class="cv-wrap"><h3>👥 ${T("全班情况", false, true)} <small class="muted">${T("课堂码", false, true)} ${esc(Cls.code)}</small></h3>
@@ -4199,11 +4238,10 @@ const ClassView = {
   },
   live() {
     this.stop();
-    if (Cloud.on && window.EventSource) { try { this.es = new EventSource(Cloud.url()); let t; const f = () => { clearTimeout(t); t = setTimeout(() => this.load(), 500); };
-      this.es.addEventListener("put", f); this.es.addEventListener("patch", f); } catch (e) { this.es = null; } }
-    this.timer = setInterval(() => { if (!$("#cvBody")) { this.stop(); return; } this.load(); }, Cloud.on ? 15000 : 4000);
+    if (Cloud.on) this.unwatch = Cloud.watch(() => { if ($("#cvBody")) this.load(); else this.stop(); });
+    this.timer = setInterval(() => { if (!$("#cvBody")) { this.stop(); return; } if (!Cloud.live) this.load(); }, Cloud.on ? 15000 : 4000);
   },
-  stop() { if (this.es) { this.es.close(); this.es = null; } clearInterval(this.timer); this.timer = null; },
+  stop() { if (this.unwatch) { this.unwatch(); this.unwatch = null; } clearInterval(this.timer); this.timer = null; },
   safe(v) { if (!v || typeof v !== "string" || !v.trim()) return ""; return Safety.validateStudentInput(v, { max: 2000 }).level === 1 ? v.trim() : ""; },
   render() {
     const box = $("#cvBody"); if (!box) { this.stop(); return; }
