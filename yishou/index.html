@@ -457,6 +457,36 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
   60%{transform:translate(0,-20%) rotate(3deg) scale(1.06)}80%{transform:translate(-20%,-8%) rotate(-4deg) scale(1)}100%{transform:translate(0,0) rotate(-3deg) scale(1)}}
 @keyframes nbShadow{0%,100%{transform:translateX(0) scale(1);opacity:.9}20%{transform:translateX(14%) scale(.75);opacity:.5}40%{transform:translateX(22%) scale(.9);opacity:.75}60%{transform:translateX(0) scale(.65);opacity:.4}80%{transform:translateX(-20%) scale(.85);opacity:.7}}
 @media (prefers-reduced-motion:reduce){.newbeast.fly .nb-img,.newbeast .nb-shadow{animation:none}}
+/* ---------- 卷轴画（图片背景太杂、剪不出外形时使用） ---------- */
+.newbeast.scrollv{width:clamp(96px,12.5cqw,170px);aspect-ratio:auto;transform:translate(-50%,-50%);animation:none}
+.sv-sway{position:relative;transform-origin:50% 0;animation:svSway 6s ease-in-out var(--fdl,0s) infinite;filter:drop-shadow(0 10px 12px rgba(0,0,0,.45))}
+.sv-cord{position:absolute;left:50%;top:-20px;width:46%;height:22px;transform:translateX(-50%);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Cpath d='M2 40 L50 3 L98 40' fill='none' stroke='%236b4422' stroke-width='3'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.sv-cord::before{content:"";position:absolute;left:50%;top:-6px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffe9a8,#b7802b);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.sv-rod{position:relative;height:11px;margin:0 -9%;border-radius:6px;background:linear-gradient(180deg,#8a5a30,#4b2a12 60%,#2e1808);box-shadow:inset 0 1px 0 rgba(255,220,170,.4);z-index:2}
+.sv-rod i{position:absolute;top:-2px;width:12px;height:15px;border-radius:4px;background:linear-gradient(180deg,#ffe9a8,#c9932f 55%,#7a4f08);box-shadow:0 1px 2px rgba(0,0,0,.4)}
+.sv-rod i:first-child{left:-6px}.sv-rod i:last-child{right:-6px}
+.sv-rod.bot{height:13px}
+.sv-paper{overflow:hidden;transform-origin:50% 0;animation:svUnroll 1.4s cubic-bezier(.3,.8,.3,1) both}
+.newbeast.scrollv .sv-rod.bot{animation:svRod 1.4s cubic-bezier(.3,.8,.3,1) both}
+.sv-silk{padding:9% 9% 6%;background:linear-gradient(90deg,#8e3a2a 0 5%,#e9d6ac 5% 95%,#8e3a2a 95%);box-shadow:inset 0 0 0 1px rgba(90,40,20,.4)}
+.sv-silk{background:
+  linear-gradient(90deg,#7d2d22 0 5%,transparent 5% 95%,#7d2d22 95%),
+  repeating-linear-gradient(45deg,rgba(150,100,40,.10) 0 4px,transparent 4px 8px),
+  linear-gradient(180deg,#f3e6c4,#e3cf9f)}
+.sv-img{position:relative;background:#fff;padding:4%;box-shadow:0 0 0 1.5px #b9822f,0 0 0 4px #f6ecd2,0 0 0 5px #8a5a1c}
+.sv-img img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.sv-title{margin-top:9%;text-align:center;line-height:1.15}
+.sv-title b{display:block;font-family:var(--f-title);font-weight:400;font-size:clamp(.85rem,1.5cqw,1.15rem);color:#7d1d17;letter-spacing:2px}
+.sv-title small{display:block;font-size:.66rem;color:#5a3d1c;font-weight:700}
+.sv-tassel{position:absolute;bottom:-26px;width:6px;height:26px;background:linear-gradient(180deg,#b8322a,#7d1d17);border-radius:0 0 3px 3px}
+.sv-tassel::before{content:"";position:absolute;top:-4px;left:-2px;width:10px;height:7px;border-radius:50%;background:#e9b84c}
+.sv-tassel.l{left:6%;animation:svTassel 3s ease-in-out infinite}.sv-tassel.r{right:6%;animation:svTassel 3.4s ease-in-out infinite reverse}
+@keyframes svUnroll{0%{clip-path:inset(0 0 100% 0)}100%{clip-path:inset(0 0 0 0)}}
+@keyframes svRod{0%{transform:translateY(-1200%)}100%{transform:none}}
+@keyframes svSway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes svTassel{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.sv-sway,.sv-tassel{animation:none}}
+.ai-tip{font-size:.86rem;line-height:1.6;background:#fff6dc;border:1.5px dashed var(--gold-d);border-radius:8px;padding:8px 10px;margin:0 0 10px;color:#4a3410}.ai-tip b{color:#7d1d17;margin-right:6px}
 .hatch-foot{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:10px}
 /* 学生页工具列 */
 .sbar .snav{display:flex;gap:6px;flex-shrink:0}
@@ -1481,10 +1511,10 @@ const LAB_OPTIONS = {
   worlds: ["未来科技城市", "神秘森林", "海底王国", "古代神话世界", "充满环境危机的世界"],
   symbols: ["勇气", "希望", "和平", "智慧", "坚持", "团结", "保护环境"],
   styles: [
-    { key: "mural",  name: "《山海经》古代神话壁画风格", desc: "仿古壁画质感，线条古朴，矿物颜料色彩，带有斑驳的岁月痕迹" },
-    { key: "fantasy",name: "东方奇幻插画风格",           desc: "细腻的东方奇幻插画，云雾缭绕，光影梦幻，富有神话氛围" },
-    { key: "gongbi", name: "中国传统工笔重彩风格",       desc: "工笔线描细致，重彩设色，绢本质感，色彩浓丽典雅" },
-    { key: "atlas",  name: "古代异兽图鉴风格",           desc: "像古籍中的异兽图谱，米黄色旧纸，墨线勾勒再加淡彩" }
+    { key: "mural",  name: "《山海经》古代神话壁画风格", desc: "仿古壁画质感，线条古朴，矿物颜料色彩，带有斑驳的岁月痕迹", beast: "神兽本身用古朴的壁画线条和矿物颜料色彩绘制" },
+    { key: "fantasy",name: "东方奇幻插画风格",           desc: "细腻的东方奇幻插画，云雾缭绕，光影梦幻，富有神话氛围", beast: "神兽本身用细腻的东方奇幻插画风格绘制，身上可以有少量光芒" },
+    { key: "gongbi", name: "中国传统工笔重彩风格",       desc: "工笔线描细致，重彩设色，绢本质感，色彩浓丽典雅", beast: "神兽本身用工笔细线勾勒、重彩设色，色彩浓丽典雅" },
+    { key: "atlas",  name: "古代异兽图鉴风格",           desc: "像古籍中的异兽图谱，米黄色旧纸，墨线勾勒再加淡彩", beast: "神兽本身像古籍异兽图谱，用墨线勾勒再加淡彩" }
   ]
 };
 
@@ -2206,7 +2236,9 @@ Object.assign(EN, {
   "复原": "Undo",
   "重新自动去背景": "Auto-remove again",
   "保留整张图": "Keep whole picture",
-  "完成": "Done"
+  "完成": "Done",
+  "小提示": "Tip",
+  "生成图片后，如果 AI 工具或 Canva 有「去背景 / Remove background」功能，先去掉背景，再下载 PNG 图片上传，异兽在地图上会最完整、最漂亮。": "After making the picture, if your AI tool or Canva has a \"Remove background\" function, remove the background first, then download a PNG and upload it. Your creature will look complete and beautiful on the map."
 });
 </script>
 <script>
@@ -3279,6 +3311,7 @@ function renderLab() {
       <div class="scroll" style="margin-bottom:16px">
         <h3>${T("AI 生图指令", false, true)}</h3>
         <p style="font-size:.88rem;color:var(--ink-2);margin:4px 0 8px">${T("本游戏没有连接 AI 生图服务，不会自动生成图片。请按「复制生图指令」，贴到老师指定的 AI 生图工具中生成图片，再把图片上传到下面。")}</p>
+        <div class="ai-tip"><b>💡 ${T("小提示", false, true)}</b>${T("生成图片后，如果 AI 工具或 Canva 有「去背景 / Remove background」功能，先去掉背景，再下载 PNG 图片上传，异兽在地图上会最完整、最漂亮。")}</div>
         <div class="prompt-box" id="lPrompt">${T("（填写左边的资料后，按「创造我的神兽」，这里会自动整理出完整的生图指令。）")}</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn jade small" id="lCopy" disabled>📋 ${T("复制生图指令", false, true)}</button></div>
         <div class="upload-zone" id="lUpload" style="margin-top:14px" role="button" tabindex="0"><b>⬆ ${T("上传 AI 生成的异兽图片", false, true)}</b><span style="font-size:.85rem;color:var(--ink-2)">${T("支持 JPG / PNG，图片会自动缩小后保存", false, true)}</span></div>
@@ -3349,17 +3382,27 @@ function labErrors(cr) {
   if (!cr.style) e.push(["G. 请选择一种画风"]);
   return e;
 }
+/* 生图指令：要求「单只神兽 + 纯白背景 + 清楚外框线」，方便自动去背景，放进异兽诞生地图后外形完整、描边漂亮 */
 function buildPrompt(cr) {
   const st = styleOf(cr);
-  return `请创作一幅「${st.name}」的插画。
-画面主角：一只名叫「${cr.name.trim()}」的原创神兽。
+  return `请画一只原创神兽的「全身角色图」，画风是「${st.name}」。
+
+【神兽资料】
+名字：「${cr.name.trim()}」
 外形特点：${allTraitsText(cr).join("；")}。
-特殊能力：${listText(cr.abilities)}，请在画面中表现出这种能力。
-生活环境：它生活在${worldText(cr)}。背景请用干净、浅色的素色背景，只放少量代表这个世界的小元素，让神兽的外形清楚完整（方便放进「异兽诞生地图」里飞翔）。
-象征意义：它象征着${listText(cr.symbols)}，整体气氛要让人感受到这种意义。
-画风要求：${st.desc}；神兽位于画面中央，构图完整，色彩以金橙、朱红、青绿、深蓝为主，带有东方神话气息。
-注意：画面中不要出现文字、水印，也不要模仿任何现有的动漫或游戏角色。
-${Safety.IMAGE_PROMPT_SAFETY}`;
+特殊能力：${listText(cr.abilities)}。请用神兽本身的姿势、表情或身上的小光效表现这种能力（不要画成背景场景）。
+来自的世界：${worldText(cr)}。请把这个世界的特色画在神兽身上，例如花纹、颜色或小饰物，不要画出背景场景。
+象征意义：${listText(cr.symbols)}，神兽的神情和姿态要让人感受到这种意义。
+画风：${st.beast || st.desc}，色彩以金橙、朱红、青绿、深蓝为主，带有东方神话气息。
+
+【画面要求（很重要）】
+1. 只画一只神兽，画出完整的全身（头、角、翅膀、尾巴、脚都不要被画面切掉），神兽在画面正中央，四周留一些空白。
+2. 背景必须是纯白色（#FFFFFF）的空白背景：不要场景、天空、云雾、地面、阴影、边框、纸张纹理，也不要光晕扩散到背景上。
+3. 神兽外围要有清楚、连续的深色轮廓线，像贴纸或角色设定图一样，外形容易辨认。
+4. 画面中不要出现文字、水印、印章，也不要模仿任何现有的动漫或游戏角色。
+5. ${Safety.IMAGE_PROMPT_SAFETY.replace(/^安全要求：/, "")}
+
+（English: full-body character design of ONE original creature, centered, isolated on a pure white background, no scenery, no ground, no shadow, no frame, clean dark outline, sticker style, no text.）`;
 }
 function createBeast(g) {
   const bad = Safety.checkAll($("#labForm"));
@@ -4043,11 +4086,16 @@ const Cutout = {
     x.putImageData(id, 0, 0); return { url: c.toDataURL("image/png"), cut: true };
   },
   /* 自动去背景：回传每个像素的透明度（0–255）；判断不出来时回传 null */
-  autoAlpha(d, w, h) {
+  autoAlpha(d, w, h, opt = {}) {
     const N = w * h, bg = new Uint8Array(N);
     const col = i => [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]], dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
     if (d[3] !== undefined) { let tr = 0; for (let i = 0; i < N; i++) if (d[i * 4 + 3] < 20) tr++; if (tr > N * .05) { const a = new Uint8ClampedArray(N); for (let i = 0; i < N; i++) a[i] = d[i * 4 + 3]; return a; } }
     const border = []; for (let i = 0; i < w; i++) border.push(i, w + i, (h - 1) * w + i, (h - 2) * w + i); for (let j = 0; j < h; j++) border.push(j * w, j * w + 1, j * w + w - 1, j * w + w - 2);
+    if (opt.plainOnly) {   // 只有「素色背景」才自动剪：四边大部分是同一种颜色
+      const m = border.reduce((a, i) => [a[0] + d[i * 4] / border.length, a[1] + d[i * 4 + 1] / border.length, a[2] + d[i * 4 + 2] / border.length], [0, 0, 0]);
+      const same = border.filter(i => dist(col(i), m) < 34).length / border.length;
+      if (same < .82) return null;
+    }
     const bins = {}; border.forEach(i => { const p = col(i), k = (p[0] >> 4) + "," + (p[1] >> 4) + "," + (p[2] >> 4); (bins[k] = bins[k] || []).push(p); });
     const pal = Object.values(bins).filter(v => v.length > border.length * .01).map(v => v.reduce((a, p) => [a[0] + p[0] / v.length, a[1] + p[1] / v.length, a[2] + p[2] / v.length], [0, 0, 0]));
     if (!pal.length) return null;
