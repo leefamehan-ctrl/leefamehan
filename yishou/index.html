@@ -442,27 +442,31 @@ textarea.txt{min-height:90px;resize:vertical;line-height:1.7}
 .egg-label,.beast-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(.7rem,1.3cqw,.95rem);padding:1px 10px;border-radius:10px;
   background:rgba(15,29,51,.85);border:1px solid var(--gold);color:var(--gold-l);margin-top:4px}
 .newbeast{position:absolute;transform:translate(-50%,-50%);width:clamp(70px,12cqw,150px);aspect-ratio:1;z-index:4;cursor:pointer;animation:beastPop 1s cubic-bezier(.2,1.5,.4,1) both}
-/* 异兽诞生地图：和立体地图上的神兽一样——剪出外形、金边、厚度、站在地图上、轻轻转身浮动 */
-.newbeast.fig{width:clamp(120px,17cqw,230px);aspect-ratio:auto;height:auto;animation:none;transform:translate(-50%,-62%);z-index:4}
-.newbeast.fig:hover,.newbeast.fig:focus{z-index:8}
-.nb-stage{position:relative;width:100%;aspect-ratio:1;perspective:700px;animation:nbRise 1.4s cubic-bezier(.2,1.4,.4,1) both}
-.nb-body{position:absolute;inset:0;transform-style:preserve-3d;animation:nbTurn var(--fd,7s) ease-in-out var(--fdl,0s) infinite}
-.nb-body img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 100%}
-.nb-front{filter:drop-shadow(1.6px 0 0 #b9822f) drop-shadow(-1.6px 0 0 #b9822f) drop-shadow(0 1.6px 0 #b9822f) drop-shadow(0 -1.6px 0 #b9822f) drop-shadow(0 0 6px rgba(255,226,150,.65))}
-.nb-back{transform:translate3d(5px,5px,-14px);filter:brightness(.28) sepia(.7) blur(.4px);opacity:.85}
-.newbeast:not(.cut) .nb-front{border-radius:18px;-webkit-mask:radial-gradient(closest-side,#000 72%,transparent);mask:radial-gradient(closest-side,#000 72%,transparent)}
-.newbeast:not(.cut) .nb-back{display:none}
-.nb-halo{position:absolute;left:50%;top:44%;width:120%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(rgba(255,232,170,.55),rgba(255,232,170,.12) 45%,transparent 70%);animation:nbHalo 3.2s ease-in-out infinite;pointer-events:none}
-.nb-ground{position:absolute;left:14%;right:14%;bottom:-3%;height:12%;border-radius:50%;background:radial-gradient(rgba(255,226,150,.65),rgba(255,200,90,.18) 55%,transparent 72%);pointer-events:none}
-.nb-name{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:6px;white-space:nowrap;text-align:center;z-index:2;
-  font-family:var(--f-title);font-size:clamp(.95rem,1.6cqw,1.3rem);color:#7d1d17;padding:4px 14px;border-radius:12px;background:linear-gradient(180deg,#fff2cc,#e8d3a2);border:2px solid #8a5a1c;box-shadow:0 3px 8px rgba(0,0,0,.35)}
-.nb-name small{display:block;font-family:var(--f-body);font-size:.62em;color:#3a2a14;font-weight:700}
-.nb-name::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:8px;margin-left:-1px;background:#8a5a1c}
-.newbeast.fig .beast-label{display:none}
-@keyframes nbRise{0%{transform:translateY(40%) scale(.2);opacity:0}100%{transform:none;opacity:1}}
-@keyframes nbTurn{0%,100%{transform:translateY(0) rotateY(-16deg)}25%{transform:translateY(-5%) rotateY(0deg)}50%{transform:translateY(-1%) rotateY(16deg)}75%{transform:translateY(-6%) rotateY(0deg)}}
-@keyframes nbHalo{50%{opacity:.6;transform:translate(-50%,-50%) scale(1.06)}}
-@media (prefers-reduced-motion:reduce){.nb-body,.nb-halo{animation:none}}
+.newbeast{width:clamp(110px,17cqw,220px)}
+.newbeast .nb-fly{position:relative;width:100%;height:100%}
+.newbeast.fly .nb-img{animation:nbFly var(--fd,10s) ease-in-out var(--fdl,0s) infinite}
+.newbeast .nb-img{width:100%;height:100%;display:grid;place-items:center;filter:drop-shadow(0 0 10px rgba(255,230,160,.85)) drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.newbeast .nb-img img{width:100%;height:100%;object-fit:contain}
+.newbeast .nb-img.none{border-radius:50%;background:#efe1bf;border:3px solid var(--gold)}
+.newbeast:not(.cut) .nb-img img{-webkit-mask:radial-gradient(closest-side,#000 70%,transparent);mask:radial-gradient(closest-side,#000 70%,transparent)}
+.newbeast .nb-shadow{position:absolute;left:20%;right:20%;bottom:-8%;height:10%;border-radius:50%;background:radial-gradient(rgba(0,0,0,.35),transparent 70%);animation:nbShadow var(--fd,10s) ease-in-out var(--fdl,0s) infinite;pointer-events:none}
+.newbeast .beast-label{top:auto;bottom:100%;margin:0 0 4px;z-index:2}
+.newbeast:hover,.newbeast:focus{z-index:8}
+@keyframes nbFly{0%{transform:translate(0,0) rotate(-3deg) scale(1)}20%{transform:translate(14%,-16%) rotate(4deg) scale(1.05)}40%{transform:translate(22%,-4%) rotate(-2deg) scale(.98)}
+  60%{transform:translate(0,-20%) rotate(3deg) scale(1.06)}80%{transform:translate(-20%,-8%) rotate(-4deg) scale(1)}100%{transform:translate(0,0) rotate(-3deg) scale(1)}}
+@keyframes nbShadow{0%,100%{transform:translateX(0) scale(1);opacity:.9}20%{transform:translateX(14%) scale(.75);opacity:.5}40%{transform:translateX(22%) scale(.9);opacity:.75}60%{transform:translateX(0) scale(.65);opacity:.4}80%{transform:translateX(-20%) scale(.85);opacity:.7}}
+@media (prefers-reduced-motion:reduce){.newbeast.fly .nb-img,.newbeast .nb-shadow{animation:none}}
+.hatch-foot{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+/* 学生页工具列 */
+.sbar .snav{display:flex;gap:6px;flex-shrink:0}
+.sbar .nv{background:linear-gradient(180deg,#2a3a5a,#1a2740);color:#e8eef6;border-color:#5b6b8a}
+.sbar .nv::before,.sbar .nv::after{background:#8fa0c0;border-color:#3a4a68}
+.sbar .nv.on{background:linear-gradient(180deg,#fbe7a6 0%,var(--gold) 45%,#b07a2a 100%);color:#3a2a14;border-color:var(--gold-d);box-shadow:0 0 0 2px rgba(246,220,147,.45),0 4px 10px rgba(0,0,0,.35);font-weight:800}
+.sbar .nv.locked{background:#20283a;color:#8a93a6;border-color:#3a4458;filter:none;cursor:not-allowed;box-shadow:none}
+.sbar .nv.locked::before,.sbar .nv.locked::after{display:none}
+.sbar .page-chip{padding:4px 12px;border-radius:30px;background:rgba(246,220,147,.15);border:1px solid var(--gold);color:var(--gold-l);font-weight:700;white-space:nowrap}
+.sbar [data-sync],.sbar .sync-pill{display:none!important}
+.sbar .brand{margin-right:2px}
 /* 剪裁器 */
 .ce-wrap h3{font-family:var(--f-title);font-weight:400;font-size:1.6rem;color:#7d1d17}.ce-tip{font-size:.9rem;color:var(--ink-2);margin:4px 0 10px}
 .ce-tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.ce-sl{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:700;margin-left:6px}.ce-sl input{width:110px}
@@ -738,6 +742,7 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
   .topbar .group-badge rt,.topbar .group-badge .en{display:none!important}
   #langBar{right:58px}#langBar .tg{padding:5px 10px}
 }
+@media (min-width:641px) and (max-width:900px){.sbar .brand{display:none}.sbar .progress-chip{display:none}}
 @media (min-width:641px) and (max-width:1320px){
   .topbar .brand{font-size:1.2rem;letter-spacing:1px}
   .topbar .btn.small{padding:5px 18px;font-size:.84rem;letter-spacing:0}
@@ -748,6 +753,7 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
   .topbar .btn.small .en{display:none!important}
 }
 @media (min-width:641px) and (max-width:1100px){
+  .sbar .page-chip{font-size:.78rem;padding:3px 8px}
   .topbar .brand{font-size:1rem;letter-spacing:0}
   .topbar .btn.small{padding:4px 10px;font-size:.78rem}
   .topbar .btn.small::before,.topbar .btn.small::after{display:none}
@@ -787,13 +793,11 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
 
 <!-- ======================= 第二页：地图探索 ======================= -->
 <section class="screen" id="s-map">
-  <div class="topbar">
-    <div class="brand">异兽秘境 · 神兽地图</div>
-    <span class="group-badge" id="mapBadge"></span>
-    <span class="progress-chip" id="mapProgress"></span>
-    <span class="sync-pill hidden" data-sync></span>
-    <button class="btn small jade" data-go="dex">📜 神兽图鉴</button>
-    <button class="btn small" id="mapLabBtn">🥚 异兽研究所</button>
+  <div class="topbar sbar">
+    <div class="brand">异兽秘境</div>
+    <span class="group-badge" data-badge></span>
+    <span class="progress-chip" data-prog></span>
+    <nav class="snav" data-nav></nav>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
@@ -820,11 +824,13 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
 
 <!-- ======================= 第三页：与动物对话 ======================= -->
 <section class="screen" id="s-explore">
-  <div class="topbar">
-    <button class="btn small ghost" data-go="map">◂ 返回地图</button>
-    <div class="brand" id="exTitle">与神兽对话</div>
+  <div class="topbar sbar">
+    <div class="brand">异兽秘境</div>
     <span class="group-badge" data-badge></span>
-    <span class="sync-pill hidden" data-sync></span>
+    <span class="page-chip" id="exTitle"></span>
+    <span class="progress-chip" data-prog></span>
+    <nav class="snav" data-nav></nav>
+    <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
     <div class="stage-wrap">
@@ -840,10 +846,13 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
 
 <!-- ======================= 捕捉环节 ======================= -->
 <section class="screen" id="s-capture">
-  <div class="topbar">
-    <button class="btn small ghost" data-go="map">◂ 返回地图</button>
-    <div class="brand" id="capTitle">神兽捕捉</div>
+  <div class="topbar sbar">
+    <div class="brand">异兽秘境</div>
     <span class="group-badge" data-badge></span>
+    <span class="page-chip" id="capTitle"></span>
+    <span class="progress-chip" data-prog></span>
+    <nav class="snav" data-nav></nav>
+    <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
     <div class="stage-wrap">
@@ -855,12 +864,11 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
 
 <!-- ======================= 第四页：神兽图鉴 ======================= -->
 <section class="screen" id="s-dex">
-  <div class="topbar">
-    <button class="btn small ghost" data-go="map">◂ 返回地图</button>
-    <div class="brand">山海图鉴 · 神兽线索秘卷</div>
+  <div class="topbar sbar">
+    <div class="brand">异兽秘境</div>
     <span class="group-badge" data-badge></span>
-    <span class="progress-chip" id="dexProgress"></span>
-    <span class="sync-pill hidden" data-sync></span>
+    <span class="progress-chip" data-prog></span>
+    <nav class="snav" data-nav></nav>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main">
@@ -888,11 +896,11 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
 
 <!-- ======================= 第五页：异兽创造研究所 ======================= -->
 <section class="screen" id="s-lab">
-  <div class="topbar">
-    <button class="btn small ghost" data-go="dex">◂ <span data-t="in">返回图鉴</span></button>
-    <div class="brand" data-t="in">异兽创造研究所</div>
+  <div class="topbar sbar">
+    <div class="brand">异兽秘境</div>
     <span class="group-badge" data-badge></span>
-    <span class="sync-pill hidden" data-sync></span>
+    <span class="progress-chip" data-prog></span>
+    <nav class="snav" data-nav></nav>
     <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main" id="labMain"></div>
@@ -900,15 +908,16 @@ rt{font-weight:700!important;color:#ffe08a!important;text-shadow:0 0 2px #0b1424
 
 <!-- ======================= 异兽诞生地图（孵化展示） ======================= -->
 <section class="screen" id="s-hatch">
-  <div class="topbar">
-    <button class="btn small ghost" id="hatchBack">◂ 返回</button>
-    <div class="brand" data-t="in">异兽诞生 · 新异兽世界</div>
-    <span class="progress-chip" id="hatchCount"></span>
-    <button class="btn small ghost" id="hatchRefresh">⟳ 刷新作品</button>
+  <div class="topbar sbar">
+    <div class="brand">异兽秘境</div>
+    <span class="group-badge" data-badge></span>
+    <span class="progress-chip" data-prog></span>
+    <nav class="snav" data-nav></nav>
+    <button class="btn small ghost" data-menu>☰ 选项</button>
   </div>
   <div class="main" style="max-width:1400px">
     <div class="hatch-stage" id="hatchStage"></div>
-    <p class="muted" style="text-align:center;margin-top:8px" id="hatchTip">点击金色神蛋，孵化各组创造的新异兽；点击异兽可查看它的文化档案。</p>
+    <div class="hatch-foot"><span class="progress-chip" id="hatchCount"></span><span class="muted" id="hatchTip">点击金色神蛋，孵化各组创造的新异兽；点击异兽可查看它的文化档案。</span><button class="btn small ghost" id="hatchRefresh">⟳ 刷新作品</button></div>
   </div>
 </section>
 
@@ -2608,6 +2617,7 @@ function go(screen, opts = {}) {
   document.body.classList.toggle("teacher-mode", screen === "teacher");
   if (screen !== "teacher" && Teacher.timer) { clearInterval(Teacher.timer); Teacher.timer = null; }
   if (["map", "explore", "capture", "dex", "lab"].includes(screen) && !S.gid) screen = "cover";
+  if (["dex", "lab", "hatch"].includes(screen) && S.gid && !(S.teacher && screen === "hatch") && navLock(screen, curGroup())) { toast("🔒 " + navLock(screen, curGroup())); if (S.screen === "cover" || !S.screen || S.screen === screen) screen = "map"; else { renderNav(); return; } }
   S.screen = screen;
   $$(".screen").forEach(s => s.classList.toggle("active", s.id === "s-" + screen));
   window.scrollTo(0, 0);
@@ -2618,8 +2628,45 @@ function go(screen, opts = {}) {
   }
   Store.session({ gid: S.gid, screen: screen === "teacher" ? "cover" : screen, animal: S.animal, teacher: screen === "teacher" });
   ({ cover: renderCover, map: renderMap, explore: renderExplore, capture: renderCapture, dex: renderDex, lab: renderLab, hatch: renderHatch, teacher: () => Teacher.open() }[screen] || (() => {}))(opts);
-  renderBadges();
-  Cloud.setStatus(Cloud.status);
+  renderBadges(); renderNav();
+}
+/* ================================================================
+   上方工具列（所有学生页面统一）：神兽地图 → 神兽图鉴 → 异兽研究所 → 异兽地图
+   还没完成前一个任务，后面的按钮会上锁
+   ================================================================ */
+const NAV = [
+  { k: "map", icon: "🗺", zh: "神兽地图" },
+  { k: "dex", icon: "📜", zh: "神兽图鉴" },
+  { k: "lab", icon: "🥚", zh: "异兽研究所" },
+  { k: "hatch", icon: "🐉", zh: "异兽地图" }
+];
+function navLock(k, g) {
+  if (!g) return k === "hatch" ? "" : "请先选择小组";
+  const c = capturedCount(g);
+  if (k === "dex" && c < 1) return "先在地图上收服第一只神兽，才能打开神兽图鉴哦！";
+  if (k === "lab" && c < 3) return `集齐本组三只神兽，才能进入异兽研究所（目前 ${c}/3）。`;
+  if (k === "hatch" && !g.creation.submitted) return c < 3 ? `先集齐三只神兽，再到异兽研究所完成并提交作品，才能打开异兽地图（目前 ${c}/3）。` : "先在异兽研究所完成并提交异兽档案，才能打开异兽地图。";
+  return "";
+}
+function navGo(k) {
+  if (S.teacher && S.screen === "hatch" && k === "back") { go("teacher"); return; }
+  const why = S.teacher && !S.gid ? "" : navLock(k, curGroup());
+  if (why) { toast("🔒 " + why); return; }
+  if (k === "hatch") S.hatchFrom = S.screen;
+  go(k);
+}
+function renderNav() {
+  const g = curGroup(), cur = S.screen === "explore" || S.screen === "capture" ? "map" : S.screen;
+  $$("[data-nav]").forEach(nav => {
+    if (S.screen === "hatch" && (S.teacher || !g)) {   // 老师从教师端打开异兽地图
+      nav.innerHTML = S.teacher ? `<button class="btn small" data-navk="back">◂ 返回教师端</button>` : `<button class="btn small" data-go="cover">◂ 返回首页</button>`;
+    } else nav.innerHTML = NAV.map(n => { const lock = navLock(n.k, g);
+      return `<button class="btn small nv${n.k === cur ? " on" : ""}${lock ? " locked" : ""}" data-navk="${n.k}" ${lock ? `aria-disabled="true" title="${esc(lock)}"` : ""} ${n.k === cur ? 'aria-current="page"' : ""}>${lock ? "🔒" : n.icon} ${n.zh}</button>`; }).join("");
+    $$("[data-navk]", nav).forEach(b => b.onclick = () => navGo(b.dataset.navk));
+  });
+  const pg = g ? (g.fullMap ? `神兽球 ${capturedCount(g) + extraCount(g)}/6` : `已收集 ${capturedCount(g)}/3`) : "";
+  $$("[data-prog]").forEach(x => { x.textContent = pg; x.classList.toggle("hidden", !pg || S.screen === "explore" || S.screen === "capture"); });
+  $$(".sbar [data-badge]").forEach(x => x.classList.toggle("hidden", !g));
 }
 document.addEventListener("click", e => {
   const lb = e.target.closest("[data-lang]");
@@ -2631,7 +2678,7 @@ document.addEventListener("click", e => {
 function renderBadges() {
   const g = curGroup(); if (!g) return;
   const html = esc(GZ(g.groupId));   // 小组名称只显示中文（不加拼音、英文），节省上方空间
-  $$("[data-badge]").concat([$("#mapBadge")]).forEach(b => b && (b.innerHTML = html));
+  $$("[data-badge]").forEach(b => b && (b.innerHTML = html));
 }
 const capturedCount = g => animalsOf(g.groupId).filter(id => g.animals[id].captured).length;
 
@@ -2795,9 +2842,7 @@ function buildMap(stage, mode) {
 function renderMap() {
   const g = curGroup(), c = capturedCount(g), mine = animalsOf(g.groupId), pt = partnerOf(g.groupId);
   const ex = extraCount(g);
-  $("#mapProgress").textContent = g.fullMap ? `神兽球 ${c + ex}/6` : `已收集 ${c}/3`;
-  $("#mapLabBtn").disabled = c < 3;
-  $("#mapLabBtn").onclick = () => go("lab");
+  renderNav();
   const V = { team: teamOf(g.groupId), pt: pt ? GN(pt) : "" };
   let msg = c < 3 ? Tf("地图上有六块散落的碎片，你们{team}队先解开其中三块发光的碎片。点击发光的岛屿，与神兽对话、回答问题，再用神兽球把它收入图鉴！", V)
     + (pt ? `<div style="margin-top:4px">${Tf("当你们和{pt}都集齐三只神兽后，整张地图会解锁，并直接获得对方的三颗神兽球！", V)}</div>` : "")
@@ -2946,7 +2991,7 @@ function renderExplore(opts = {}) {
   const g = curGroup(), a = A(S.animal);
   if (!a) { go("map"); return; }
   const st = g.animals[a.id], d = st.dlg;
-  $("#exTitle").textContent = `与神兽对话 · ${a.name}`;
+  $("#exTitle").textContent = `与${a.name}对话`;
   const stage = $("#exStage");
   stage.style.backgroundImage = `url(${ASSETS["scene_" + a.id]})`;
   stage.style.setProperty("--gx", a.capTarget.x + "%"); stage.style.setProperty("--gy", a.capTarget.y + "%");
@@ -3042,7 +3087,7 @@ function renderCapture() {
   if (!a) { go("map"); return; }
   const st = g.animals[a.id];
   if (!st.nodes.every(n => n === 2)) { toast("要先完成三个知识节点，才能捕捉神兽哦！", true); go("explore"); return; }
-  $("#capTitle").textContent = `神兽捕捉 · ${a.name}`;
+  $("#capTitle").textContent = `收服${a.name}`;
   $("#capTrack").innerHTML = trackHTML(st, 3);
   const box = $("#capStage");
   if (st.captured) {
@@ -3122,7 +3167,7 @@ function bindCard3D(box) {
    ================================================================ */
 function renderDex() {
   const g = curGroup(), mine = animalsOf(g.groupId), c = capturedCount(g), acc = accessibleOf(g);
-  $("#dexProgress").textContent = g.fullMap ? `神兽球 ${c + extraCount(g)}/6` : `已收集 ${c}/3`;
+  renderNav();
   MapView.render("dex");
   const others = MAP_ORDER.filter(id => !mine.includes(id));
   const pt = partnerOf(g.groupId);
@@ -3418,11 +3463,6 @@ function openArchive(g) {
    ================================================================ */
 let hatchGroups = {};
 async function renderHatch() {
-  $("#hatchBack").onclick = () => {
-    if (S.hatchFrom === "teacher" && S.teacher) go("teacher");
-    else if (S.gid) go(["map", "dex", "lab"].includes(S.hatchFrom) ? S.hatchFrom : "map");
-    else go("cover");
-  };
   $("#hatchRefresh").onclick = () => renderHatch();
   const stage = $("#hatchStage");
   stage.style.backgroundImage = `url(${ASSETS.cover})`;
@@ -3444,17 +3484,16 @@ async function renderHatch() {
 }
 function beastHTML(g, p) {
   const cr = g.creation, k = CONFIG.GROUPS.indexOf(g.groupId);
-  return `<div class="newbeast fig" data-beast="${g.groupId}" style="left:${Math.min(88, Math.max(12, p.x))}%;top:${Math.min(80, Math.max(40, p.y))}%;--fd:${(6 + (k % 4) * .9).toFixed(1)}s;--fdl:-${(k * 1.1).toFixed(1)}s" role="button" tabindex="0">
-    <span class="nb-name">${TP(cr.name)}<small>${GH(g.groupId)}</small></span>
-    <div class="nb-stage"><i class="nb-halo"></i><i class="nb-ground"></i>
-      <div class="nb-body">${cr.image ? `<img class="nb-back" data-cutb="${g.groupId}" alt=""><img class="nb-front" data-cut="${g.groupId}" alt="${esc(cr.name)}">` : `<div class="noimg"><span class="seal" style="min-width:50px;height:50px;font-size:1.6rem">${esc((cr.name || "兽").slice(0, 1))}</span></div>`}</div></div></div>`;
+  /* 位置限制在地图中间范围，飞行时连名字都不会超出地图 */
+  const x = Math.min(84, Math.max(14, p.x)), y = Math.min(74, Math.max(32, p.y));
+  return `<div class="newbeast fly" data-beast="${g.groupId}" style="left:${x}%;top:${y}%;--fd:${(9 + (k % 4) * 1.7).toFixed(1)}s;--fdl:-${(k * 1.3).toFixed(1)}s" role="button" tabindex="0">
+    <div class="nb-fly"><div class="nb-img${cr.image ? "" : " none"}">${cr.image ? `<img data-cut="${g.groupId}" alt="${esc(cr.name)}">` : `<div class="noimg"><span class="seal" style="min-width:50px;height:50px;font-size:1.6rem">${esc((cr.name || "兽").slice(0, 1))}</span></div>`}</div><i class="nb-shadow"></i></div>
+    <span class="beast-label">${TP(cr.name)} · ${GH(g.groupId)}</span></div>`;
 }
 /* 把图片换成去背景的版本 */
 function fillCutouts(root) {
   $$("img[data-cut]", root).forEach(im => { if (im.dataset.done) return; im.dataset.done = 1; const g = hatchGroups[im.dataset.cut]; if (!g) return;
-    const set = url => { im.onload = () => { const r = im.naturalWidth / Math.max(1, im.naturalHeight), st = im.closest(".nb-stage"), nb = im.closest(".newbeast");
-        if (st) st.style.aspectRatio = String(Math.max(.6, Math.min(1.8, r))); if (nb && r > 1.15) nb.style.width = `clamp(140px, ${Math.round(17 * Math.min(1.5, r * .85))}cqw, 300px)`; };
-      im.src = url; const bk = im.parentElement.querySelector("img[data-cutb]"); if (bk) bk.src = url; };
+    const set = url => { im.src = url; };
     if (g.creation.cutout && SAFE_IMG.test(g.creation.cutout)) { set(g.creation.cutout); im.closest(".newbeast").classList.add("cut"); return; }
     Cutout.get(g.creation.image).then(r => { set(r ? r.url : g.creation.image); im.closest(".newbeast").classList.toggle("cut", !!(r && r.cut)); }); });
 }
